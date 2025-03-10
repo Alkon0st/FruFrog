@@ -1,24 +1,21 @@
-import HomeScreen from './HomeScreen';
+import * as React from 'react';
+import HomePage from './HomePage';
+
 import { Text } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // npx expo start --android
-// or npm run start
+// npm run start
 
-const Stack = createNativeStackNavigator(); //creates stack for nav
+export default function App() {
+    const TabNav = createBottomTabNavigator()
 
-const App = () =>{
-
-    // Navigation Container is a wrapper for the navigator
-    // Stack.Navigator is a wrapper for the screen
+    //TabNav.Navigator is main navigator
     return (
-        
-            <Stack.Navigator>
-                <Stack.Screen name='Home' component = {HomeScreen}/>
-            </Stack.Navigator>
-        
-    );
+        <TabNav.Navigator>
+            <TabNav.Screen name='Home' component={HomePage}/>
+            <TabNav.Screen name='Test' component={HomePage}/>
+        </TabNav.Navigator>
+    )
 }
-
-export default App;
-
