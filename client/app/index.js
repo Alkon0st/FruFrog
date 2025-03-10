@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import Reac, {useState} from 'react';
 import { Stack, useRouter } from 'expo-router';
 import HookComponent from '../components/hookComponent';
-import {Budget} from '../components';
+import {Budget, App} from '../components';
 
 const Home = () => {
     const router = useRouter();
@@ -16,9 +16,10 @@ const Home = () => {
         <SafeAreaView>
             <View>
                 <Text>Home</Text>
+                <App/>
                 <Budget/>
 
-                
+
                 {/* this section is for api call testing*/}
                 {showHookComponent && <HookComponent />}
                 <TouchableOpacity onPress={fetchData} style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5 }}>
