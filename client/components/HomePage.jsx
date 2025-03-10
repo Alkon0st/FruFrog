@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 
-function HomeScreen() {
+function HomePage() {
     return (
         <View style ={styles.viewStyle}>
             <Text style ={styles.headingStyle}>Home Page</Text>
