@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import Reac, {useState} from 'react';
 import { Stack, useRouter } from 'expo-router';
 import HookComponent from '../components/hookComponent';
-import {Budget, App} from '../components';
+import {Budget, Nav} from '../components';
 
 const Home = () => {
     const router = useRouter();
@@ -16,7 +16,7 @@ const Home = () => {
         <SafeAreaView>
             <View>
                 <Text>Home</Text>
-                <App/>
+                <Nav/>
                 <Budget/>
 
 
