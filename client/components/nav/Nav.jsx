@@ -1,5 +1,6 @@
 import * as React from 'react';
 import HomePage from '../home/HomePage';
+import BudgetPage from '../budget/BudgetPage';
 
 import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,7 +16,7 @@ export default function Nav() {
     return (
         <TabNav.Navigator>
             <TabNav.Screen name='Home' component={HomePage}/>
-            <TabNav.Screen name='Test' component={HomePage}/>
+            <TabNav.Screen name='Budget' component={BudgetPage}/>
         </TabNav.Navigator>
     )
 }

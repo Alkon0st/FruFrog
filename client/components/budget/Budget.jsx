@@ -37,13 +37,45 @@ const Item = ({title}) => (
 const Budget = () => {
     return (
             <SafeAreaView>
-                <FlatList
+                {/* <FlatList
                 data={DATA}
                 renderItem={({item}) => <Item title={item.title} />}
                 keyExtractor = {item => item.id}
-                />
+                /> */}
                 <Text>Categories</Text>
-                <Text>Subcategories</Text>      
+                <Text>Subcategories</Text> 
+                <Text>
+                    #note add subcategories, edit subcategories, delete categories
+                    Housing
+                    - Rent Payments
+                    - Mortgage Payments 
+                    - Propert Taxes 
+                    - HOA Payments 
+                    - Home Maintenance Costs 
+                    Transportation
+                    - Car Payments 
+                    - Car Warranty 
+                    - Gas 
+                    - Parking Fees 
+                    - Maintenance 
+                    Food
+                    - Groceries 
+                    - Restaurants 
+                    - Pet Food 
+                    Utilities
+                    - Electricity
+                    - Water 
+                    - Internet 
+                    - Phones 
+                    - Garabge 
+                    Entertainment
+                    - Subscriptions 
+                    - Concerts 
+                    - Movies
+                    - Vacation 
+                    Others
+                </Text>
+
             </SafeAreaView>
     )
 }
