@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // npx expo start --android
 // npm run start
 
-export default function App() {
+export default function Nav() {
     const TabNav = createBottomTabNavigator()
 
     //TabNav.Navigator is main navigator
