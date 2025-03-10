@@ -1,39 +1,29 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useFetch = () => {
-    const [data, setData] = useState([]);
+const useFetch = (url) => {
+    const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const apicall =  {
-        method: 'GET',
-        url: `localhost:5000`,
-    };
-    const fetchData = async () => {
-        setIsLoading(true);
-    
-        try {
-            const response = await axios.request(apicall);
-            setData(response.data.data);
-            setIsLoading(false);
-        } catch{
-            setError(error)
-            alert('apicall is not working')
-        } finally {
-            setIsLoading(false);
-        }
-    };
     useEffect(() => {
-        fetchData();
-    }, []);
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get(url);
+                setData(response.data);
+            } catch (error) {
+                setError(error);
+                alert('API call is not working');
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    const refetch = () => {
-        setIsLoading(true);
         fetchData();
-    }
+    }, [url]); // Fetch data when `url` changes
 
-    return{ data, isLoading, error, refetch}
-}
+    return { data, isLoading, error };
+};
 
 export default useFetch;

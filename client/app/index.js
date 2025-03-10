@@ -1,40 +1,26 @@
 import { View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import Reac, {useState} from 'react';
 import { Stack, useRouter } from 'expo-router';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import HookComponent from '../components/hookComponent';
 
 const Home = () => {
+    const [showHookComponent, setShowHookComponent] = useState(false);
     const router = useRouter();
-    const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-    
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const response = await axios.get('http://localhost:5000'); 
-            setData(response.data); 
-        } catch (error) {
-            setError(error);
-            alert('API call is not working');
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
-    useEffect(() => {
-        fetchData(); 
-    }, []);
+    const fetchData = () => {
+    setShowHookComponent(true);
+    };
 
     return (
         <SafeAreaView>
             <View>
                 <Text>Home</Text>
-                {isLoading ? <Text>Loading...</Text> : <Text>Data: {JSON.stringify(data)}</Text>}
-                {error && <Text style={{ color: 'red' }}>Error: {error.message}</Text>}
+                {/* this section is for api call testing*/}
+                {showHookComponent && <HookComponent />}
                 <TouchableOpacity onPress={fetchData} style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5 }}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Fetch Data</Text>
                 </TouchableOpacity>
+                
             </View>
         </SafeAreaView>
     );
