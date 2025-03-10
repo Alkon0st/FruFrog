@@ -1,5 +1,5 @@
 import * as React from 'react';
-import HomePage from './HomePage';
+import HomePage from '../home/HomePage';
 
 import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';

@@ -1,4 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 
 function HomePage() {
     return (

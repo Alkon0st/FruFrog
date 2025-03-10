@@ -1,7 +1,10 @@
 //budget page
 import Budget from "./budget/Budget";
+
+// home page
+import HomePage from "./home/HomePage"
 //navigation
-import Nav from "./Nav";
+import Nav from "./nav/Nav";
 
 
 
@@ -9,5 +12,6 @@ import Nav from "./Nav";
 
 export {
     Nav,
+    HomePage,
     Budget,
 };
