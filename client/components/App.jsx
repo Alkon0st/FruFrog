@@ -1,11 +1,12 @@
 import HomeScreen from './HomeScreen';
-import Budget from './budget./Budget';
+//import Budget from './budget./Budget';
 
 import { Text } from 'react-native';
 import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // npx expo start --android
+// or npm run start
 
 const Stack = createNativeStackNavigator(); //creates stack for nav
 
