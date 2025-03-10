@@ -1,11 +1,13 @@
-
 // this is the entry point of our program
-var express = require('express');
+const express = require('express');
+const connectDB = require('./config/db');
+require('dotenv').config();
 
 const port = process.env.port || 5000;
 const app = express();
 const cors = require('cors')
 
+connectDB();
 app.use(cors());
 
 app.get('/', (req, res) => {
