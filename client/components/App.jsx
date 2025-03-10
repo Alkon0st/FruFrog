@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // npx expo start --android
+// or npm run start
 
 const Stack = createNativeStackNavigator(); //creates stack for nav
 

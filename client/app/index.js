@@ -3,6 +3,7 @@ import Reac, {useState} from 'react';
 import { Stack, useRouter } from 'expo-router';
 import HookComponent from '../components/hookComponent';
 import {Budget, App} from '../components';
+import {Budget, App} from '../components';
 
 const Home = () => {
     const router = useRouter();
