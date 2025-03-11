@@ -1,5 +1,5 @@
 //budget page
-import Budget from "./budget/Budget";
+import budgetPage from "./budget/budgetPage";
 
 //billsplit page
 import billSplitPage from "./billSplit/billSplitPage"
@@ -23,5 +23,5 @@ import Nav from "./nav/Nav";
 export {
     Nav,
     HomePage,
-    Budget,
+    budgetPage,
 };

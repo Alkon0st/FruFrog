@@ -1,27 +1,53 @@
-import { View, Text } from "react-native";
+import { useState } from 'react';
+import { View, 
+    Text, 
+    Button,
+    SafeAreaView, 
+    TouchableOpacity
+} from "react-native";
+import budgetCategories, {addCategory, addSubCategory} from './budgetCategories';
 import styles from "./budgetPage.style";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 
 const BudgetPage = () => {
+    const [isCategoryAdded, setIsCategoryAdded] = useState(false);
+    const [visibleCategories, setVisibleCategories] = useState({});
+
+
+    const handleAddCategory = () => {
+        addCategory("Health");
+        addSubCategory("Health", "Insurance", 0);
+        addSubCategory("Health", "Medical Bills", 0);
+        setIsCategoryAdded(true)
+    };
+
+    const toggleCategoryVisibility = (category) => {
+        setVisibleCategories((prevState) => ({
+            ...prevState,
+            [category]: !prevState[category]
+        }));
+    };
+
     return (
         <SafeAreaView>
-            <View style ={styles.container}>
-                <Text style ={styles.headingStyle}>Budget Page</Text>
-                <Text style ={styles.textStyle}>This is the placeholder for the Budget page</Text>
-                <Text> this section should be the Spending Power</Text>
-            </View>
+            <Text>Categories</Text>
+            {Object.keys(budgetCategories).map((category) => (
+                <View key={category}>
+                    <TouchableOpacity onPress={() => toggleCategoryVisibility(category)}>
+                        <Text style={styles.category}>{category}</Text>
+                    </TouchableOpacity>
+                    {visibleCategories[category] && budgetCategories[category].map((subCategory) => (
+                        <Text key={subCategory.name} style={styles.subCategory}>
+                            {subCategory.name}: ${subCategory.amount}
+                        </Text>
+                    ))}
+                </View>
+            ))}
+            <Button title="Add Health Category" onPress={handleAddCategory} />
+            {isCategoryAdded && console.log(`Health Category is added`)}
+        </SafeAreaView> 
+    );
+};
 
-            <View style={styles.container}>
-                <Text> This part should be where the graph is</Text>
-            </View>
-
-            <View style={styles.container}>
-                <Text> This part is where the categories are</Text>
-            </View>
-        </SafeAreaView>
-
-        
-    )
-}
 
 export default BudgetPage;
