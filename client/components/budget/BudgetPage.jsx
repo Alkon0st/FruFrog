@@ -37,10 +37,13 @@ const BudgetPage = () => {
             <Text>Categories</Text>
             {Object.keys(budgetCategories).map((category) => (
                 <View key={category}>
+                    {/* make the category clickable to toggle subcategories */}
                     <TouchableOpacity onPress={() => toggleCategoryVisibility(category)}>
                         <Text style={styles.category}>{category}</Text>
                     </TouchableOpacity>
+
                     {visibleCategories[category] && budgetCategories[category].map((subCategory) => (
+                        
                         <Text key={subCategory.name} style={styles.subCategory}>
                             {subCategory.name}: ${subCategory.amount}
                         </Text>
