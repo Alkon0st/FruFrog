@@ -10,10 +10,13 @@ import styles from "./budgetPage.style";
 
 
 const BudgetPage = () => {
-    const [isCategoryAdded, setIsCategoryAdded] = useState(false);
+    // state to track if a category has been added
     const [visibleCategories, setVisibleCategories] = useState({});
+    const [isCategoryAdded, setIsCategoryAdded] = useState(false);
 
 
+    // add a new category and subcategories
+    // this is just a test function to add a category
     const handleAddCategory = () => {
         addCategory("Health");
         addSubCategory("Health", "Insurance", 0);
@@ -21,6 +24,7 @@ const BudgetPage = () => {
         setIsCategoryAdded(true)
     };
 
+    // toggle the visibility of the subcategories
     const toggleCategoryVisibility = (category) => {
         setVisibleCategories((prevState) => ({
             ...prevState,
