@@ -8,7 +8,7 @@ import { View,
 } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useRouter } from "expo-router";
-import styles from "./budget.style";
+import styles from "./budgetPage.style";
 import DATA from "./data"
 
 const Item = ({title}) => (
