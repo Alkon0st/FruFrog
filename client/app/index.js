@@ -13,10 +13,7 @@ const Home = () => {
     };
 
     return (
-        <div>
-            <Nav/>
-            <HeaderButton/>
-        </div>
+        <Nav/>
         // <HomePage/>
         // <SafeAreaView>
         //     <View>

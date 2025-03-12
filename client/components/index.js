@@ -20,7 +20,6 @@ import HeaderButton from './nav/HeaderNav';
 
 export {
     Nav,
-    HeaderButton,
     HomePage,
     budgetPage,
 };

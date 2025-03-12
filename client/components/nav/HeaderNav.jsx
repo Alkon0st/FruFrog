@@ -10,26 +10,39 @@ import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
 
 
-import { Button, Text } from 'react-native';
+import { Button, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+
+const Stack = createStackNavigator()
+
 export default function HeaderButton() {
-    const Stack = createStackNavigator()
 
     return (
         <Stack.Navigator>
             <Stack.Screen 
-            name="Default" 
-            component={None}
-            options={({ navigation }) => ({
+            name="Profile" 
+            component={ProfilePage}
+            options={{
                 headerRight: () => (
-                    <Button onPress={() => navigation.navigate(ProfilePage)}>Profile</Button>
+                    <TouchableOpacity
+                        title='Profile' 
+                        onPress={() => console.log('Profile button pressed')}
+                    />
                 ),
-                headerLeft: () => (
-                    <Button onPress={() => navigation.navigate(SettingsPage)}>Settings</Button>
-                ),
-            })} />
+            }} />
         </Stack.Navigator>
-    )
+    );
 } 
+
+        // <Stack.Navigator>
+        //     <Stack.Screen
+        //     name='Settings'
+        //     component={SettingsPage}
+        //     options={({ navigation2 }) => ({
+        //         headerLeft: () => (
+        //             <Button onPress={() => navigation.navigate(SettingsPage)}>Settings</Button>
+        //         ),
+        //     })} />
+        // </Stack.Navigator>
