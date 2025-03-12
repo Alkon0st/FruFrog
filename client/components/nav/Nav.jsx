@@ -11,16 +11,32 @@ import SettingsPage from '../settings/SettingsPage'
 
 
 import { Button, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // npm run start
 
-export default function Nav() {
-    const TabNav = createBottomTabNavigator()
+// export default function Nav() {
+//     const TabNav = createBottomTabNavigator()
 
-    //TabNav.Navigator is main navigator
-    return (
+//     //TabNav.Navigator is main navigator
+//     return (
+//         <TabNav.Navigator>
+//             <TabNav.Screen name='Home' component={HomePage}/>
+//             <TabNav.Screen name='Budget' component={BudgetPage}/>
+//             <TabNav.Screen name='BillSplit' component={BillSplitPage}/>
+//             <TabNav.Screen name='History' component={HistoryPage}/>
+//             <TabNav.Screen name='Croak' component={CroakPage}/>
+//         </TabNav.Navigator>
+//     )
+// }
+
+const TabNav = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function MoreTabs() {
+    return(
         <TabNav.Navigator>
             <TabNav.Screen name='Home' component={HomePage}/>
             <TabNav.Screen name='Budget' component={BudgetPage}/>
@@ -28,6 +44,25 @@ export default function Nav() {
             <TabNav.Screen name='History' component={HistoryPage}/>
             <TabNav.Screen name='Croak' component={CroakPage}/>
         </TabNav.Navigator>
+    );
+}
+
+//Stack to contain the tabs
+function RootStack() {
+    return(
+        <Stack.Navigator>
+            <Stack.Screen
+                name="More"
+                component={MoreTabs}
+                options={{ headerShown: false}}
+            />
+        </Stack.Navigator>
     )
 }
 
+//To return the Navigation bar
+export default function Nav() {
+    return(
+        <RootStack />
+    )
+}
