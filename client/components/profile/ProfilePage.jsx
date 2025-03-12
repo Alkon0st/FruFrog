@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import styles from './ProfilePage.style';
 
 function ProfilePage() {
     return (
@@ -9,23 +10,5 @@ function ProfilePage() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    viewStyle: {
-        display: 'flex',
-        justifyConten: 'center',
-        alignItems: 'center',
-        flex: 1,
-    },
-    textStyle: {
-        fontSize: 28,
-        color: 'DarkGreen',
-    },
-    headingStyle: {
-        fontSize: 30,
-        color: 'black',
-        textAlign: 'center',
-    },
-});
 
 export default ProfilePage

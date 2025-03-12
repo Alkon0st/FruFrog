@@ -11,22 +11,4 @@ function SettingsPage() {
     );
 }
 
-const styles = StyleSheet.create({
-    viewStyle: {
-        display: 'flex',
-        justifyConten: 'center',
-        alignItems: 'center',
-        flex: 1,
-    },
-    textStyle: {
-        fontSize: 28,
-        color: 'DarkGreen',
-    },
-    headingStyle: {
-        fontSize: 30,
-        color: 'black',
-        textAlign: 'center',
-    },
-});
-
 export default SettingsPage
