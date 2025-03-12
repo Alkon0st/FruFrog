@@ -16,25 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // npm run start
 
-function HeaderButton() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen 
-            name="Default" 
-            component={None}
-            options={({ navigation }) => ({
-                headerRight: () => (
-                    <Button onPress={() => navigation.navigate(ProfilePage)}>Profile</Button>
-                ),
-                headerLeft: () => (
-                    <Button onPress={() => navigation.navigate(SettingsPage)}>Settings</Button>
-                ),
-            })} />
-        </Stack.Navigator>
-    )
-} 
-
-function Nav() {
+export default function Nav() {
     const TabNav = createBottomTabNavigator()
 
     //TabNav.Navigator is main navigator
@@ -49,4 +31,3 @@ function Nav() {
     )
 }
 
-export default {Nav, HeaderButton}
