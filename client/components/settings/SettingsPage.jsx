@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import styles from './SettingsPage.style';
 
 function SettingsPage() {
     return (
