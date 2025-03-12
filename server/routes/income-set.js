@@ -33,8 +33,8 @@ const userSchema = new mongoose.Schema({
 });
 */
 
-// Validation middleware for income update
-const validateIncomeUpdate = [
+const validateIncomeUpdate = 
+[
   body('amount')
     .isNumeric()
     .withMessage('Income amount must be a number')
