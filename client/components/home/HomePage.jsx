@@ -65,7 +65,7 @@ function HomePage() {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                    placeholder="Group Name"
+                    placeholder="Pond Name"
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
