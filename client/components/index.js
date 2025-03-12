@@ -14,7 +14,8 @@ import HomePage from "./home/HomePage"
 
 
 //navigation
-import { Nav, HeaderButton } from "./nav/Nav";
+import Nav from "./nav/Nav";
+import HeaderButton from './nav/HeaderNav';
 
 
 export {
