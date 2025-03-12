@@ -1,5 +1,5 @@
 //budget page
-import budgetPage from "./budget/budgetPage";
+import budgetPage from "./budget/BudgetPage";
 
 //billsplit page
 import billSplitPage from "./billSplit/billSplitPage"

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 // all the pages 
 import HomePage from '../home/HomePage';
-import BudgetPage from '../budget/budgetPage'
+import BudgetPage from '../budget/BudgetPage'
 import BillSplitPage from '../billSplit/billSplitPage'
 import HistoryPage from '../history/historyPage'
 import CroakPage from '../croak/croakPage'
