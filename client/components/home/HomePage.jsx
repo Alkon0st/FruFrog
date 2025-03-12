@@ -30,10 +30,10 @@ function HomePage() {
 
     //for sample options
     const options = [
-        {value: 'AAAA', label: 'AAAA'},
-        {value: 'Blip@', label: 'Blip@'},
-        {value: 'John_Doe1332', label: 'John_Doe1332'},
-        {value: 'musclemanRS', label: 'musclemanRS'},
+        {value: '1', label: 'option 1'},
+        {value: '2', label: 'option 2'},
+        {value: '3', label: 'option 3'},
+        {value: '4', label: 'option 4'},
     ]
 
     //for form
@@ -58,6 +58,7 @@ function HomePage() {
             
             
             <Text style={styles.headingStyle}>Start of Create Pond Form</Text>
+            <Text style ={styles.textStyle}>Enter Pond Name:</Text>
             <Controller
                 control={control}
                 rules={{
@@ -74,21 +75,20 @@ function HomePage() {
                 name="groupName"
             />
             {errors.groupName && <Text>This is required.</Text>}
-
+            
+            <Text style ={styles.textStyle}>Choose Pond Thumbnail:</Text>
             <Controller
                 control={control}
-                name="usernames"
+                name="thumbnail"
                 render= {({ field: {onChange, onBlur, value} }) => (
                     <Select
-                        noOptionsMessage = 'None'
                         options={options}
                         onBlur={onBlur}
                         onChange={onChange}
-                        isMulti={true}
                         value={value}
                     />
             )} />
-
+            {errors.thumbnail && <Text>This is required.</Text>}
 
             <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
@@ -103,12 +103,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     textStyle: {
-        fontSize: 28,
-        color: 'DarkGreen',
+        fontSize: 20,
+        color: '#309c61',
     },
     headingStyle: {
         fontSize: 30,
         color: 'black',
+        fontWeight: 'bold',
         textAlign: 'center',
     },
 });
