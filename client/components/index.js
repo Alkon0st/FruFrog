@@ -14,14 +14,12 @@ import HomePage from "./home/HomePage"
 
 
 //navigation
-import Nav from "./nav/Nav";
-
-
-
+import { Nav, HeaderButton } from "./nav/Nav";
 
 
 export {
     Nav,
+    HeaderButton,
     HomePage,
     budgetPage,
 };
