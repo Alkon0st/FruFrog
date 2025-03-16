@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View, Button} from 'react-native';
 
 import CreatePond from '../pondFunctions/CreatePond';
+import AddUser from '../pondFunctions/AddUser';
 
 function HomePage() {
     return (
@@ -10,6 +11,7 @@ function HomePage() {
             
             {/* Function to call for create pond */}
             <CreatePond /> 
+            <AddUser />
         </View>
     );
 }
