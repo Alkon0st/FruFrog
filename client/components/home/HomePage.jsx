@@ -10,7 +10,7 @@ import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import DropDown from '../pondFunctions/ponddropdown';
+import CreatePond from '../pondFunctions/CreatePond';
 
 function HomePage() {
     const navigation = useNavigation();
@@ -21,7 +21,7 @@ function HomePage() {
             <Text style ={styles.textStyle}>This is the placeholder for the home page</Text>
             
             {/* Function to call for create pond */}
-            <DropDown /> 
+            <CreatePond /> 
         </View>
     );
 }

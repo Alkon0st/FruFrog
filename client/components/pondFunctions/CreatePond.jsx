@@ -7,7 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import Select from 'react-select';
 
 
-function CreatePond() {
+function CreatePondFunction() {
   //for sample options
   let options = [
       {value: '1', label: 'option 1'},
@@ -72,7 +72,7 @@ function CreatePond() {
   )
 }
 
-const DropDown = () => {
+const CreatePond = () => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <SafeAreaProvider>
@@ -94,7 +94,7 @@ const DropDown = () => {
                 onPress={() => setModalVisible(!modalVisible)}>
                 <Text style={styles.textButton}>Hide</Text>
               </Pressable>
-              <CreatePond />
+              <CreatePondFunction />
             </View>
           </View>
         </Modal>
@@ -172,4 +172,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DropDown;
+export default CreatePond;
