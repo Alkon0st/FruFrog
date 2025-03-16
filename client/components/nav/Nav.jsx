@@ -17,6 +17,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // npm run start
 
+// Just Tabs
 export default function Nav() {
     const TabNav = createBottomTabNavigator()
 
