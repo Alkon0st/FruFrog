@@ -21,6 +21,14 @@ function AddUserFunction() {
       {value: 'Blip@', label: 'Blip@'},
       {value: 'John_Doe1332', label: 'John_Doe1332'},
       {value: 'musclemanRS', label: 'musclemanRS'},
+      {value: 'NaNahopley', label: 'NaNahopley'},
+      {value: 'OH_BOI', label: 'OH_BOI'},
+      {value: 'SadLad', label: 'SadLad'},
+      {value: 'SolarFlareX9', label: 'SolarFlareX9'},
+      {value: 'SpendJ5@', label: 'SpendJ5@'},
+      {value: 'TEE_HEE', label: 'TEE_HEE'},
+      {value: 'Trix_Xx', label: 'Trix_Xx'},
+      {value: 'xXMafiaBossXx', label: 'xXMafiaBossXx'},
   ]
 
   //for form
@@ -28,11 +36,7 @@ function AddUserFunction() {
       control, 
       handleSubmit,
       formState: {errors},
-  } = useForm({
-      defaultValues: {
-          groupName: "",
-      },
-  })
+  } = useForm()
 
   //takes input data and puts it in console
   const onSubmit = (data) => console.log(data)
@@ -45,13 +49,17 @@ function AddUserFunction() {
       <Controller
           control={control}
           rules={{required: true,}}
-          name="thumbnail"
+          name="requested_users"
           render= {({ field: {onChange, onBlur, value} }) => (
               <Select
-                  options={options}
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  value={value}
+                placeholder={'Search...'}
+                options={friends}
+                onBlur={onBlur}
+                onChange={onChange}
+                value={value}
+                isMulti={true}
+                isSearchable={true}
+                maxMenuHeight = {125}
               />
       )} 
       />
@@ -69,6 +77,41 @@ const AddUser = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView> 
+        {/*Popup for OPTIONS ----------------------------------------------*/}
+        <Modal 
+          animationType="none"
+          transparent = {true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal closed.');
+            setModalVisible(!modalVisible); //changes variable to not visible
+          }}>
+          {/* The popup itself */}
+          <View style={styles.mainView}>
+            <View style={styles.modalView}>
+              {/* To go back to home */}
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textButton}>Hide</Text>
+              </Pressable>
+              {/* To add selection */}
+              <View style={styles.fixToText}>
+                <Pressable
+                  style={[styles.button, styles.buttonOpen]}
+                  onPress={() => setCodeVisible(true)}>
+                  <Text style={styles.textButton}>Add User by Code</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonOpen]}
+                  onPress={() => setUserVisible(true)}>
+                  <Text style={styles.textButton}>Add User by User</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
         {/*Popup for add by User ----------------------------------------------*/}
         <Modal 
           animationType="none"
@@ -90,6 +133,7 @@ const AddUser = () => {
             </View>
           </View>
         </Modal>
+
         {/*Popup for add by CODE ----------------------------------------------*/}
         <Modal 
           animationType="none"
@@ -111,40 +155,7 @@ const AddUser = () => {
             </View>
           </View>
         </Modal>
-        {/*Popup for OPTIONS ----------------------------------------------*/}
-        <Modal 
-          animationType="none"
-          transparent = {true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal closed.');
-            setModalVisible(!modalVisible); //changes variable to not visible
-          }}>
-          {/* The popup itself */}
-          <View style={styles.mainView}>
-            <View style={styles.modalView}>
-              {/* To go back to home */}
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textButton}>Hide</Text>
-              </Pressable>
-              {/* To add selection */}
-              <View>
-                <Pressable
-                  style={[styles.button, styles.buttonOpen]}
-                  onPress={() => setCodeVisible(true)}>
-                  <Text style={styles.textButton}>Add User by Code</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.button, styles.buttonOpen]}
-                  onPress={() => setCodeVisible(true)}>
-                  <Text style={styles.textButton}>Add User by User</Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        </Modal>
+
         {/*Add User button ----------------------------------------------*/}
         <Pressable
           style={[styles.button, styles.buttonOpen]}
@@ -158,6 +169,10 @@ const AddUser = () => {
 
 // styles storage: to call do ex: styles.dropdown
 const styles = StyleSheet.create({
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
     mainView: {
       flex: 1,
       justifyContent: 'center',
