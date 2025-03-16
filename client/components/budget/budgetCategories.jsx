@@ -1,7 +1,7 @@
 let budgetCategories = {
     Housing: [
-        { name: "Rent Payments", amount: 0 },
-        { name: "Mortgage Payments", amount: 0 },
+        { name: "Rent Payments", amount: 1000 },
+        { name: "Mortgage Payments", amount: 500 },
         { name: "Property Taxes", amount: 0 },
         { name: "HOA Payments", amount: 0 },
         { name: "Home Maintenance Costs", amount: 0 }
@@ -41,13 +41,21 @@ export const addCategory = (categoryName) => {
     }
 }
 
-export const addSubCategory = (categoryName, subCategoryName) => {
+export const addSubCategory = (categoryName, subCategoryName, Amount) => {
     if (budgetCategories[categoryName]) {
-        budgetCategories[categoryName].push({name: subCategoryName, amount: 0});
+        budgetCategories[categoryName].push({name: subCategoryName, amount: Amount});
     } else {
         budgetCategories[categoryName] = [{name: subCategoryName, amount: 0}];
     }
 }
 
+export const updateSubCategoryAmount = (categoryName, subCategoryName, amount) => {
+    if (budgetCategories[categoryName]) {
+        const subCategory = budgetCategories[categoryName].find(sub => sub.name === subCategoryName);
+        if (subCategory) {
+            subCategory.amount = amount;
+        }
+    }
+}
 
 export default budgetCategories;
