@@ -8,13 +8,13 @@ function LoginPage() {
           <Text style={styles.headingStyle}>Welcome Back</Text>
           <Text style={styles.textStyle}>Log in to see what you have toad-do</Text>
           
-          {/* Function to call for Sign In button */}
+          {/* Function call for Sign In button */}
           {currentForm === 'Sign In' && (
             <View style={styles.authToggle}>
           <SignIn />
           </View>
           )}
-          {/* Function to call for Forgot Password button */}
+          {/* Function call for Forgot Password button */}
           {currentForm === 'Forgot Password?' && (
             <View style={styles.authToggle}>    
           <ForgotPassword />
