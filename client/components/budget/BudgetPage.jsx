@@ -3,21 +3,23 @@ import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-na
 import budgetCategories from './budgetCategories';
 import styles from "./budgetPage.style";
 import { toggleCategoryVisibility, getTotalAmount, handleUpdateAmount } from './budgetHandler';
-import AddCategoryModal from './addCategoryModal';
-import AddSubcategoryModal from './addSubcategoryModal';
-
+import AddSubcategoryModal from './modals/addSubcategoryModal';
+import AddCategoryModal from './modals/addCategoryModal';
+import EditSubcategoryModal from './modals/editSubcategoryModal';
 
 const BudgetPage = () => {
-    // useState to manage the visibility of categories and modals
     const [visible, setVisible] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [newCategory, setNewCategory] = useState('');
     const [newSubCategory, setNewSubCategory] = useState('');
     const [newSubCategoryAmount, setNewSubCategoryAmount] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+    const [updatedSubCategoryName, setUpdatedSubCategoryName] = useState('');
+    const [updatedSubCategoryAmount, setUpdatedSubCategoryAmount] = useState('');
 
-    // Function to handle adding a new category
     const handleAddNewCategory = () => {
         if (newCategory) {
             budgetCategories[newCategory] = [];
@@ -26,10 +28,8 @@ const BudgetPage = () => {
         }
     };
 
-    // Function to handle adding a new subcategory to the selected category
     const handleAddNewSubCategory = () => {
         if (newSubCategory && selectedCategory && newSubCategoryAmount) {
-            // Add the new subcategory to the selected category
             budgetCategories[selectedCategory].push({ name: newSubCategory, amount: parseFloat(newSubCategoryAmount) });
             setIsModalVisible(false);
             setNewSubCategory('');
@@ -37,7 +37,22 @@ const BudgetPage = () => {
         }
     };
 
-    // Function to render the chevron icon based on category visibility
+    const handleUpdateSubCategory = () => {
+        if (selectedCategory && selectedSubcategory && updatedSubCategoryName && updatedSubCategoryAmount) {
+            const subcategories = budgetCategories[selectedCategory];
+            const subcategoryIndex = subcategories.findIndex(sub => sub.name === selectedSubcategory.name);
+            if (subcategoryIndex !== -1) {
+                subcategories[subcategoryIndex] = {
+                    name: updatedSubCategoryName,
+                    amount: parseFloat(updatedSubCategoryAmount)
+                };
+                setIsEditModalVisible(false);
+                setUpdatedSubCategoryName('');
+                setUpdatedSubCategoryAmount('');
+            }
+        }
+    };
+
     const renderChevron = (category) => (
         <Text style={styles.chevron}>
             {visible[category] ? 'v' : '>'}
@@ -58,7 +73,6 @@ const BudgetPage = () => {
                         <Text style={styles.addButtonText}>+</Text>
                     </TouchableOpacity>
                 </View>
-                
                 {/* {Object.keys(budgetCategories).filter(category => getTotalAmount(category, budgetCategories) > 0).map((category) => ( */}
                 {Object.keys(budgetCategories).map((category) => (
                     <View key={category}>
@@ -71,17 +85,18 @@ const BudgetPage = () => {
 
                         {visible[category] && (
                             <View>
-                                {budgetCategories[category].filter(subCategory => subCategory.amount > 0).map((subCategory) => (
+                                {/* {budgetCategories[category].filter(subCategory => subCategory.amount > 0).map((subCategory) => ( */}
+                                {budgetCategories[category].map((subCategory) => (    
                                     <View key={subCategory.name} style={[styles.subCategoryContainer, styles.p]}>
-                                        <TouchableOpacity onPress={() => handleUpdateAmount(category, subCategory.name, subCategory.amount, setVisible, visible)}>
+                                        <TouchableOpacity onPress={() => { setSelectedCategory(category); setSelectedSubcategory(subCategory); setUpdatedSubCategoryName(subCategory.name); setUpdatedSubCategoryAmount(subCategory.amount.toString()); setIsEditModalVisible(true); }}>
                                             <Text style={styles.subCategory}>
                                                 {subCategory.name}: ${subCategory.amount}
                                             </Text>
                                         </TouchableOpacity>
-                                    </View>
+                                    </View> 
                                 ))}
                                 <TouchableOpacity onPress={() => { setSelectedCategory(category); setIsModalVisible(true); }} style={styles.addButton}>
-                                    <Text style={styles.addButtonText}>+</Text>
+                                        <Text style={styles.addButtonText}>Add</Text>
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -106,6 +121,17 @@ const BudgetPage = () => {
                 newSubCategoryAmount={newSubCategoryAmount}
                 setNewSubCategoryAmount={setNewSubCategoryAmount}
                 handleAddNewSubCategory={handleAddNewSubCategory}
+            />
+
+            <EditSubcategoryModal
+                visible={isEditModalVisible}
+                onClose={() => setIsEditModalVisible(false)}
+                selectedSubcategory={selectedSubcategory}
+                updatedSubCategoryName={updatedSubCategoryName}
+                setUpdatedSubCategoryName={setUpdatedSubCategoryName}
+                updatedSubCategoryAmount={updatedSubCategoryAmount}
+                setUpdatedSubCategoryAmount={setUpdatedSubCategoryAmount}
+                handleUpdateSubCategory={handleUpdateSubCategory}
             />
         </SafeAreaView>
     );

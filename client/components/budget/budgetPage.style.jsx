@@ -58,8 +58,21 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        marginLeft: 10,
+    },
+    editButton: {
+        backgroundColor: '#FFA500',
+        padding: 10,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     addButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    editButtonText: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 18,
@@ -98,7 +111,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
-    }
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        marginTop: 10,
+    },
 });
 
 export default styles;

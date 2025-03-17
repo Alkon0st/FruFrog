@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Button, Modal } from 'react-native';
-import styles from "./budgetPage.style";
+import styles from "../budgetPage.style";
 
 const AddCategoryModal = ({
     visible,
@@ -18,7 +18,7 @@ const AddCategoryModal = ({
         >
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>+</Text>
+                    <Text style={styles.modalTitle}> Add New Category </Text>
                     <TextInput
                         style={styles.input}
                         placeholder="New Category"

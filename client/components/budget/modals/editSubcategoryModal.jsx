@@ -1,16 +1,16 @@
 import React from 'react';
 import { View, Text, TextInput, Button, Modal } from 'react-native';
-import styles from "./budgetPage.style";
+import styles from "../budgetPage.style";
 
-const AddSubcategoryModal = ({
+const EditSubcategoryModal = ({
     visible,
     onClose,
-    selectedCategory,
-    newSubCategory,
-    setNewSubCategory,
-    newSubCategoryAmount,
-    setNewSubCategoryAmount,
-    handleAddNewSubCategory
+    selectedSubcategory,
+    updatedSubCategoryName,
+    setUpdatedSubCategoryName,
+    updatedSubCategoryAmount,
+    setUpdatedSubCategoryAmount,
+    handleUpdateSubCategory
 }) => {
     return (
         <Modal
@@ -21,21 +21,21 @@ const AddSubcategoryModal = ({
         >
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Add Subcategory to {selectedCategory}</Text>
+                    <Text style={styles.modalTitle}>Edit Subcategory</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="New Subcategory"
-                        value={newSubCategory}
-                        onChangeText={setNewSubCategory}
+                        placeholder="Subcategory Name"
+                        value={updatedSubCategoryName}
+                        onChangeText={setUpdatedSubCategoryName}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder="Amount"
-                        value={newSubCategoryAmount}
-                        onChangeText={setNewSubCategoryAmount}
+                        value={updatedSubCategoryAmount}
+                        onChangeText={setUpdatedSubCategoryAmount}
                         keyboardType="numeric"
                     />
-                    <Button title="Add" onPress={handleAddNewSubCategory} />
+                    <Button title="Update" onPress={handleUpdateSubCategory} />
                     <Button title="Cancel" onPress={onClose} />
                 </View>
             </View>
@@ -43,4 +43,4 @@ const AddSubcategoryModal = ({
     );
 };
 
-export default AddSubcategoryModal;
+export default EditSubcategoryModal;
