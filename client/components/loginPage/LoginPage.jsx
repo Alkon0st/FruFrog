@@ -1,25 +1,20 @@
 import { StyleSheet, Text, View, Button } from "react-native";
+import React, { useState } from 'react';
 
 function LoginPage() {
+  const [pondName] = useState('AHHHHHHHHHHHHHH');
+
   return (
       <View style={styles.viewStyle}>
           <Text style={styles.headingStyle}>Welcome Back</Text>
           <Text style={styles.textStyle}>Log in to see what you have toad-do</Text>
+          <Text> {pondName} </Text>
           
           {/* Function call for Sign In button */}
-          {currentForm === 'Sign In' && (
-            <View style={styles.authToggle}>
           <SignIn />
-          </View>
-          )}
-          {/* Function call for Forgot Password button */}
-          {currentForm === 'Forgot Password?' && (
-            <View style={styles.authToggle}>    
+          {/* Function call for Forgot Password button */} 
           <ForgotPassword />
-          </View>
-          )}
       </View>
-
   );
 }
 
