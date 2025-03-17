@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
         elevation: 2,
+        backgroundColor: '#89d149'
       },
       buttonOpen: {
         backgroundColor: '#F194FF',
@@ -45,6 +46,9 @@ const styles = StyleSheet.create({
       warningText: {
         color: '#EF0000',
       },
+      validText: {
+        color: '#00ff26',
+      },
       headingStyle: {
         fontSize: 30,
         color: 'black',
@@ -52,6 +56,7 @@ const styles = StyleSheet.create({
       },
       textInputStyle: {
         fontSize: 20,
+        color: '#A0A0A0',
       },
       textStyle: {
         fontSize: 20,

@@ -1,17 +1,85 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View, Button } from 'react-native';
+import {Alert, Modal, Text, Pressable, View, Button, TouchableOpacity } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 // SafeAreaView & associated are modules that automatically applies padding for views that are not covered
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import Select from 'react-select';
 
+import styles from './AddUser.style';
+
 function AddCodeFunction() {
-  return(
+  const [otp, setOtp] = useState('');
+  const [generated, setGenerated] = useState(false);
+  const [userInput, setUserInput] = useState('');
+  const [isValid, setIsValid] = useState(null);
+  // State to control OTP box visibility
+  const [showOtpBox, setShowOtpBox] = useState(false);
+
+  // Function to generate a random OTP
+  const generateOtp = () => {
+    let generatedOtp = '';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < 6; i++) {
+      generatedOtp += characters
+        .charAt(Math
+          .floor(Math.random() * characters.length));
+    }
+
+    // Set the generated OTP and reset the validity status
+    setOtp(generatedOtp);
+    setIsValid(null);
+    // Show the OTP box after generating OTP
+    setShowOtpBox(true);
+  };
+
+  // Function to validate the entered OTP
+  const validateOtp = () => {
+      if (userInput === otp) {
+          setIsValid(true);
+      } else {
+          setIsValid(false);
+      }
+  };
+
+  return (
     <View>
-      <Text> Add by Code Placeholder </Text>
+      <Text style={styles.headingStyle}>Add by Code</Text>
+      <View>
+        <Text style={styles.textStyle}> Code Generator </Text>
+        <TouchableOpacity style={styles.button}
+          onPress={generateOtp}>
+          <Text style={styles.textButton}> Generate Code </Text>
+        </TouchableOpacity>
+        {showOtpBox && (
+          // Conditionally render the OTP box
+          <View>
+            <Text style={{color: 'black', fontSize: 18}}> Generated Code: {otp} </Text>
+          </View>
+        )}
+        <Text style={[styles.textStyle, {marginTop: 10}]}>Code Validator (test)</Text>
+        <TextInput
+          style={[styles.textInputStyle, {fontSize: 18}]}
+          placeholder="Enter Pond Code"
+          value={userInput}
+          onChangeText={setUserInput}
+        />
+        <TouchableOpacity style={styles.button}
+          onPress={validateOtp}>
+          <Text style={styles.textButton}> Validate Code </Text>
+        </TouchableOpacity>
+        {/* Display messages based on the validity status */}
+        {isValid === true &&
+          <Text style={styles.validText}> Valid Code </Text>
+          }
+        {isValid === false &&
+          <Text style={styles.warningText}> Invalid Code </Text>
+          }
+      </View>
     </View>
-  )
+  );
 }
 
 function AddUserFunction() {
@@ -166,72 +234,5 @@ const AddUser = () => {
     </SafeAreaProvider>
   )
 }
-
-// styles storage: to call do ex: styles.dropdown
-const styles = StyleSheet.create({
-  fixToText: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-    mainView: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(179, 228, 183, 0.5)'
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: 'white',
-      borderRadius: 20,
-      padding: 35,
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    button: {
-      margin: 5,
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2,
-    },
-    buttonOpen: {
-      backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-      backgroundColor: '#2196F3',
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: 'center',
-    },
-    warningText: {
-      color: '#EF0000',
-    },
-    headingStyle: {
-      fontSize: 30,
-      color: 'black',
-      fontWeight: 'bold',
-    },
-    textInputStyle: {
-      fontSize: 20,
-    },
-    textStyle: {
-      fontSize: 20,
-      color: '#309c61',
-      marginBottom: 3,
-    },
-    textButton: {
-      margin: 3,
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-});
 
 export default AddUser;
