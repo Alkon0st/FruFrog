@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     container: {
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
     addButton: {
         backgroundColor: '#007BFF',
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -61,6 +63,16 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 18,
+    },
+    addButtonCategory: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#007AFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginVertical: 10,
     },
     categoriesHeader: {
         flexDirection: 'row',
@@ -70,16 +82,17 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent:'flex-end',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        width: 300,
+        width: width,
+        height: '60%',
         padding: 20,
         backgroundColor: 'white',
         borderRadius: 10,
-        alignItems: 'center',
+        alignItems: 'baseline',
     },
     modalTitle: {
         fontSize: 18,

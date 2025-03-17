@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { View, Text, Button, SafeAreaView, TextInput, TouchableOpacity, Modal } from "react-native";
+import { View, Text, Button, SafeAreaView, TextInput, TouchableOpacity, Modal, ScrollView } from "react-native";
 import budgetCategories from './budgetCategories';
 import styles from "./budgetPage.style";
 import { handleAddCategory, handleAddSubCategory, toggleCategoryVisibility, getTotalAmount, handleUpdateAmount, deleteCategory, deleteSubCategory } from './budgetHandler';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const BudgetPage = () => {
     const [visible, setVisible] = useState({});
@@ -14,14 +13,16 @@ const BudgetPage = () => {
 
     const handleAddNewCategory = () => {
         if (newCategory) {
-            handleAddCategory(newCategory, setIsCategoryAdded);
+            handleAddCategory(newCategory);
+            setIsCategoryAdded(false);
             setNewCategory('');
         }
     };
 
     const handleAddNewSubCategory = () => {
         if (newSubCategory && selectedCategory) {
-            handleAddSubCategory(selectedCategory, newSubCategory, setSelectedCategory);
+            handleAddSubCategory(selectedCategory, newSubCategory);
+            setSelectedCategory(null);
             setNewSubCategory('');
         }
     };
@@ -40,11 +41,14 @@ const BudgetPage = () => {
                 <Text style={styles.h2}>Spending Power</Text>
 
                 <Text style={styles.h2}>Graph</Text>
-
-            
+                <View style={styles.categoryContainer}>
                 <Text style={styles.h2}>Categories</Text>
+                <TouchableOpacity onPress={() => setIsCategoryAdded(true)} style={styles.addButtonCategory}>
+                    <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
+                </View>
                 {Object.keys(budgetCategories).filter(category => getTotalAmount(category, budgetCategories) > 0).map((category) => (
-                    <View key={category}> 
+                    <View key={category}>
                         <TouchableOpacity onPress={() => toggleCategoryVisibility(category, setVisible)} style={styles.categoryContainer}>
                             <Text style={[styles.category, styles.h3]}>
                                 {category}: ${getTotalAmount(category, budgetCategories)}
@@ -54,7 +58,7 @@ const BudgetPage = () => {
 
                         {visible[category] && (
                             <View>
-                                {budgetCategories[category].map((subCategory) => (
+                                {budgetCategories[category].filter(subCategory => subCategory.amount > 0).map((subCategory) => (
                                     <View key={subCategory.name} style={[styles.subCategoryContainer, styles.p]}>
                                         <TouchableOpacity onPress={() => handleUpdateAmount(category, subCategory.name, subCategory.amount, setVisible, visible)}>
                                             <Text style={styles.subCategory}>
@@ -63,17 +67,16 @@ const BudgetPage = () => {
                                         </TouchableOpacity>
                                     </View>
                                 ))}
-                                <TouchableOpacity onPress={() => setSelectedCategory(category)} style={styles.addButton}>
+                                {/* <TouchableOpacity onPress={() => setSelectedCategory(category)} style={styles.addButtonCategory}>
                                     <Text style={styles.addButtonText}>+</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
                         )}
                     </View>
                 ))}
+                
             </ScrollView>
-            
-            
-            
+
             {isCategoryAdded && (
                 <Modal
                     transparent={true}
