@@ -16,7 +16,7 @@ function LoginPage() {
           {/* Function call for Sign In button */}
           <SignIn />
           {/* Function call for Forgot Password button */}
-          <ForgotPasswordFunction />        
+          {/* It looks horrible and doesn't function the way I want it to. I'll have to fix it later */}        
       </View>
   );
 }
