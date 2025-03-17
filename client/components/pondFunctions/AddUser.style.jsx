@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   fixToText: {
-      flexDirection: 'row',
-      justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
     },
   mainView: {
     flex: 1,
