@@ -28,7 +28,8 @@ function CreatePondFunction() {
   })
 
   //takes input data and puts it in console
-  const onSubmit = (data) => console.log(data)
+  //const onSubmit = (data) => console.log(data.groupName)
+  const onSubmit = (data) => console.log(data.groupName)
 
   return (
     <View>
