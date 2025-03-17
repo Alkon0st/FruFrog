@@ -1,13 +1,17 @@
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
 
 import CreatePond from '../pondFunctions/CreatePond';
 import AddUser from '../pondFunctions/AddUser';
 
 function HomePage() {
+    const [pondName, setPondName] = useState('AHHHHHHHHHHHHHH');
+
     return (
         <View style ={styles.viewStyle}>
             <Text style ={styles.headingStyle}>Home Page</Text>
             <Text style ={styles.textStyle}>This is the placeholder for the home page</Text>
+            <Text> {pondName} </Text>
             
             {/* Function to call for create pond */}
             <CreatePond /> 
