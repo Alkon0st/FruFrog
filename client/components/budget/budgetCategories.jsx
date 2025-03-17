@@ -4,21 +4,21 @@
 // this is a sample object, you can add more categories and subcategories as needed; server will send the budgetCategories object to the client
 let budgetCategories = {
     Housing: [
-        { name: "Rent Payments", amount: 1000 },
-        { name: "Mortgage Payments", amount: 500 },
+        { name: "Rent Payments", amount: 1000.15 },
+        { name: "Mortgage Payments", amount: 500.10 },
         { name: "Property Taxes", amount: 0 },
         { name: "HOA Payments", amount: 0 },
         { name: "Home Maintenance Costs", amount: 0 }
     ],
     Transportation: [
-        { name: "Car Payments", amount: 0 },
-        { name: "Car Warranty", amount: 0 },
+        { name: "Car Payments", amount: 500.00 },
+        { name: "Car Warranty", amount: 25.00 },
         { name: "Gas", amount: 0 },
         { name: "Parking Fees", amount: 0 },
         { name: "Maintenance", amount: 0 }
     ],
     Food: [
-        { name: "Groceries", amount: 0 },
+        { name: "Groceries", amount: 100 },
         { name: "Restaurants", amount: 0 },
         { name: "Pet Food", amount: 0 }
     ],

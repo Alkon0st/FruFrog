@@ -2,7 +2,7 @@ import { addCategory, addSubCategory, updateSubCategoryAmount } from './budgetCa
 
 export const handleAddCategory = (categoryName, setIsCategoryAdded) => {
     addCategory(categoryName);
-    setIsCategoryAdded(true);
+    setIsCategoryAdded(false);
 };
 
 export const handleAddSubCategory = (categoryName, subCategoryName, setSelectedCategory) => {
