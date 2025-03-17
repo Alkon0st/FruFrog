@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     },
     textInputStyle: {
       fontSize: 20,
+      color: '#A0A0A0',
     },
     textStyle: {
       fontSize: 20,
