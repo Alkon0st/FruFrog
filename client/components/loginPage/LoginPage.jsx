@@ -1,6 +1,4 @@
 import { StyleSheet, Text, View, Button } from "react-native";
-import SignIn from "./SignIn";
-import ForgotPassword from "./ForgotPassword";
 
 function LoginPage() {
   return (
