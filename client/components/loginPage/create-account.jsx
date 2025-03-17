@@ -1,175 +1,226 @@
-import { useState } from "react";
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 
 const CreateAccount = () => {
+  // State for form fields and validation
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  // State for error messages
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  
+  // State for success message
+  const [showSuccess, setShowSuccess] = useState(false);
+  
+  // Validation functions
+  const validateUsername = (text) => {
+    if (text.length < 3) {
+      setUsernameError('Username must be at least 3 characters long');
+      return false;
+    }
+    setUsernameError('');
+    return true;
+  };
+  
+  const validateEmail = (text) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(text)) {
+      setEmailError('Please enter a valid email address');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+  
+  const validatePassword = (text) => {
+    if (text.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
+  
+  // Form submission handler
+  const handleSubmit = () => {
+    const isUsernameValid = validateUsername(username);
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+    
+    if (isUsernameValid && isEmailValid && isPasswordValid) {
+      // In a real app, you would call your API here
+      setShowSuccess(true);
+      
+      // Reset form after successful submission
+      setTimeout(() => {
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setShowSuccess(false);
+      }, 3000);
+    }
+  };
+
   return (
-    <div>
-      <style>
-        {`
-          /* Container styling */
-          .register-container {
-              max-width: 400px;
-              margin: 50px auto;
-              padding: 20px;
-              font-family: Arial, sans-serif;
-          }
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.registerContainer}>
+          <View style={styles.registerForm}>
+            <Text style={styles.formTitle}>Create Account</Text>
 
-          /* Form styling */
-          .register-form {
-              background: #f9f9f9;
-              padding: 25px;
-              border-radius: 8px;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          }
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Username</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter username"
+                value={username}
+                onChangeText={(text) => {
+                  setUsername(text);
+                  validateUsername(text);
+                }}
+              />
+              {usernameError ? (
+                <Text style={styles.errorMessage}>{usernameError}</Text>
+              ) : null}
+            </View>
 
-          .form-title {
-              text-align: center;
-              margin-bottom: 20px;
-              color: #333;
-              font-size: 24px;
-          }
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  validateEmail(text);
+                }}
+              />
+              {emailError ? (
+                <Text style={styles.errorMessage}>{emailError}</Text>
+              ) : null}
+            </View>
 
-          .form-group {
-              margin-bottom: 20px;
-          }
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Password</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter password"
+                secureTextEntry
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  validatePassword(text);
+                }}
+              />
+              {passwordError ? (
+                <Text style={styles.errorMessage}>{passwordError}</Text>
+              ) : null}
+            </View>
 
-          .form-group label {
-              display: block;
-              margin-bottom: 5px;
-              font-weight: bold;
-              color: #555;
-          }
-
-          .form-group input {
-              width: 100%;
-              padding: 10px;
-              border: 1px solid #ddd;
-              border-radius: 4px;
-              font-size: 16px;
-              box-sizing: border-box;
-          }
-
-          .form-group input:focus {
-              outline: none;
-              border-color: #007bff;
-              box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-          }
-
-          /* Error messaging */
-          .error-message {
-              color: #dc3545;
-              font-size: 14px;
-              margin-top: 5px;
-              display: none;
-          }
-
-          .error .error-message {
-              display: block;
-          }
-
-          /* Submit button */
-          .submit-btn {
-              width: 100%;
-              background: #007bff;
-              color: white;
-              border: none;
-              padding: 12px;
-              border-radius: 4px;
-              cursor: pointer;
-              font-size: 16px;
-              transition: background 0.3s;
-          }
-
-          .submit-btn:hover {
-              background: #0056b3;
-          }
-
-          .submit-btn:disabled {
-              background: #cccccc;
-              cursor: not-allowed;
-          }
-
-          /* Success message */
-          .success-message {
-              text-align: center;
-              color: #28a745;
-              margin-top: 15px;
-              display: none;
-          }
-
-          .success .success-message {
-              display: block;
-          }
-
-          /* Responsive design */
-          @media (max-width: 480px) {
-              .register-container {
-                  margin: 20px;
-                  padding: 10px;
-              }
-
-              .register-form {
-                  padding: 15px;
-              }
-          }
-        `}
-      </style>
-      <div className="register-container">
-        <form className="register-form" id="registerForm">
-          <h2 className="form-title">Create Account</h2>
-
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input 
-              type="text" 
-              id="username" 
-              name="username" 
-              required 
-              minLength="3"
-              placeholder="Enter username"
-            />
-            <div className="error-message" id="username-error">
-              Username must be at least 3 characters long
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              required 
-              placeholder="Enter email"
-            />
-            <div className="error-message" id="email-error">
-              Please enter a valid email address
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              required 
-              minLength="6"
-              placeholder="Enter password"
-            />
-            <div className="error-message" id="password-error">
-              Password must be at least 6 characters long
-            </div>
-          </div>
-
-          <button type="submit" className="submit-btn">
-            Register
-          </button>
-          <div className="success-message" id="success-message">
-            Account created successfully!
-          </div>
-        </form>
-      </div>
-    </div>
+            <TouchableOpacity
+              style={styles.submitBtn}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.submitBtnText}>Register</Text>
+            </TouchableOpacity>
+            
+            {showSuccess && (
+              <Text style={styles.successMessage}>
+                Account created successfully!
+              </Text>
+            )}
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  registerContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  registerForm: {
+    backgroundColor: '#f9f9f9',
+    padding: 25,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  formTitle: {
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#333',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  formGroup: {
+    marginBottom: 20,
+  },
+  label: {
+    marginBottom: 5,
+    fontWeight: 'bold',
+    color: '#555',
+    fontSize: 16,
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 4,
+    fontSize: 16,
+  },
+  errorMessage: {
+    color: '#dc3545',
+    fontSize: 14,
+    marginTop: 5,
+  },
+  submitBtn: {
+    width: '100%',
+    backgroundColor: '#007bff',
+    padding: 12,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  submitBtnText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  successMessage: {
+    textAlign: 'center',
+    color: '#28a745',
+    marginTop: 15,
+    fontSize: 16,
+  },
+});
 export default CreateAccount;

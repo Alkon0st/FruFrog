@@ -11,16 +11,15 @@ const validateUsernameUpdate =
     .withMessage('Username must be at least 3 characters long')
     .escape()
     .custom(async (value, { req }) => {
-      // Check if new username is already taken by another user
+      
       const existingUser = await User.findOne({
-        username: value,
-        _id: { $ne: req.userData.userId } // Exclude current user
+        username: value, // Checks if new username is already taken by another user by value
+        _id: { $ne: req.userData.userId }
       });
       
       if (existingUser) {
         throw new Error('Username is already taken');
       }
-      
       return true;
     }),
   body('password')
