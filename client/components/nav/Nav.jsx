@@ -8,6 +8,7 @@ import HistoryPage from '../history/historyPage'
 import CroakPage from '../croak/croakPage'
 import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
+import LoginPage from '../loginPage/LoginPage';
 
 
 import { Button, Text } from 'react-native';
@@ -24,6 +25,7 @@ export default function Nav() {
     //TabNav.Navigator is main navigator
     return (
         <TabNav.Navigator>
+            <TabNav.Screen name='Login' component={LoginPage}/>
             <TabNav.Screen name='Home' component={HomePage}/>
             <TabNav.Screen name='Budget' component={BudgetPage}/>
             <TabNav.Screen name='BillSplit' component={BillSplitPage}/>
