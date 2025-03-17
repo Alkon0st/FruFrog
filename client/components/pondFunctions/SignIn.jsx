@@ -22,13 +22,6 @@ function SignInFunction() {
         }
     });
     
-    // Role options for Select component
-    const roleOptions = [
-        { value: 'user', label: 'User' },
-        { value: 'admin', label: 'Administrator' },
-        { value: 'guest', label: 'Guest' }
-    ];
-    
     const onSubmit = (data) => {
         if (data.username === 'admin' && data.password === 'admin') {
             setShowError(false);
@@ -110,29 +103,6 @@ function SignInFunction() {
                             </>
                         )}
                         name="password"
-                    />
-                    
-                    <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                            <View style={styles.selectContainer}>
-                                <Text style={styles.textStyle}>Role:</Text>
-                                <Select
-                                    options={roleOptions}
-                                    placeholder="Select your role"
-                                    onChange={(selected) => onChange(selected.value)}
-                                    value={roleOptions.find(option => option.value === value)}
-                                    styles={{
-                                        control: (base) => ({
-                                            ...base,
-                                            width: '100%',
-                                            marginBottom: 10
-                                        })
-                                    }}
-                                />
-                            </View>
-                        )}
-                        name="role"
                     />
                     
                     {showError && (

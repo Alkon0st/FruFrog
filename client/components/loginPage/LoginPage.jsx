@@ -14,7 +14,8 @@ function LoginPage() {
           
           {/* Function call for Sign In button */}
           <SignIn />
-          {/* Function call for Forgot Password button */} 
+          {/* Function call for Forgot Password button */}
+          <ForgotPassword />        
       </View>
   );
 }
