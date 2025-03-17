@@ -1,85 +1,126 @@
 import { useState } from 'react';
-import { View, 
-    Text, 
-    Button,
-    SafeAreaView, 
-    TextInput,
-    TouchableOpacity
-} from "react-native";
-import budgetCategories, {addCategory, addSubCategory, updateSubCategoryAmount} from './budgetCategories';
+import { View, Text, Button, SafeAreaView, TextInput, TouchableOpacity, Modal } from "react-native";
+import budgetCategories from './budgetCategories';
 import styles from "./budgetPage.style";
-
+import { handleAddCategory, handleAddSubCategory, toggleCategoryVisibility, getTotalAmount, handleUpdateAmount, deleteCategory, deleteSubCategory } from './budgetHandler';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const BudgetPage = () => {
-    // state to track if a category has been added
-    const [visibleCategories, setVisibleCategories] = useState({});
+    const [visible, setVisible] = useState({});
     const [isCategoryAdded, setIsCategoryAdded] = useState(false);
+    const [newCategory, setNewCategory] = useState('');
+    const [newSubCategory, setNewSubCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
-
-    // add a new category and subcategories
-    // this is just a test function to add a category
-    const handleAddCategory = () => {
-        addCategory("Health");
-        addSubCategory("Health", "Insurance", 10);
-        addSubCategory("Health", "Medical Bills", 25);
-        setIsCategoryAdded(true)
+    const handleAddNewCategory = () => {
+        if (newCategory) {
+            handleAddCategory(newCategory, setIsCategoryAdded);
+            setNewCategory('');
+        }
     };
 
-
-    // toggle the visibility of the subcategories
-    const toggleCategoryVisibility = (category) => {
-        setVisibleCategories((prevState) => ({
-            ...prevState,
-            [category]: !prevState[category]
-        }));
+    const handleAddNewSubCategory = () => {
+        if (newSubCategory && selectedCategory) {
+            handleAddSubCategory(selectedCategory, newSubCategory, setSelectedCategory);
+            setNewSubCategory('');
+        }
     };
 
-    // calculate the total amount for a category
-    const getTotalAmount = (category) => {
-        return budgetCategories[category].reduce((total, subCategory) => total + subCategory.amount, 0);
-    };
-
-    // handle updating the amount for a subcategory and update the state
-    const handleUpdateAmount = () => (category, subCategoryName, amount) => {
-        updateSubCategoryAmount(category, subCategoryName, amount);
-        setVisibleCategories({...visibleCategories})
-    };
-
-
+    const renderChevron = (category) => (
+        <Text style={styles.chevron}>
+            {visible[category] ? 'v' : '>'}
+        </Text>
+    );
 
     return (
-        <SafeAreaView>
-            <Text>Categories</Text>
-            {Object.keys(budgetCategories).map((category) => (
-                <View key={category}>
-                    {/* make the category clickable to toggle subcategories */}
-                    <TouchableOpacity onPress={() => toggleCategoryVisibility(category)}>
-                        <Text style={styles.category}>
-                            {category}: ${getTotalAmount(category)}
-                        </Text>
-                    </TouchableOpacity>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
+                <Text style={styles.h1}>Budget Page</Text>
 
-                    {/* display the subcategories if the category is visible */}
-                    {visibleCategories[category] && budgetCategories[category].map((subCategory) => (
-                    <View key={subCategory.name} style={styles.subCategoryContainer}>
-                        <Text style={styles.subCategory}>
-                            {subCategory.name}: ${subCategory.amount}
-                        </Text>
-                        {/* <TextInput
-                            placeholder="Enter Amount"
-                            keyboardType="numeric"
-                            onChangeText={(text) => handleUpdateAmount(category, subCategory.name, text)}
-                        /> */}
+                <Text style={styles.h2}>Spending Power</Text>
+
+                <Text style={styles.h2}>Graph</Text>
+
+            
+                <Text style={styles.h2}>Categories</Text>
+                {Object.keys(budgetCategories).filter(category => getTotalAmount(category, budgetCategories) > 0).map((category) => (
+                    <View key={category}> 
+                        <TouchableOpacity onPress={() => toggleCategoryVisibility(category, setVisible)} style={styles.categoryContainer}>
+                            <Text style={[styles.category, styles.h3]}>
+                                {category}: ${getTotalAmount(category, budgetCategories)}
+                            </Text>
+                            {renderChevron(category)}
+                        </TouchableOpacity>
+
+                        {visible[category] && (
+                            <View>
+                                {budgetCategories[category].map((subCategory) => (
+                                    <View key={subCategory.name} style={[styles.subCategoryContainer, styles.p]}>
+                                        <TouchableOpacity onPress={() => handleUpdateAmount(category, subCategory.name, subCategory.amount, setVisible, visible)}>
+                                            <Text style={styles.subCategory}>
+                                                {subCategory.name}: ${subCategory.amount}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
+                                <TouchableOpacity onPress={() => setSelectedCategory(category)} style={styles.addButton}>
+                                    <Text style={styles.addButtonText}>+</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
                     </View>
-                    ))}
+                ))}
+            </ScrollView>
+            
+            
+            
+            {isCategoryAdded && (
+                <Modal
+                    transparent={true}
+                    animationType="slide"
+                    visible={isCategoryAdded}
+                    onRequestClose={() => setIsCategoryAdded(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Add New Category</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="New Category"
+                                value={newCategory}
+                                onChangeText={setNewCategory}
+                            />
+                            <Button title="Add" onPress={handleAddNewCategory} />
+                            <Button title="Cancel" onPress={() => setIsCategoryAdded(false)} />
+                        </View>
+                    </View>
+                </Modal>
+            )}
 
-                </View>
-            ))}
-            <Button title="Add Health Category" onPress={handleAddCategory} />
-            {/* {isCategoryAdded && console.log(`Health Category is added`)} */}
-        </SafeAreaView> 
+            {selectedCategory && (
+                <Modal
+                    transparent={true}
+                    animationType="slide"
+                    visible={!!selectedCategory}
+                    onRequestClose={() => setSelectedCategory(null)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Add Subcategory to {selectedCategory}</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="New Subcategory"
+                                value={newSubCategory}
+                                onChangeText={setNewSubCategory}
+                            />
+                            <Button title="Add" onPress={handleAddNewSubCategory} />
+                            <Button title="Cancel" onPress={() => setSelectedCategory(null)} />
+                        </View>
+                    </View>
+                </Modal>
+            )}
+        </SafeAreaView>
     );
 };
-
 
 export default BudgetPage;
