@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View, Button } from "react-native";
 import React, { useState } from 'react';
 
-import SignIn from '../pondFunctions/SignIn';
-import ForgotPasswordFunction from "../pondFunctions/ForgotPassword";
+import SignIn from './SignIn';
 
 function LoginPage() {
   const [pondName] = useState('AHHHHHHHHHHHHHH');
