@@ -7,6 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import Select from 'react-select';
 
 import styles from './CreatePond.style';
+import AddPond from '../dataHandler/AddData';
 
 function CreatePondFunction() {
   //for sample options
@@ -29,8 +30,8 @@ function CreatePondFunction() {
   })
 
   //takes input data and puts it in console
-  const onSubmit = (data) => console.log(data.groupName)
-  //const onSubmit = (data) => setPondName(data.groupName)
+  //const onSubmit = (data) => console.log(data.groupName)
+  const onSubmit = (data) => AddPond(data.thumbnail, data.groupName)
 
   return (
     <View>
