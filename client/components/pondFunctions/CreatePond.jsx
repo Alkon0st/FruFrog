@@ -12,64 +12,67 @@ import AddPond from '../dataHandler/AddData';
 function CreatePondFunction() {
   //for sample options
   let options = [
-      {value: '1', label: 'option 1'},
-      {value: '2', label: 'option 2'},
-      {value: '3', label: 'option 3'},
-      {value: '4', label: 'option 4'},
+    {value: '1', label: 'option 1'},
+    {value: '2', label: 'option 2'},
+    {value: '3', label: 'option 3'},
+    {value: '4', label: 'option 4'},
   ]
 
   //for form
   const {
-      control, 
-      handleSubmit,
-      formState: {errors},
+    control, 
+    handleSubmit,
+    formState: {errors},
   } = useForm({
-      defaultValues: {
-          groupName: "",
-      },
+    defaultValues: {
+      groupName: "",
+      thumbnail: "",
+    },
   })
 
   //takes input data and puts it in console
-  //const onSubmit = (data) => console.log(data.groupName)
-  const onSubmit = (data) => AddPond(data.thumbnail, data.groupName)
+  const onSubmit = (data) => {
+    console.log(data);
+    AddPond(data.thumbnail, data.groupName); //Call AddPond w/ the data
+  }
 
   return (
     <View>
       <Text style={styles.headingStyle}>Create Pond</Text> 
       <Text style ={styles.textStyle}>Enter Pond Name:</Text>
       <Controller
-          control={control}
-          rules={{required: true,}}
-          render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-              style = {styles.textInputStyle}
-              placeholder="Pond's name here..."
-              placeholderTextColor="#A0A0A0"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-          />
-          )}
-          name="groupName"
+        control={control}
+        rules={{required: true,}}
+        render={({ field: { onChange, onBlur, value } }) => (
+        <TextInput
+          style = {styles.textInputStyle}
+          placeholder="Pond's name here..."
+          placeholderTextColor="#A0A0A0"
+          onBlur={onBlur}
+          onChangeText={onChange}
+          value={value}
+        />
+        )}
+        name="groupName"
       />
       {errors.groupName && <Text style = {styles.warningText}> This is required.</Text>}
       
       <Text style ={styles.textStyle}>Choose Pond Thumbnail:</Text>
       <Controller
-          control={control}
-          rules={{required: true,}}
-          name="thumbnail"
-          render= {({ field: {onChange, onBlur, value} }) => (
-              <Select
-                  options={options}
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  value={value}
-              />
+        control={control}
+        rules={{required: true,}}
+        name="thumbnail"
+        render= {({ field: {onChange, onBlur, value} }) => (
+          <Select
+            options={options}
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
       )} 
       />
       {errors.thumbnail && <Text style = {styles.warningText}> This is required.</Text>} 
-
+      
       <Button style={styles.buttonOpen} textInputStyle={styles.textButton} title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   )

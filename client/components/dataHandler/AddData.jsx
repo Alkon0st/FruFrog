@@ -10,6 +10,7 @@ const AddPond = ( { thumbnail_id, name } ) => {
     const [budgetList, setBudgetList] = useState('');
     const [billList, setBillList] = useState('');
     const [addCode, setAddCode] = useState('');
+    const [message, setMessage] = useState('');  // Add state for message display
 
     // handle form submission
     const handleSubmit = async () => {
