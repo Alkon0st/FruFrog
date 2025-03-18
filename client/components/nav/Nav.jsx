@@ -33,9 +33,7 @@ export default function Nav() {
                     justifyContent: 'space-evenly',
                     alignItems: 'center',
                     flexDirection: 'row',
-                }
-            }}
-        >
+                }}}>
             <TabNav.Screen name='Login' component={LoginPage} options={{
                 tabBarIcon: () => (<Text>Login Page</Text>), }}/>
             <TabNav.Screen name='Home' component={HomePage} options={{
