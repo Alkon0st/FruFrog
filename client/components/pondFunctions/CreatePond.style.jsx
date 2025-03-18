@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',

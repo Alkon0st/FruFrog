@@ -5,6 +5,7 @@ import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import Select from 'react-select';
+
 import styles from './CreatePond.style';
 
 function CreatePondFunction() {
@@ -28,8 +29,8 @@ function CreatePondFunction() {
   })
 
   //takes input data and puts it in console
-  //const onSubmit = (data) => console.log(data.groupName)
   const onSubmit = (data) => console.log(data.groupName)
+  //const onSubmit = (data) => setPondName(data.groupName)
 
   return (
     <View>
