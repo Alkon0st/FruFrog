@@ -10,7 +10,7 @@ import styles from './AddUser.style';
 
 function AddCodeFunction() {
   const [otp, setOtp] = useState('');
-  const [generated, setGenerated] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [isValid, setIsValid] = useState(null);
   // State to control OTP box visibility
@@ -22,17 +22,19 @@ function AddCodeFunction() {
     const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    for (let i = 0; i < 6; i++) {
+    if (!isGenerated) {
+      for (let i = 0; i < 6; i++) {
       generatedOtp += characters
         .charAt(Math
           .floor(Math.random() * characters.length));
-    }
-
+      }
     // Set the generated OTP and reset the validity status
     setOtp(generatedOtp);
     setIsValid(null);
     // Show the OTP box after generating OTP
     setShowOtpBox(true);
+    setIsGenerated(true); //makes it so only one code can be generated per render
+    }
   };
 
   // Function to validate the entered OTP
