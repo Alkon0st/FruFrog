@@ -5,7 +5,6 @@ import HomePage from '../home/HomePage';
 import BudgetPage from '../budget/BudgetPage'
 import BillSplitPage from '../billSplit/billSplitPage'
 import HistoryPage from '../history/historyPage'
-import CroakPage from '../croak/croakPage'
 import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
 
