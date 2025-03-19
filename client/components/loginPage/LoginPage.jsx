@@ -13,9 +13,7 @@ function LoginPage() {
           <Text> {pondName} </Text>
           
           {/* Function call for Sign In button */}
-          <SignIn />
-          {/* Function call for Forgot Password button */}
-          {/* It looks horrible and doesn't function the way I want it to. I'll have to fix it later */}        
+          <SignIn />      
       </View>
   );
 }
