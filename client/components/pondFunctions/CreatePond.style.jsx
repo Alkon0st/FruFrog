@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   mainView: {
@@ -28,7 +30,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    backgroundColor: '#85BB65',
+    borderColor: '#4F723A',
+    borderWidth: '3px',
   },
   buttonClose: {
     backgroundColor: '#2196F3',
@@ -59,6 +63,23 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+
+
+  
+  popup: {
+    flex: 1,
+    justifyContent:'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  popupContent: {
+    width: width,
+    height: '60%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'baseline',
   },
 });
 

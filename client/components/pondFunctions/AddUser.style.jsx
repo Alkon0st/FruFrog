@@ -31,10 +31,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    backgroundColor: '#89d149'
+    backgroundColor: '#89d149',
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    backgroundColor: '#85BB65',
+    borderColor: '#4F723A',
+    borderWidth: '3px',
   },
   buttonClose: {
     backgroundColor: '#2196F3',
