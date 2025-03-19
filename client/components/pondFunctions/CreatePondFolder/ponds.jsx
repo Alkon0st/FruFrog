@@ -1,7 +1,7 @@
 //list of ponds
 let pondList = {
     "Current Pond": [
-        { name: "Thumbnail", list: ["option 1"] },
+        { name: "Thumbnail", list: ["1"] },
         { name: "Members", list: ["You", "Sofiki123"] },
     ],
 };

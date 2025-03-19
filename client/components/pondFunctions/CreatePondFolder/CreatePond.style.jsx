@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#309c61',
     marginBottom: 3,
+    padding: 3,
   },
   textButton: {
     margin: 3,
