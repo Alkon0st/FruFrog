@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
 
-import CreatePond from '../pondFunctions/createpondextra/CreatePond';
+import CreatePond from '../pondFunctions/CreatePondFolder/CreatePond';
 import AddUser from '../pondFunctions/AddUser';
-import CreatePage from '../pondFunctions/createpondextra/CreatePage';
+import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
 
 function HomePage() {
 
