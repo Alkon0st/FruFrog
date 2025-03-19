@@ -11,7 +11,6 @@ function SignInFunction() {
     const [modalVisible, setModalVisible] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
     
-    // Using react-hook-form
     const { control, handleSubmit: formHandleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             username: '',
