@@ -1,15 +1,34 @@
 import React from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet } from 'react-native';
 
-const AddBillModal = ({ visible, onClose }) => {
+// Bill Modal Component
+const AddBillModal = ({ visible, onSubmit, onClose }) => {
   const [billTitle, setBillTitle] = React.useState('');
   const [billDate, setBillDate] = React.useState('');
   const [billPaid, setBillPaid] = React.useState('');
   const [billTotal, setBillTotal] = React.useState('');
 
+  const handleSubmit = () => {
+    if (!billTitle || !billDate || !billTotal) return;
+
+    const newBill = {
+      title: billTitle,
+      date: billDate,
+      paid: parseFloat(billPaid) || 0,
+      total: parseFloat(billTotal),
+    };
+
+    onSubmit(newBill);
+    setBillTitle('');
+    setBillDate('');
+    setBillPaid('');
+    setBillTotal('');
+  }
+
   return (
+    <View style={styles.modalBackground}>
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
@@ -48,11 +67,12 @@ const AddBillModal = ({ visible, onClose }) => {
           {/* Buttons */}
           <View style={styles.buttonRow}>
             <Button title="Cancel" onPress={onClose} color="red" />
-            <Button title="Done" onPress={onClose} />
+            <Button title="Done" onPress={handleSubmit} />
           </View>
         </View>
       </View>
     </Modal>
+    </View>
   );
 };
 
@@ -61,12 +81,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
   },
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
-    width: '80%',
+    width: '25%',
+    // aspectRatio: 3/2,
     borderRadius: 10,
     alignItems: 'center',
   },

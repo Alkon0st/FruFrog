@@ -1,8 +1,11 @@
 import { StyleSheet } from "react-native";
 
+// Bill Page Styles
 const styles = StyleSheet.create({
+    gradient: {
+        flex: 1,
+    },
     page: {
-        backgroundColor: "#d6faf9",
     },
     pageContainer: {
         marginTop: 10,
@@ -11,13 +14,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     
-    
     billHeader: {
         width: "50%",
         flexDirection: "row",
         justifyContent: "right",
         alignItems: "right",
-        // backgroundColor: "red",
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -41,15 +42,13 @@ const styles = StyleSheet.create({
       color: "ababab",
     },
     
-    
     billList: {
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "blue",
     },
     billContainer: {
-        width: "50%",
+        width: "35%",
         backgroundColor: "white",
         padding: 10,
         marginTop: 15,
@@ -58,9 +57,28 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'space-between',
     },
+    billTitleSection: {
+        width: '48%',
+        justifyContent: 'center',
+        alignItems: 'left',
+    },
+    billPaidSection: {
+        width: '48%',
+        justifyContent: 'right',
+        alignItems: 'right',
+   },
+    billMembersSection: {
+        width: '48%',
+        justifyContent: 'center',
+        alignItems: 'left',
+  },
+    billTotalSection: {
+        width: '48%',
+        justifyContent: 'center',
+        alignItems: 'right',
+   },
     billTitle: {
         fontSize: 20,
-        fontWeight: "bold",
     },
     billDate: {
 
