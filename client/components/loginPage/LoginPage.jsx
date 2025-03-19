@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import SignIn from './SignIn';
 
 function LoginPage() {
-  const [pondName] = useState('AHHHHHHHHHHHHHH');
-
-  return (
+    return (
       <View style={styles.viewStyle}>
           <Text style={styles.headingStyle}>Welcome Back</Text>
           <Text style={styles.textStyle}>Log in to see what you have toad-do</Text>
