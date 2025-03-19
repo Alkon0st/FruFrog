@@ -14,7 +14,7 @@
     "@react-navigation/native": "^7.0.15",
     "@react-navigation/stack": "^7.1.2",
     "axios": "^1.8.2",
-    "expo": "^52.0.16",
+    "expo": "^52.0.39",
     "expo-constants": "~17.0.2",
     "expo-linking": "~7.0.2",
     "expo-router": "~4.0.2",
