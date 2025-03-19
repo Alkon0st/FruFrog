@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import SignIn from './SignIn';
 
 function LoginPage() {
-    return (
+
+  return (
       <View style={styles.viewStyle}>
           <Text style={styles.headingStyle}>Welcome Back</Text>
           <Text style={styles.textStyle}>Log in to see what you have toad-do</Text>
-          <Text> {pondName} </Text>
-          
           {/* Function call for Sign In button */}
           <SignIn />
           {/* Function call for Create Account button */}
@@ -36,7 +35,4 @@ const styles = StyleSheet.create({
       textAlign: 'center',
   },
 });
-
 export default LoginPage
- 
- 
