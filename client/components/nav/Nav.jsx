@@ -17,6 +17,8 @@ import HeaderButton from './HeaderNav';
 
 // npm run start
 
+import CreatePage from '../pondFunctions/createpondextra/CreatePage';
+
 // Just Tabs
 export default function Nav() {
     const TabNav = createBottomTabNavigator()

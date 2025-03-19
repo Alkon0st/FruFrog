@@ -10,9 +10,7 @@ const cors = require('cors')
 connectDB();
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send('Hello Hello')
-})
+
 
 
 

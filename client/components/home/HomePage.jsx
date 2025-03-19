@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
 
-import CreatePond from '../pondFunctions/CreatePond';
+import CreatePond from '../pondFunctions/createpondextra/CreatePond';
 import AddUser from '../pondFunctions/AddUser';
+import CreatePage from '../pondFunctions/createpondextra/CreatePage';
 
 function HomePage() {
 
@@ -11,9 +12,11 @@ function HomePage() {
             <Text style ={styles.headingStyle}>Home Page</Text>
             <Text style ={styles.textStyle}>This is the placeholder for the home page</Text>
             
+            <View style={styles.buttonRow}>
             {/* Function to call for create pond */}
-            <CreatePond /> 
             <AddUser />
+            <CreatePage /> 
+            </View>
         </View>
     );
 }
@@ -34,6 +37,14 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    buttonRow: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignSelf: 'stretch',
+        paddingRight: '20px',
+        paddingLeft: '20px',
+        paddingTop: '10px',
     },
 });
 

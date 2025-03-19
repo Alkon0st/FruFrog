@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-// SafeAreaView & associated are modules that automatically applies padding for views that are not covered
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
-import Select from 'react-select';
 
 function SignInFunction() {
     const [username, setUsername] = useState('');
@@ -131,7 +129,6 @@ function SignInFunction() {
                         </Pressable>
                     </View>
                     
-                    {/* Success Modal */}
                     <Modal
                         animationType="slide"
                         transparent={true}
@@ -152,7 +149,6 @@ function SignInFunction() {
                         </View>
                     </Modal>
                     
-                    {/* Forgot Password Form */}
                     {forgotPassword && (
                         <View style={styles.forgotPasswordContainer}>
                             <Text style={styles.subHeadingStyle}>Reset Password</Text>
@@ -180,7 +176,6 @@ function SignInFunction() {
     );
 };
 
-// Extended styles to support new components
 const styles = {
     safeArea: {
         flex: 1,
@@ -290,5 +285,4 @@ const styles = {
         marginTop: 10,
     },
 };
-
 export default SignInFunction;
