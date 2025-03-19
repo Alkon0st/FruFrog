@@ -33,13 +33,6 @@ function CreateAccountFunction({ navigation }) {
 
   const password = watch("password");
 
-  // Role options for dropdown
-  const roleOptions = [
-    { value: 'user', label: 'Regular User' },
-    { value: 'admin', label: 'Administrator' },
-    { value: 'guest', label: 'Guest User' }
-  ];
-
   // Handle form submission
   const onSubmit = (data) => {
     if (!termsAccepted) {
@@ -200,27 +193,6 @@ function CreateAccountFunction({ navigation }) {
               <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>
             )}
             
-            {/* Role Selection */}
-            <Text style={styles.textStyle}>User Role:</Text>
-            <View style={styles.selectContainer}>
-              <Controller
-                control={control}
-                rules={{ required: "Please select a role" }}
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    options={roleOptions}
-                    placeholder="Select your role"
-                    value={roleOptions.find(option => option.value === value)}
-                    onChange={(option) => {
-                      onChange(option.value);
-                      setSelectedRole(option.value);
-                    }}
-                    styles={selectStyles}
-                  />
-                )}
-                name="role"
-              />
-            </View>
             {errors.role && (
               <Text style={styles.errorText}>{errors.role.message}</Text>
             )}
