@@ -13,8 +13,10 @@ function LoginPage() {
           <Text> {pondName} </Text>
           
           {/* Function call for Sign In button */}
-          <SignIn />      
-      </View>
+          <SignIn />
+          {/* Function call for Create Account button */}
+          <create-account />
+        </View>
   );
 }
 
