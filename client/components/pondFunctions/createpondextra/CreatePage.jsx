@@ -51,10 +51,10 @@ const CreatePage = () => {
                 visible={isCreatePondModalVisible}
                 onClose={() => setIsCreatePondModalVisible(false)}
                 newPond={newPond}
-                setNewCategory={setNewPond}
+                setNewPond={setNewPond}
                 newThumbnail={newThumbnail}
                 setNewThumbnail={setNewThumbnail}
-                handleAddNewCategory={handleAddPond}
+                handleAddPond={handleAddPond}
             />
         </SafeAreaView>
     );
