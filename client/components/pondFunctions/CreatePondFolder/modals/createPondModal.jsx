@@ -46,8 +46,8 @@ const CreatePondModal = ({
                         value={options.find(option => option.value === newThumbnail)}
                         onChange={(selectedOption) => setNewThumbnail(selectedOption.value)}
                     />
-                    <Button title="Add" onPress={handleAddPond} />
-                    <Button title="Cancel" onPress={onClose} />
+                    <Button style={[styles.button, styles.buttonOpen]} title="Add" onPress={handleAddPond} />
+                    <Button style={[styles.button, styles.buttonOpen]} title="Cancel" onPress={onClose} />
                 </View>
             </View>            
         </Modal>

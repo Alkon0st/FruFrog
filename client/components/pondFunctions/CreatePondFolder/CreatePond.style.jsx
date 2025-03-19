@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#85BB65',
     borderColor: '#4F723A',
     borderWidth: '3px',
+    marginTop: '10px',
   },
   buttonClose: {
     backgroundColor: '#2196F3',
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
-    alignItems: 'baseline',
+    alignItems: 'flex-start',
   },
   pondView: {
     backgroundColor: '#c3edab',
