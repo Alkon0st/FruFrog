@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
 
-import CreatePond from '../pondFunctions/CreatePond';
+import CreatePond from '../pondFunctions/createpondextra/CreatePond';
 import AddUser from '../pondFunctions/AddUser';
+import CreatePage from '../pondFunctions/createpondextra/CreatePage';
 
 function HomePage() {
 
@@ -13,8 +14,8 @@ function HomePage() {
             
             <View style={styles.buttonRow}>
             {/* Function to call for create pond */}
-            <CreatePond /> 
             <AddUser />
+            <CreatePage /> 
             </View>
         </View>
     );
@@ -38,9 +39,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     buttonRow: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignSelf: 'stretch',
+        paddingRight: '20px',
+        paddingLeft: '20px',
+        paddingTop: '10px',
     },
 });
 

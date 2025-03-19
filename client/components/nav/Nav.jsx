@@ -38,8 +38,6 @@ export default function Nav() {
                 }}}>
             <TabNav.Screen name='Login' component={LoginPage} options={{
                 tabBarIcon: () => (<Text>Login Page</Text>), }}/>
-            <TabNav.Screen name='CreatePage' component={CreatePage} options={{
-                tabBarIcon: () => (<Text>TEST</Text>), }}/>
             <TabNav.Screen name='Home' component={HomePage} options={{
                 tabBarIcon: ({focused}) => (
                     // When focused is bitten lilypad

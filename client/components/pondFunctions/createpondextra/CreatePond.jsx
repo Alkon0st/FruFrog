@@ -7,7 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import Select from 'react-select';
 
 import styles from './CreatePond.style';
-import AddPond from '../dataHandler/AddData';
+import AddPond from '../../dataHandler/AddData';
 
 function CreatePondFunction() {
   //for sample options

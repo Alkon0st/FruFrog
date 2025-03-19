@@ -81,6 +81,29 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'baseline',
   },
+  pondView: {
+    backgroundColor: '#c3edab',
+    borderColor: '#6a9153',
+    borderWidth: '3px',
+    marginBottom: '10px',
+    padding: '10px',
+    borderRadius: 15,
+  },
+  pondSubView: {
+    flexDirection: 'row',
+  },
+  pondName: {
+    fontSize: '120%',
+    fontWeight: 'bold'
+  },
+  pondLabel: {
+    marginLeft: '10px',
+    textDecorationLine: 'underline',
+  },
+  pondDetail: {
+    textDecorationLine: 'none',
+    marginLeft: '5px',
+  }
 });
 
 export default styles;

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, Modal, TouchableOpacity, ScrollView, Pressable } from "react-native";
 import pondList from './ponds';
 import CreatePondModal from './modals/createPondModal';
 
-import styles from '../CreatePond.style';
+import styles from './CreatePond.style';
 
 const CreatePage = () => {
     const [isCreatePondModalVisible, setIsCreatePondModalVisible] = useState(false);
@@ -27,25 +27,29 @@ const CreatePage = () => {
             <ScrollView>
                 <View>
                     <TouchableOpacity onPress={() => setIsCreatePondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
-                        <Text style={styles.textButton}>Add Pond</Text>
+                        <Text style={styles.textButton}>Create Pond</Text>
                     </TouchableOpacity>
                 </View>
                 {Object.keys(pondList).map((pond) => (
-                    <View key={pond}>
-                            <Text>
+                    <View key={pond} style={styles.pondView}>
+                            <Text style={styles.pondName}>
                                 {pond}
                             </Text>
                             {pondList[pond].map((detail) => (    
-                                <View key={detail.name}>
-                                    <Text>
+                                <View key={detail.name} style={styles.pondSubView}>
+                                    <Text style={styles.pondLabel}>
                                         {/* Displays thumbnail & members */}
-                                        {detail.name}: {detail.list.map((item) => <Text>{item}, </Text>)}
+                                        {detail.name}: 
+                                    </Text>
+                                    <Text style={styles.pondDetail}>
+                                        {detail.list.map((item) => <Text>{item}, </Text>)}
                                     </Text>
                                 </View> 
                             ))}
                     </View>
                 ))}
             </ScrollView>
+            
 
             <CreatePondModal
                 visible={isCreatePondModalVisible}
