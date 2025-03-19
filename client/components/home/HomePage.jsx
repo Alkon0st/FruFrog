@@ -11,9 +11,11 @@ function HomePage() {
             <Text style ={styles.headingStyle}>Home Page</Text>
             <Text style ={styles.textStyle}>This is the placeholder for the home page</Text>
             
+            <View style={styles.buttonRow}>
             {/* Function to call for create pond */}
             <CreatePond /> 
             <AddUser />
+            </View>
         </View>
     );
 }
@@ -34,6 +36,11 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignSelf: 'stretch',
     },
 });
 
