@@ -3,40 +3,55 @@ import styles from "./billSplitPage.style";
 import Bill from './bill';
 import AddBillModal from './addBillModal';
 import React, { useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
+// Main Bill Split Page
 const BillSplitPage = () => {
+    // Functions
+    // Add Bill Button Modal
     const [modalVisible, setModalVisible] = useState(false);
+    //  Default Bills List
+    const [bills, setBills] = useState([
+        { title: "Foo Rent", date: 'March 01, 2025', paid: 0, total: 56.67 },
+      ]);
+
+    // Variables
+    const addBill = (newBill) => {
+        setBills([newBill, ...bills]);
+        setModalVisible(false);
+      };
 
     return (
+        // Page Container
+        <LinearGradient colors={['#FFFFFF', '#d6faf9']}>
         <View style={styles.page}>
         <View style={styles.pageContainer}>
 
+        {/* Header */}
         <View style={styles.billHeader}>
+            {/* Title */}
             <View>
             <Text style={styles.billHeaderTitle}>Bills</Text>
             </View>
-
+            {/* Add Bill Button */}
             <View>
             <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
-            <AddBillModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+            <AddBillModal visible={modalVisible} onSubmit={addBill} onClose={() => setModalVisible(false)} />
             <Text style={styles.addButtonSubtext}>Add Bill</Text>
             </View>
         </View>
-            
 
+        {/* Bill Listing */}
         <View style={styles.billList}>
-            <Bill title="Bill 1" date="01/01/2021" paid="Paid" total="$100"/>
-            <Bill title="Bill 2" date="02/01/2021" paid="Not Paid" total="$200"/>
-            <Bill title="Bill 3" date="03/01/2021" paid="Paid" total="$300"/>
-            <Bill title="Bill 4" date="03/01/2021" paid="Paid" total="$300"/>
-            <Bill title="Bill 5" date="03/01/2021" paid="Paid" total="$300"/>
-            <Bill title="Bill 6" date="03/01/2021" paid="Paid" total="$300"/>
-        </View>
-        
+        {bills.map((bill, index) => (
+            <Bill key={index} {...bill} />
+            ))}
         </View>
         </View>
+        </View>
+        </LinearGradient>
     )
 }
 
