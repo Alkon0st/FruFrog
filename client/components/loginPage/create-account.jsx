@@ -11,20 +11,14 @@ import {
 } from 'react-native';
 
 const CreateAccount = () => {
-  // State for form fields and validation
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  // State for error messages
   const [usernameError, setUsernameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  
-  // State for success message
   const [showSuccess, setShowSuccess] = useState(false);
   
-  // Validation functions
   const validateUsername = (text) => {
     if (text.length < 3) {
       setUsernameError('Username must be at least 3 characters long');
@@ -52,18 +46,13 @@ const CreateAccount = () => {
     setPasswordError('');
     return true;
   };
-  
-  // Form submission handler
   const handleSubmit = () => {
     const isUsernameValid = validateUsername(username);
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
     
     if (isUsernameValid && isEmailValid && isPasswordValid) {
-      // In a real app, you would call your API here
       setShowSuccess(true);
-      
-      // Reset form after successful submission
       setTimeout(() => {
         setUsername('');
         setEmail('');
