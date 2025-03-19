@@ -8,6 +8,7 @@ import HistoryPage from '../history/historyPage'
 import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
 import LoginPage from '../loginPage/LoginPage';
+import CreateAccount from '../loginPage/create-account';
 
 import { View, StyleSheet, Image, Button, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -38,6 +39,8 @@ export default function Nav() {
                 }}}>
             <TabNav.Screen name='Login' component={LoginPage} options={{
                 tabBarIcon: () => (<Text>Login Page</Text>), }}/>
+            <TabNav.Screen name='Create Account' component={CreateAccount} options={{
+                tabBarIcon: () => (<Text>Create Account Page</Text>), }}/>
             <TabNav.Screen name='Home' component={HomePage} options={{
                 tabBarIcon: ({focused}) => (
                     // When focused is bitten lilypad
