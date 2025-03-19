@@ -17,6 +17,8 @@ import HeaderButton from './HeaderNav';
 
 // npm run start
 
+import CreatePage from '../pondFunctions/createpondextra/CreatePage';
+
 // Just Tabs
 export default function Nav() {
     const TabNav = createBottomTabNavigator()
@@ -36,6 +38,8 @@ export default function Nav() {
                 }}}>
             <TabNav.Screen name='Login' component={LoginPage} options={{
                 tabBarIcon: () => (<Text>Login Page</Text>), }}/>
+            <TabNav.Screen name='CreatePage' component={CreatePage} options={{
+                tabBarIcon: () => (<Text>TEST</Text>), }}/>
             <TabNav.Screen name='Home' component={HomePage} options={{
                 tabBarIcon: ({focused}) => (
                     // When focused is bitten lilypad
