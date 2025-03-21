@@ -67,8 +67,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-
-  
   popup: {
     flex: 1,
     justifyContent:'flex-end',
@@ -77,7 +75,6 @@ const styles = StyleSheet.create({
   },
   popupContent: {
     width: width,
-    height: '60%',
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
