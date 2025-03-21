@@ -37,10 +37,10 @@ export default function Nav() {
                     alignItems: 'center',
                     flexDirection: 'row',
                 }}}>
-            {/* <TabNav.Screen name='Login' component={LoginPage} options={{
+            <TabNav.Screen name='Login' component={LoginPage} options={{
                 tabBarIcon: () => (<Text>Login Page</Text>), }}/>
             <TabNav.Screen name='Create Account' component={CreateAccount} options={{
-                tabBarIcon: () => (<Text>Create Account Page</Text>), }}/> */}
+                tabBarIcon: () => (<Text>Create Account Page</Text>), }}/>
             <TabNav.Screen name='Home' component={HomePage} options={{
                 tabBarIcon: ({focused}) => (
                     // When focused is bitten lilypad
