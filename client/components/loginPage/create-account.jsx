@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 
 function CreateAccountFunction() {
-  const { control, formState: {errors}, watch } = useForm();
+  const { control, handleSubmit, formState: {errors}, watch } = useForm();
+  const [username, setUsername] = useState('');
   const [passwordVisible] = useState(false);
   const [confirmPasswordVisible] = useState(false);
   const password = watch('password', '');
 
+  const onsubmit = (data) => {
+    console.log('Form Data: ', data);
+    alert('Your account has been successfully created.');
+  };
+  
   return (
     <LinearGradient
       // Background Linear Gradient
@@ -89,7 +95,7 @@ function CreateAccountFunction() {
           <Controller
             control={control} 
             rules={{
-                required: "Confirm password is required",
+                required: "Incorrect password",
                 validate: (value) => value === password || "Passwords do not match",
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -108,6 +114,9 @@ function CreateAccountFunction() {
             )}
             name="confirmPassword"
           />
+          <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onsubmit)}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
   );
@@ -122,11 +131,41 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       margin: 110,
       padding: 20,
-      borderRadius: 40,
+      borderRadius: 5,
   },
   textStyle: {
       fontSize: 12,
-      color: '#309c61',
+      color: 'black',
+      marginBottom: 5,
+      alignSelf: 'flex-start',
+      marginLeft: 30,
+  },
+  textInputStyle: {
+      borderWidth: 1,
+      borderColor: '#008000',
+      padding: 10,
+      width: 170,
+      marginBottom: 10,
+      borderRadius: 5,
+  },
+  errorText: {
+      color: '#800D00',
+      marginBottom: 10,
+      alignSelf: 'flex-start',
+      marginLeft: 30,
+  },
+  buttonStyle: {
+      backgroundColor: '#85BB65',
+      padding: 15,
+      borderRadius: 5,
+      width: 170,
+      alignItems: 'center',
+      marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500'
   },
   headingStyle: {
       fontSize: 12,
