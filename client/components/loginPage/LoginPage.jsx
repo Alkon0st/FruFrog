@@ -13,7 +13,7 @@ function LoginPage() {
       locations={[0, 0.47, 1]}
       backgroundTopColor="#FEFFF5"
       backgroundBottomColor="#E0FDD9"
-      styles={styles.LinearGradient}>
+      style={styles.LinearGradient}>
       
 
       <View style={styles.viewStyle}>
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
       textAlign: 'center',
   },
 });
-export default LoginPage
+export default LoginPage;

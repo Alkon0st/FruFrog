@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity } from 'react-native';
+import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
@@ -171,7 +171,7 @@ function SignInFunction() {
     );
 };
 
-const styles = {
+const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
     },
@@ -279,5 +279,5 @@ const styles = {
         textAlign: 'center',
         marginTop: 10,
     },
-};
+});
 export default SignInFunction;
