@@ -3,8 +3,10 @@ import { Text, View, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 function CreateAccountFunction() {
+  const navigation = useNavigation();
   const { control, handleSubmit, formState: {errors}, watch } = useForm();
   const [username, setUsername] = useState('');
   const [passwordVisible] = useState(false);
@@ -15,13 +17,14 @@ function CreateAccountFunction() {
     console.log('Form Data: ', data);
     alert('Your account has been successfully created.');
   };
-  
+
   return (
     <LinearGradient
       // Background Linear Gradient
       start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
       locations={[0.47, 1]}
       colors={['#FEFFF5', '#E0FDD9']}
+      style={styles.LinearGradient}
       >
       <View style = {styles.viewStyle}>
         <Controller
@@ -116,6 +119,11 @@ function CreateAccountFunction() {
           />
           <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onsubmit)}>
             <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Sign In')}>
+            <Text style={{marginTop : 15, textAlign: 'center', color: '#067AFF'}}>
+              Already have an account? <Text style={{fontweight:'bold'}}>Sign In</Text>
+              </Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>

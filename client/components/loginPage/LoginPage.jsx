@@ -1,11 +1,21 @@
 import { StyleSheet, Text, View, Button } from "react-native";
-import React, { useState } from 'react';
+import React from 'react';
 
 import SignIn from './SignIn';
+import { LinearGradient } from "expo-linear-gradient";
 
 function LoginPage() {
 
   return (
+    <LinearGradient
+      // Background Linear Gradient
+      start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+      locations={[0, 0.47, 1]}
+      backgroundTopColor="#FEFFF5"
+      backgroundBottomColor="#E0FDD9"
+      styles={styles.LinearGradient}>
+      
+
       <View style={styles.viewStyle}>
           <Text style={styles.headingStyle}>Welcome Back</Text>
           <Text style={styles.textStyle}>Log in to see what you have toad-do</Text>
@@ -14,6 +24,8 @@ function LoginPage() {
           {/* Function call for Create Account button */}
           <create-account />
         </View>
+        
+    </LinearGradient>
   );
 }
 

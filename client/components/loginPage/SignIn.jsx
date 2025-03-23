@@ -77,10 +77,6 @@ function SignInFunction() {
                         control={control}
                         rules={{
                             required: "Password is required",
-                            minLength: {
-                                value: 5,
-                                message: "Password must be at least 5 characters"
-                            }
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <>
