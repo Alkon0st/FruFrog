@@ -12,7 +12,7 @@ const Bill = ({ title, date, paid, total }) => {
       </View>
 
       <View style={styles.billPaidSection}>
-        <Text style={styles.billPaid}>{paid}</Text>
+        <Text style={styles.billPaid}>Paid: ${paid}</Text>
       </View>
 
       <View style={styles.billMembersSection}>
@@ -20,7 +20,7 @@ const Bill = ({ title, date, paid, total }) => {
       </View>
       
       <View style={styles.billTotalSection}>
-        <Text style={styles.billTotal}>{total}</Text>
+        <Text style={styles.billTotal}>Total: ${total}</Text>
       </View>
     </View>
   );

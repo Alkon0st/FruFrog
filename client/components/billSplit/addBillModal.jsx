@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet } from 'react-native';
 
 // Bill Modal Component
@@ -25,6 +25,14 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     setBillTotal('');
   }
 
+  useEffect(() => {
+    if (visible) {
+      const today = new Date();
+      const formattedDate = today.toISOString().split('T')[0];
+      setBillDate(formattedDate);
+    }
+  }, [visible]);
+
   return (
     <View style={styles.modalBackground}>
     <Modal
@@ -43,12 +51,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
             value={billTitle}
             onChangeText={setBillTitle}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Due Date"
-            value={billDate}
-            onChangeText={setBillDate}
-          />
+          <TextInput style={styles.input} value={billDate} editable={false} />
           <TextInput
             style={styles.input}
             placeholder="Paid Amount"
@@ -93,7 +96,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     width: '25%',
-    // aspectRatio: 3/2,
     borderRadius: 10,
     alignItems: 'center',
   },
