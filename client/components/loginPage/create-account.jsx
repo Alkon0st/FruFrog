@@ -18,8 +18,6 @@ function CreateAccount() {
   const [username, setUsername] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  
-  // Watch password for validation
   const password = watch('password') || '';
 
   const onsubmit = (data) => {
