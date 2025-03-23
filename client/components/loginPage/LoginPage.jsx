@@ -10,9 +10,8 @@ function LoginPage() {
     <LinearGradient
       // Background Linear Gradient
       start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-      locations={[0, 0.47, 1]}
-      backgroundTopColor="#FEFFF5"
-      backgroundBottomColor="#E0FDD9"
+      locations={[0.47, 1]}
+      colors={['#FEFFF5', '#E0FDD9']}
       style={styles.LinearGradient}>
       
 
