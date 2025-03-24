@@ -9,6 +9,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.0.0",
+    "@react-native-vector-icons/ant-design": "^4.4.2",
+    "@react-native-vector-icons/common": "^11.0.0",
+    "@react-native-vector-icons/evil-icons": "^1.10.1",
+    "@react-native-vector-icons/fontawesome6": "^6.7.1",
     "@react-navigation/bottom-tabs": "^7.2.1",
     "@react-navigation/material-top-tabs": "^7.1.1",
     "@react-navigation/native": "^7.0.18",
