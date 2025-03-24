@@ -122,7 +122,7 @@ function CreateAccount() {
                     <View style={styles.passwordContainer}>
                         <TextInput
                             style={styles.textInputStyle}
-                            placeholder="Confirm your password"
+                            placeholder="Confirm password"
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
   },
   showHideText: {
     color: '#067AFF',
-    marginLeft: -50,
+    marginLeft: -40,
+    marginTop: 10,
     zIndex: 1,
   },
   signInText: {

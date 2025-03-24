@@ -63,10 +63,15 @@ const IncomeForm = () => {
               selectedValue={incomeData.frequency}
               onValueChange={(value) => setIncomeData({...incomeData, frequency: value})}
             >
-              <Picker.Item label="Weekly" value="weekly" />
+               
+              <Picker.Item label="Hourly" value="hourly" />
+              <Picker.Item label="Daily" value="daily"  />  
+              <Picker.Item label="Weekly" value="weekly"  />
               <Picker.Item label="Biweekly" value="biweekly" />
               <Picker.Item label="Monthly" value="monthly" />
-              <Picker.Item label="Annually" value="annually" />
+              <Picker.Item label="Annually" value="annually"  />
+
+
             </Picker>
           </View>
         </View>
