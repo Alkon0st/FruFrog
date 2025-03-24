@@ -52,14 +52,14 @@ function SignInFunction() {
                     <Controller
                         control={control}
                         rules={{
-                            required: "Username is required",
+                            required: "Username or Email is required",
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <>
-                                <Text style={styles.textStyle}>Username:</Text>
+                                <Text style={styles.textStyle}>Username or Email:</Text>
                                 <TextInput
                                     style={styles.textInputStyle}
-                                    placeholder="Enter your username"
+                                    placeholder="Enter username or email"
                                     onBlur={onBlur}
                                     onChangeText={(text) => {
                                         onChange(text);
@@ -149,7 +149,7 @@ function SignInFunction() {
                             <Text style={styles.subHeadingStyle}>Reset Password</Text>
                             <TextInput
                                 style={styles.textInputStyle}
-                                placeholder="Enter your email"
+                                placeholder="Email or username"
                             />
                             <TouchableOpacity 
                                 style={styles.button}
@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
         padding: 20,
         flex: 1,
         justifyContent: 'center',
+        backgroundColor: 'white',
     },
     headingStyle: {
         fontSize: 24,
