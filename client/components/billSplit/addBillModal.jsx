@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 
 // Bill Modal Component
 const AddBillModal = ({ visible, onSubmit, onClose }) => {
+  const [billCategory, setBillCategory] = React.useState('');
   const [billTitle, setBillTitle] = React.useState('');
   const [billDate, setBillDate] = React.useState('');
   const [billPaid, setBillPaid] = React.useState('');
@@ -19,6 +20,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     };
 
     onSubmit(newBill);
+    setBillCategory('');
     setBillTitle('');
     setBillDate('');
     setBillPaid('');
@@ -43,7 +45,13 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Add New Bill</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+            style={styles.input}
+            placeholder="Category"
+            value={billCategory}
+            onChangeText={setBillCategory}
+          />
 
           <TextInput
             style={styles.input}
@@ -69,9 +77,16 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
 
           {/* Buttons */}
           <View style={styles.buttonRow}>
-            <Button title="Cancel" onPress={onClose} color="red" />
-            <Button title="Done" onPress={handleSubmit} />
+            <TouchableOpacity onPress={onClose} style={styles.button}>
+              <Text>Custom Split</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSubmit}>
+            </TouchableOpacity>
           </View>
+          </View>
+          <View style={styles.taxContainer}>
+            <Text>Tax</Text>
+          </View> 
         </View>
       </View>
     </Modal>
@@ -93,29 +108,39 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
   },
   modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
+    backgroundColor: '#4f723a',
     width: '25%',
     borderRadius: 10,
-    alignItems: 'center',
+    flexDirection: 'row',
   },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
+  inputContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    padding: 20,
   },
   input: {
     width: '100%',
-    borderBottomWidth: 1,
-    borderColor: 'lightgrey',
+    // borderBottomWidth: 1,
+    // borderColor: 'lightgrey',
     padding: 8,
     marginBottom: 10,
+  },
+  taxContainer: {
+    padding: 20,
   },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     marginTop: 15,
+  },
+  button: {
+    backgroundColor: "#85bb65",
+    borderColor: "#4f723a",
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 1,
   },
 });
 

@@ -13,10 +13,13 @@ const Bill = ({ title, date, paid, total }) => {
 
       <View style={styles.billPaidSection}>
         <Text style={styles.billPaid}>Paid: ${paid}</Text>
+        <Text style={styles.billPercent}>{paid/total*100}% Paid</Text>
       </View>
 
+      <View style={styles.divider} />
+
       <View style={styles.billMembersSection}>
-        <Text style={styles.billMembers}>1 2 3</Text>
+        <Text style={styles.billMembers}>O O O O</Text>
       </View>
       
       <View style={styles.billTotalSection}>

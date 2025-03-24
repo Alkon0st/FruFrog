@@ -89,6 +89,12 @@ const styles = StyleSheet.create({
     billTotal: {
 
     },
+    divider: {
+        borderBottomWidth: 1,
+        borderColor: 'black',
+        backgroundColor: 'red',
+        height: 1,
+    }
 });
 
 export default styles;
