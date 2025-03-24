@@ -14,6 +14,7 @@ function HomePage() {
         <SafeAreaView style ={styles.viewStyle}>
         <LinearGradient
             colors = {['#F1FEFE', '#B2F0EF']}
+            style = {styles.page}
         >
             <ScrollView>
                 <Text style ={styles.headingStyle}>Home Page</Text>
@@ -24,12 +25,9 @@ function HomePage() {
                 <AddUser />
                 <CreatePage /> 
                 </View>
-
-                <View style = {styles.empty}>
-                    <Text>hidden text</Text>
-                </View>
             </ScrollView>
         </LinearGradient>
+
         </SafeAreaView>
         </SafeAreaProvider>
 
@@ -64,11 +62,10 @@ const styles = StyleSheet.create({
         paddingLeft: '20px',
         paddingTop: '10px',
     },
-    empty: { 
+    page: { 
         flexDirection: 'column', 
-        flex: 1,            
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
+        flex: 1,
+        justifyContent:'flex-end',
         backgroundColor: 'white',
     }
 });

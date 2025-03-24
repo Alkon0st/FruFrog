@@ -30,6 +30,7 @@ export default function Nav() {
         <TabNav.Navigator
             // Hides label and styles the bar
             screenOptions={{
+                headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     position: 'absolute',
