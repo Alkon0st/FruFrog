@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   headingStyle: {
       fontSize: 30,
-      color: 'black',
+      color: '#008000',
       fontWeight: 'bold',
       textAlign: 'center',
   },

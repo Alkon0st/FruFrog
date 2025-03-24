@@ -32,6 +32,7 @@ function CreateAccount() {
       locations={[0.47, 1]}
       colors={['#FEFFF5', '#E0FDD9']}
       style={styles.LinearGradient}>
+      <Text style={styles.headingStyle}>Create Account</Text>
 
       <View style={styles.viewStyle}>
         <Controller
@@ -153,6 +154,12 @@ const styles = StyleSheet.create({
   LinearGradient: {
     flex: 1,
   },
+  headingStyle: {
+    fontSize: 20,
+    color: '#008000',
+    fontWeight: 'normal',
+    textAlign: 'center',
+  },
   viewStyle: {
     display: 'flex',
     justifyContent: 'center',
@@ -160,7 +167,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     marginHorizontal: 20,
-    padding: 20,
+    marginVertical: 80,
+    marginTop: 2,
+    padding: 100,
     borderRadius: 5,
   },
   textStyle: {
@@ -189,19 +198,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '100%',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 5,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '500'
-  },
-  headingStyle: {
-    fontSize: 12,
-    color: 'black',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginBottom: 5,
+    fontWeight: 'bold'
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -215,9 +217,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   signInText: {
-    marginTop: 15, 
+    marginTop: 12, 
     textAlign: 'center', 
-    color: '#067AFF',
+    color: '#008000',
     width: '100%',
   }
 });

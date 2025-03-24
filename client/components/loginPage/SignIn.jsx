@@ -182,10 +182,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     headingStyle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
+        color: '#008000',
     },
     subHeadingStyle: {
         fontSize: 18,
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     button: {
-        backgroundColor: '#007BFF',
+        backgroundColor: '#008000',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
@@ -229,8 +230,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     alternateButtonText: {
-        color: '#007BFF',
+        color: '#008000',
         textDecorationLine: 'underline',
+        fontWeight: 'bold',
     },
     selectContainer: {
         marginBottom: 15,
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     modalButton: {
-        backgroundColor: '#007BFF',
+        backgroundColor: '#008000',
         borderRadius: 5,
         padding: 10,
         elevation: 2,
@@ -273,7 +275,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         padding: 15,
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor: '#008000',
     },
     linkText: {
         color: '#007BFF',
