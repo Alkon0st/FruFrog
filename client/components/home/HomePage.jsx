@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, Button, Dimensions, ScrollView} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import Icon from '@react-native-vector-icons/ant-design';
 
 import CreatePond from '../pondFunctions/CreatePondFolder/CreatePond';
 import AddUser from '../pondFunctions/AddUser';
 import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
+import HeaderButton from '../nav/HeaderNav';
 
 function HomePage() {
 
@@ -18,12 +20,14 @@ function HomePage() {
         >
             <ScrollView>
                 <Text style ={styles.headingStyle}>Home Page</Text>
-                <Text style ={styles.textStyle}>This is the placeholder for the home page</Text>
+                <Text style ={styles.textStyle}>This is the placeholder for the home page </Text>
+                <Icon name='check' size = {20} />
+                 
                 
                 <View style={styles.buttonRow}>
-                {/* Function to call for create pond */}
-                <AddUser />
-                <CreatePage /> 
+                    {/* Function to call for create pond */}
+                    <AddUser />
+                    <CreatePage /> 
                 </View>
             </ScrollView>
         </LinearGradient>

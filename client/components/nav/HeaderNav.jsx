@@ -12,28 +12,22 @@ import SettingsPage from '../settings/SettingsPage'
 import { Button, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from 'expo-router';
 
 
-const Stack = createStackNavigator()
+export default function Nav() {
+    const navigation = useNavigation();
 
-export default function HeaderButton() {
-
+    //TabNav.Navigator is main navigator
     return (
-        <Stack.Navigator>
-            <Stack.Screen 
-            name="Profile" 
-            component={ProfilePage}
-            options={{
-                headerRight: () => (
-                    <TouchableOpacity
-                        title='Profile' 
-                        onPress={() => console.log('Profile button pressed')}
-                    />
-                ),
-            }} />
-        </Stack.Navigator>
-    );
-} 
+        <View>
+            <Button onPress={() => navigation.navigate(ProfilePage)}>
+                Profile
+            </Button>
+        </View>
+    )
+}
 
         // <Stack.Navigator>
         //     <Stack.Screen

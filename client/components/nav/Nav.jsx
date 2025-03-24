@@ -21,6 +21,31 @@ import HeaderButton from './HeaderNav';
 
 import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
 
+function HeaderTabs() {
+    const Head = createBottomTabNavigator()
+
+    return (
+        <Head.Navigator
+            // Hides label and styles the bar
+            screenOptions={{
+                headerShown: false,
+                tabBarShowLabel: false,
+                tabBarStyle: {
+                    position: 'absolute',
+                    height: 80,
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                }}}>
+                    
+            <Head.Screen name='Test' component={SettingsPage} options={{
+                tabBarIcon: () => (<Text>Test</Text>) }}/>
+            <Head.Screen name='Test1' component={HomePage} options={{
+                tabBarIcon: () => (<Text>Test</Text>) }}/>
+        </Head.Navigator>
+    )
+}
+
 // Just Tabs
 export default function Nav() {
     const TabNav = createBottomTabNavigator()
