@@ -5,34 +5,6 @@ const router = express.Router();
 
 const User = require('../models/user');
 
-/* 
-// IF we need an extension for user info????
-const userSchema = new mongoose.Schema({
-  // Existing user fields (username, email, password, etc.)
-  
-  // Income information
-  income: {
-    amount: {
-      type: Number,
-      default: 0
-    },
-    currency: {
-      type: String,
-      default: 'USD'
-    },
-    frequency: {
-      type: String,
-      enum: ['weekly', 'biweekly', 'monthly', 'annually'],
-      default: 'monthly'
-    },
-    lastUpdated: {
-      type: Date,
-      default: Date.now
-    }
-  }
-});
-*/
-
 const validateIncomeUpdate = 
 [
   body('amount')

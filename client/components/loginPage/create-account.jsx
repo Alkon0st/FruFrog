@@ -1,29 +1,40 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
-function CreateAccountFunction() {
-  const { control, handleSubmit, formState: {errors}, watch } = useForm();
+function CreateAccount() {
+  const navigation = useNavigation();
+  const { control, handleSubmit, formState: {errors}, watch } = useForm({
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
+  });
   const [username, setUsername] = useState('');
-  const [passwordVisible] = useState(false);
-  const [confirmPasswordVisible] = useState(false);
-  const password = watch('password', '');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const password = watch('password') || '';
 
   const onsubmit = (data) => {
     console.log('Form Data: ', data);
     alert('Your account has been successfully created.');
   };
-  
+
   return (
     <LinearGradient
       // Background Linear Gradient
       start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
       locations={[0.47, 1]}
       colors={['#FEFFF5', '#E0FDD9']}
-      >
-      <View style = {styles.viewStyle}>
+      style={styles.LinearGradient}>
+      <Text style={styles.headingStyle}>Create Account</Text>
+
+      <View style={styles.viewStyle}>
         <Controller
             control={control}
             rules={{
@@ -36,21 +47,22 @@ function CreateAccountFunction() {
                         style={styles.textInputStyle}
                         placeholder="Enter your username"
                         onBlur={onBlur}
-                        onChangeText={(text) => {
-                            onChange(text);
-                            setUsername(text);
-                        }}
+                        onChangeText={onChange}
                         value={value}
                     />
                     {errors.username && <Text style={styles.errorText}>{errors.username.message}</Text>}
                 </>
             )}
             name="username"
-          />
-          <Controller
+        />
+        <Controller
             control={control}
             rules={{
                 required: "Email is required",
+                pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address"
+                },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
@@ -61,13 +73,14 @@ function CreateAccountFunction() {
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
+                        keyboardType="email-address"
                     />
                     {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
                 </>
             )}
             name="email"
-          />
-          <Controller
+        />
+        <Controller
             control={control}
             rules={{
                 required: "Password is required",
@@ -79,99 +92,135 @@ function CreateAccountFunction() {
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
                     <Text style={styles.headingStyle}>Password</Text>
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter your password"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        secureTextEntry={!passwordVisible}
-                    />
+                    <View style={styles.passwordContainer}>
+                        <TextInput
+                            style={styles.textInputStyle}
+                            placeholder="Enter your password"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            secureTextEntry={!passwordVisible}
+                        />
+                        <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+                            <Text style={styles.showHideText}>{passwordVisible ? "Hide" : "Show"}</Text>
+                        </TouchableOpacity>
+                    </View>
                     {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
                 </>
             )}
             name="password"
-          />
-          <Controller
+        />
+        <Controller
             control={control} 
             rules={{
-                required: "Incorrect password",
+                required: "Please confirm your password",
                 validate: (value) => value === password || "Passwords do not match",
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
                     <Text style={styles.headingStyle}>Confirm Password</Text>
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Confirm your password"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        secureTextEntry={!confirmPasswordVisible}
-                    />
-                    {errors.confirmPassword && ( <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>)}
+                    <View style={styles.passwordContainer}>
+                        <TextInput
+                            style={styles.textInputStyle}
+                            placeholder="Confirm your password"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            secureTextEntry={!confirmPasswordVisible}
+                        />
+                        <TouchableOpacity onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+                            <Text style={styles.showHideText}>{confirmPasswordVisible ? "Hide" : "Show"}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {errors.confirmPassword && (<Text style={styles.errorText}>{errors.confirmPassword.message}</Text>)}
                 </>
             )}
             name="confirmPassword"
-          />
-          <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onsubmit)}>
+        />
+        <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onsubmit)}>
             <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Sign In')}>
+            <Text style={styles.signInText}>
+              Already have an account? <Text style={{fontWeight:'bold'}}>Sign In</Text>
+            </Text>
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  LinearGradient: {
+    flex: 1,
+  },
+  headingStyle: {
+    fontSize: 20,
+    color: '#008000',
+    fontWeight: 'normal',
+    textAlign: 'center',
+  },
   viewStyle: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'left',
-      flex: 1,
-      backgroundColor: 'white',
-      margin: 110,
-      padding: 20,
-      borderRadius: 5,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    flex: 1,
+    backgroundColor: 'white',
+    marginHorizontal: 20,
+    marginVertical: 80,
+    marginTop: 2,
+    padding: 100,
+    borderRadius: 5,
   },
   textStyle: {
-      fontSize: 12,
-      color: 'black',
-      marginBottom: 5,
-      alignSelf: 'flex-start',
-      marginLeft: 30,
+    fontSize: 12,
+    color: 'black',
+    marginBottom: 5,
+    alignSelf: 'flex-start',
+    marginLeft: 30,
   },
   textInputStyle: {
-      borderWidth: 1,
-      borderColor: '#008000',
-      padding: 10,
-      width: 170,
-      marginBottom: 10,
-      borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#008000',
+    padding: 10,
+    width: '100%',
+    marginBottom: 10,
+    borderRadius: 5,
   },
   errorText: {
-      color: '#800D00',
-      marginBottom: 10,
-      alignSelf: 'flex-start',
-      marginLeft: 30,
+    color: '#800D00',
+    marginBottom: 10,
+    alignSelf: 'flex-start',
   },
   buttonStyle: {
-      backgroundColor: '#85BB65',
-      padding: 15,
-      borderRadius: 5,
-      width: 170,
-      alignItems: 'center',
-      marginTop: 10,
+    backgroundColor: '#85BB65',
+    padding: 15,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 5,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '500'
+    fontWeight: 'bold'
   },
-  headingStyle: {
-      fontSize: 12,
-      color: 'black',
-      fontWeight: 'normal',
-      textAlign: 'left',
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
   },
+  showHideText: {
+    color: '#067AFF',
+    marginLeft: -50,
+    zIndex: 1,
+  },
+  signInText: {
+    marginTop: 12, 
+    textAlign: 'center', 
+    color: '#008000',
+    width: '100%',
+  }
 });
-export default CreateAccountFunction;
+export default CreateAccount;

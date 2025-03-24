@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity } from 'react-native';
+import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
@@ -52,14 +52,14 @@ function SignInFunction() {
                     <Controller
                         control={control}
                         rules={{
-                            required: "Username is required",
+                            required: "Username or Email is required",
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <>
-                                <Text style={styles.textStyle}>Username:</Text>
+                                <Text style={styles.textStyle}>Username or Email:</Text>
                                 <TextInput
                                     style={styles.textInputStyle}
-                                    placeholder="Enter your username"
+                                    placeholder="Enter username or email"
                                     onBlur={onBlur}
                                     onChangeText={(text) => {
                                         onChange(text);
@@ -77,10 +77,6 @@ function SignInFunction() {
                         control={control}
                         rules={{
                             required: "Password is required",
-                            minLength: {
-                                value: 5,
-                                message: "Password must be at least 5 characters"
-                            }
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <>
@@ -153,7 +149,7 @@ function SignInFunction() {
                             <Text style={styles.subHeadingStyle}>Reset Password</Text>
                             <TextInput
                                 style={styles.textInputStyle}
-                                placeholder="Enter your email"
+                                placeholder="Email or username"
                             />
                             <TouchableOpacity 
                                 style={styles.button}
@@ -175,7 +171,7 @@ function SignInFunction() {
     );
 };
 
-const styles = {
+const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
     },
@@ -183,12 +179,14 @@ const styles = {
         padding: 20,
         flex: 1,
         justifyContent: 'center',
+        backgroundColor: 'white',
     },
     headingStyle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
+        color: '#008000',
     },
     subHeadingStyle: {
         fontSize: 18,
@@ -213,7 +211,7 @@ const styles = {
         marginBottom: 10,
     },
     button: {
-        backgroundColor: '#007BFF',
+        backgroundColor: '#008000',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
@@ -232,8 +230,9 @@ const styles = {
         alignItems: 'center',
     },
     alternateButtonText: {
-        color: '#007BFF',
+        color: '#008000',
         textDecorationLine: 'underline',
+        fontWeight: 'bold',
     },
     selectContainer: {
         marginBottom: 15,
@@ -266,7 +265,7 @@ const styles = {
         fontSize: 18,
     },
     modalButton: {
-        backgroundColor: '#007BFF',
+        backgroundColor: '#008000',
         borderRadius: 5,
         padding: 10,
         elevation: 2,
@@ -276,12 +275,12 @@ const styles = {
         marginTop: 20,
         padding: 15,
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor: '#008000',
     },
     linkText: {
         color: '#007BFF',
         textAlign: 'center',
         marginTop: 10,
     },
-};
+});
 export default SignInFunction;
