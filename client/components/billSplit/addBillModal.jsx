@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
 // Bill Modal Component
 const AddBillModal = ({ visible, onSubmit, onClose }) => {
@@ -8,6 +9,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
   const [billDate, setBillDate] = React.useState('');
   const [billPaid, setBillPaid] = React.useState('');
   const [billTotal, setBillTotal] = React.useState('');
+  const [category, setCategory] = useState('Rent');
 
   const handleSubmit = () => {
     if (!billTitle || !billDate || !billTotal) return;
@@ -25,6 +27,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     setBillDate('');
     setBillPaid('');
     setBillTotal('');
+    setCategory('Rent');
   }
 
   useEffect(() => {
@@ -43,52 +46,64 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <View style={styles.inputContainer}>
-            <TextInput
-            style={styles.input}
-            placeholder="Category"
-            value={billCategory}
-            onChangeText={setBillCategory}
-          />
-
+    <View style={styles.modalContainer}>
+      <View style={styles.modalContent}>
+        {/* Main Section */}
+        <View style={styles.inputContainer}>
+          {/* TODO: Stylize category dropdown /*}
+          {/* Category */}
+          <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)}>
+            <Picker.Item label="Rent" value="Rent" />
+            <Picker.Item label="Food" value="Food" />
+            <Picker.Item label="Utilities" value="Utilities" />
+            <Picker.Item label="Entertainment" value="Entertainment" />
+            <Picker.Item label="Others" value="Others" />
+          </Picker>
+          {/* Title */}
           <TextInput
             style={styles.input}
-            placeholder="Bill Title"
+            placeholder="Title here..."
             value={billTitle}
             onChangeText={setBillTitle}
           />
-          <TextInput style={styles.input} value={billDate} editable={false} />
+          {/* Date */}
+          <View style={styles.dateSection}>
+          <Text style={styles.date}>{billDate}</Text>
+          </View>
+          {/* TODO: Implement members /*}
+          {/* Members */}
+          <View style={styles.membersSection}>
+          <Text>O O O O</Text>
+          </View>
+          {/* Total */}
+          <View style={{flexDirection: 'row'}}>
+          <Text>Total: $</Text>
           <TextInput
             style={styles.input}
-            placeholder="Paid Amount"
-            value={billPaid}
-            onChangeText={setBillPaid}
-            keyboardType="numeric"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Total Amount"
             value={billTotal}
             onChangeText={setBillTotal}
             keyboardType="numeric"
           />
-
+          </View>
           {/* Buttons */}
           <View style={styles.buttonRow}>
             <TouchableOpacity onPress={onClose} style={styles.button}>
-              <Text>Custom Split</Text>
+            <Text style={styles.buttonText}>Custom Split</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleSubmit}>
+            <TouchableOpacity onPress={onClose} style={styles.button}>
+            <Text style={styles.buttonText}>Even Split</Text>
             </TouchableOpacity>
           </View>
-          </View>
-          <View style={styles.taxContainer}>
-            <Text>Tax</Text>
-          </View> 
+
         </View>
+        {/* TODO: Implement tax section /*}
+        {/* Tax Section */}
+        <View style={styles.taxContainer}>
+        <Text>Tax</Text>
+        </View> 
       </View>
+    </View>
+
     </Modal>
     </View>
   );
@@ -105,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: '#4f723a',
@@ -116,18 +131,27 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: 'white',
     borderRadius: 10,
-    alignItems: 'center',
-    padding: 20,
+    alignItems: 'left',
+    padding: 10,
+    position: 'relative',
   },
   input: {
-    width: '100%',
-    // borderBottomWidth: 1,
-    // borderColor: 'lightgrey',
-    padding: 8,
+    borderBottomWidth: 1,
+    borderColor: 'lightgrey',
     marginBottom: 10,
+    placeholderTextColor: 'cecece',
+    backgroundColor: '#f4f4f4',
   },
-  taxContainer: {
-    padding: 20,
+  dateSection: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  date: {
+    color: '#989898',
+  },
+  membersSection: {
+    backgroundColor: '#b2e196',
   },
   buttonRow: {
     flexDirection: 'row',
@@ -139,9 +163,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#85bb65",
     borderColor: "#4f723a",
     borderWidth: 2,
-    borderRadius: 5,
+    borderRadius: 8,
     padding: 1,
   },
+  buttonText: {
+    color: 'white',
+  },
+  taxContainer: {
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
 });
 
 export default AddBillModal;

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
+    "@react-native-picker/picker": "^2.11.0",
     "@react-native-vector-icons/ant-design": "^4.4.2",
     "@react-native-vector-icons/common": "^11.0.0",
     "@react-native-vector-icons/evil-icons": "^1.10.1",
@@ -19,7 +20,7 @@
     "@react-navigation/native": "^7.0.18",
     "@react-navigation/stack": "^7.2.2",
     "axios": "^1.8.2",
-    "expo": "^52.0.39",
+    "expo": "^52.0.40",
     "expo-constants": "~17.0.2",
     "expo-linear-gradient": "^14.0.2",
     "expo-linking": "~7.0.2",
