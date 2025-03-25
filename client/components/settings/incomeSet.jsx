@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Icon from '@react-native-vector-icons/ant-design'
 import {
   View,
   Text,
@@ -23,6 +24,13 @@ const IncomeForm = () => {
     setShowSuccessMessage(true);
     setTimeout(() => setShowSuccessMessage(false), 3000);
   };
+
+  const FrequencyPickerItem = ({label, value}) => (
+    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+      <Text>{label}</Text>
+      {incomeData.frequency === value && <Icon name="check" size={20} color="#4CAF50" />}
+    </View>
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -63,14 +71,14 @@ const IncomeForm = () => {
               selectedValue={incomeData.frequency}
               onValueChange={(value) => setIncomeData({...incomeData, frequency: value})}
             >
-               
-              <Picker.Item label="Hourly" value="hourly" />
-              <Picker.Item label="Daily" value="daily"  />  
-              <Picker.Item label="Weekly" value="weekly"  />
-              <Picker.Item label="Biweekly" value="biweekly" />
-              <Picker.Item label="Monthly" value="monthly" />
-              <Picker.Item label="Annually" value="annually"  />
-
+            // Need each of the following to display the check icon while selected  
+              <Picker.Item label="Hourly" value="hourly" color={incomeData.frequency === "hourly" ? "#4CAF50" : "#000"} />
+              <Picker.Item label="Daily" value="daily" color={incomeData.frequency === "daily" ? "#4CAF50" : "#000"} />  
+              <Picker.Item label="Weekly" value="weekly" color={incomeData.frequency === "weekly" ? "#4CAF50" : "#000"}  />
+              <Picker.Item label="Biweekly" value="biweekly" color={incomeData.frequency === "biweekly" ? "#4CAF50" : "#000"} />
+              <Picker.Item label="Monthly" value="monthly" color={incomeData.frequency === "monthly" ? "#4CAF50" : "#000"}/>
+              <Picker.Item label="Annually" value="annually" color={incomeData.frequency === "annually" ? "#4CAF50" : "#000"} />
+            
 
             </Picker>
           </View>
@@ -128,7 +136,7 @@ const IncomeForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#85BB65',
   },
   formContainer: {
     padding: 20,
