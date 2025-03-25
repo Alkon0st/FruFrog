@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Switch, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 // Bill Modal Component
 const AddBillModal = ({ visible, onSubmit, onClose }) => {
-  const [billCategory, setBillCategory] = React.useState('');
   const [billTitle, setBillTitle] = React.useState('');
   const [billDate, setBillDate] = React.useState('');
   const [billPaid, setBillPaid] = React.useState('');
   const [billTotal, setBillTotal] = React.useState('');
   const [category, setCategory] = useState('Rent');
+  const [tax, setTax] = useState('0');
 
   const handleSubmit = () => {
     if (!billTitle || !billDate || !billTotal) return;
@@ -19,6 +19,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
       date: billDate,
       paid: parseFloat(billPaid) || 0,
       total: parseFloat(billTotal),
+      tax: parseFloat(tax),
     };
 
     onSubmit(newBill);
@@ -28,6 +29,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     setBillPaid('');
     setBillTotal('');
     setCategory('Rent');
+    setBillDate('');
   }
 
   useEffect(() => {
@@ -38,8 +40,10 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     }
   }, [visible]);
 
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled((prev) => !prev);
+
   return (
-    <View style={styles.modalBackground}>
     <Modal
       animationType="fade"
       transparent={true}
@@ -52,16 +56,18 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
         <View style={styles.inputContainer}>
           {/* TODO: Stylize category dropdown /*}
           {/* Category */}
-          <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)}>
-            <Picker.Item label="Rent" value="Rent" />
-            <Picker.Item label="Food" value="Food" />
-            <Picker.Item label="Utilities" value="Utilities" />
-            <Picker.Item label="Entertainment" value="Entertainment" />
-            <Picker.Item label="Others" value="Others" />
-          </Picker>
+          <View style={styles.categorySection}>
+            <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)}>
+              <Picker.Item label="Rent" value="Rent" />
+              <Picker.Item label="Food" value="Food" />
+              <Picker.Item label="Utilities" value="Utilities" />
+              <Picker.Item label="Entertainment" value="Entertainment" />
+              <Picker.Item label="Others" value="Others" />
+            </Picker>
+          </View>
           {/* Title */}
           <TextInput
-            style={styles.input}
+            style={styles.titleInput}
             placeholder="Title here..."
             value={billTitle}
             onChangeText={setBillTitle}
@@ -79,7 +85,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
           <View style={{flexDirection: 'row'}}>
           <Text>Total: $</Text>
           <TextInput
-            style={styles.input}
+            style={styles.totalInput}
             value={billTotal}
             onChangeText={setBillTotal}
             keyboardType="numeric"
@@ -94,18 +100,32 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
             <Text style={styles.buttonText}>Even Split</Text>
             </TouchableOpacity>
           </View>
-
         </View>
+
         {/* TODO: Implement tax section /*}
         {/* Tax Section */}
         <View style={styles.taxContainer}>
-        <Text>Tax</Text>
-        </View> 
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{color: 'white'}}>$</Text>
+          {/* <TextInput
+            style={styles.taxInput}
+            value={tax}
+            onChangeText={setTax}
+            keyboardType="numeric"
+          /> */}
+          </View>
+          <Text style={styles.taxText}>Split Tax</Text>
+          <Switch
+            trackColor={{ false: '#ffffff', true: '#ffffff' }}
+            thumbColor={isEnabled ? '#4f723a' : '#4f723a'}
+            value={isEnabled}
+            onValueChange={toggleSwitch}
+          />
+        </View>
       </View>
     </View>
 
     </Modal>
-    </View>
   );
 };
 
@@ -116,31 +136,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
   modalContent: {
     backgroundColor: '#4f723a',
-    width: '25%',
     borderRadius: 10,
     flexDirection: 'row',
   },
   inputContainer: {
     backgroundColor: 'white',
     borderRadius: 10,
-    alignItems: 'left',
     padding: 10,
     position: 'relative',
   },
-  input: {
-    borderBottomWidth: 1,
-    borderColor: 'lightgrey',
-    marginBottom: 10,
-    placeholderTextColor: 'cecece',
-    backgroundColor: '#f4f4f4',
+  categorySection: {
+    alignItems: 'left',
+    padding: 10,
   },
   dateSection: {
     position: 'absolute',
@@ -150,8 +159,31 @@ const styles = StyleSheet.create({
   date: {
     color: '#989898',
   },
+  titleInput: {
+    marginBottom: 10,
+    placeholderTextColor: 'cecece',
+    backgroundColor: '#f4f4f4',
+    fontSize: 13,
+    marginBottom: 20,
+  },
+  totalInput: {
+    borderBottomWidth: 1,
+    borderColor: 'lightgrey',
+    marginBottom: 10,
+    placeholderTextColor: 'cecece',
+    width: '20%',
+    marginBottom: 10,
+  },
+  taxInput: {
+    borderBottomWidth: 1,
+    borderColor: 'white',
+    marginBottom: 10,
+    width: '20%',
+    color: 'white',
+  },
   membersSection: {
     backgroundColor: '#b2e196',
+    marginBottom: 10,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -170,11 +202,13 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   taxContainer: {
-    padding: 20,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  taxText: {
+    color: 'white',
+  },
 });
 
 export default AddBillModal;
