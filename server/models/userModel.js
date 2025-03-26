@@ -23,8 +23,7 @@ const UserSchema = new mongoose.Schema({
         type: String 
     },  // URL or file path
     name: { 
-        type: String, 
-        required: true 
+        type: String
     },
     bio: {
         type: String 
