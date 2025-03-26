@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   fixToText: {
@@ -7,14 +9,14 @@ const styles = StyleSheet.create({
     },
   mainView: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'top',
     alignItems: 'center',
     backgroundColor: 'rgba(179, 228, 183, 0.5)'
   },
   modalView: {
-    margin: 20,
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
     padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
@@ -25,6 +27,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    width: width,
+    alignSelf: 'flex-start',
   },
   button: {
     margin: 5,
