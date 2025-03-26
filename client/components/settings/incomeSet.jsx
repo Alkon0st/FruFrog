@@ -72,7 +72,7 @@ const IncomeForm = () => {
               onValueChange={(value) => setIncomeData({...incomeData, frequency: value})}
             >
             // Need each of the following to display the check icon while selected  
-              <Picker.Item label="Hourly" value="hourly" color={incomeData.frequency === "hourly" ? "#4CAF50" : "#000"} />
+              <Picker.Item label="Hourly" value="hourly" name= "check" color={incomeData.frequency === "hourly" ? "#4CAF50" : "#000"} />
               <Picker.Item label="Daily" value="daily" color={incomeData.frequency === "daily" ? "#4CAF50" : "#000"} />  
               <Picker.Item label="Weekly" value="weekly" color={incomeData.frequency === "weekly" ? "#4CAF50" : "#000"}  />
               <Picker.Item label="Biweekly" value="biweekly" color={incomeData.frequency === "biweekly" ? "#4CAF50" : "#000"} />
