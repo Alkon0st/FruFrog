@@ -65,11 +65,62 @@ export default function Nav() {
                     flexDirection: 'row',
                 }}}>
             <TabNav.Screen name='Login' component={LoginPage} options={{
-                tabBarIcon: () => (<Text>Login Page</Text>), }}/>
+                tabBarIcon: ({focused}) => (
+                    focused
+                    ? <View style={styles.view}> <Image
+                        source={require('./img/pad_active.png')}
+                        resizeMode='contain'
+                        style={styles.img}
+                    />
+                        <Text style={styles.focusedText}>Login</Text>
+                    </View>
+                    : <View style={styles.view}> <Image
+                    source={require('./img/pad_idle.png')}
+                    resizeMode='contain'
+                    style={styles.img}
+                    />
+                    <Text style={styles.idleText}>Login</Text>
+                    </View>
+                ), 
+            }}/>
             <TabNav.Screen name='Create Account' component={CreateAccount} options={{
-                tabBarIcon: () => (<Text>Create Account Page</Text>), }}/>
+                tabBarIcon: ({focused}) => (
+                    focused
+                    ? <View style={styles.view}> <Image
+                        source={require('./img/pad_active.png')}
+                        resizeMode='contain'
+                        style={styles.img}
+                    />
+                        <Text style={styles.focusedText}>Create Account</Text>
+                    </View>
+                    : <View style={styles.view}> <Image
+                    source={require('./img/pad_idle.png')}
+                    resizeMode='contain'
+                    style={styles.img}
+                    />
+                    <Text style={styles.idleText}>Create Account</Text>
+                    </View>
+                ),
+            }}/>
             <TabNav.Screen name='Settings' component={SettingsPage} options={{
-                tabBarIcon: () => (<Text>Settings</Text>), }}/>
+                tabBarIcon: ({focused}) => (
+                    focused
+                    ? <View style={styles.view}> <Image
+                        source={require('./img/pad_active.png')}
+                        resizeMode='contain'
+                        style={styles.img}
+                    />
+                        <Text style={styles.focusedText}>Settings</Text>
+                    </View>
+                    : <View style={styles.view}> <Image
+                    source={require('./img/pad_idle.png')}
+                    resizeMode='contain'
+                    style={styles.img}
+                    />
+                    <Text style={styles.idleText}>Settings</Text>
+                    </View>
+                ),  
+            }}/>
             <TabNav.Screen name='Home' component={HomePage} options={{
                 tabBarIcon: ({focused}) => (
                     // When focused is bitten lilypad
