@@ -19,20 +19,21 @@ function SignInFunction() {
         }
     });
     
-    const onSubmit = (data) => {
-        if (data.username === 'admin' && data.password === 'admin') {
-            setShowError(false);
-            setModalVisible(true);
-        } else {
-            setShowError(true);
-            Alert.alert(
-                "Login Failed",
-                "Invalid username or password. Please try again.",
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
-        }
+    const onSubmit = async (data) => {
+        setIsLoading(true);
+        setTimeout(() => {
+            if (data.username === 'admin' && data.password === 'admin') {
+                setShowError(false);
+                setIsLoading(false);
+                setModalVisible(true);
+                navigation.replace('HomePage', { username: data.username });
+                Alert.alert("Login Successful", "Welcome back, " + data.username + "!");
+            } else {
+                setShowError(true);
+                Alert.alert("Sign In Failed", "Invalid username or password");
+                setIsLoading(false);
+            }
+        },1500);
     };
     
     const handleForgotPassword = () => {
