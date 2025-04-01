@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import React from 'react';
 
 import SignIn from './SignIn';
+import CreateAccount from './create-account';
 import { LinearGradient } from "expo-linear-gradient";
 
 function LoginPage() {
+  const navigation = useNavigation();
 
   return (
     <LinearGradient
@@ -18,10 +21,17 @@ function LoginPage() {
       <View style={styles.viewStyle}>
           <Text style={styles.headingStyle}>Welcome Back</Text>
           <Text style={styles.textStyle}>Log in to see what you have toad-do</Text>
+      
+
           {/* Function call for Sign In button */}
           <SignIn />
           {/* Function call for Create Account button */}
-          <create-account />
+          <TouchableOpacity onPress={() => navigation.navigate('Create Account')}
+              style={styles.buttonStyle}
+          >
+              <Text style={styles.textButton}>Create Account</Text>
+          </TouchableOpacity>
+              
         </View>
         
     </LinearGradient>
@@ -29,11 +39,13 @@ function LoginPage() {
 }
 
 const styles = StyleSheet.create({
-  viewStyle: {
-      display: 'flex',
+  LinearGradient: {
+      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      flex: 1,
+  },
+  viewStyle: {
+      alignItems: 'center',
   },
   textStyle: {
       fontSize: 20,
@@ -43,6 +55,20 @@ const styles = StyleSheet.create({
       fontSize: 30,
       color: '#008000',
       fontWeight: 'bold',
+      textAlign: 'center',
+  },
+  buttonStyle: {
+      backgroundColor: '#85BB65',
+      padding: 10,
+      borderRadius: 5,
+      width: '100%',
+      alignItems: 'center',
+      marginBottom: 10,
+  },
+  textButton: {
+      fontSize: 16,
+      color: 'white',
+      fontWeight: 'normal',
       textAlign: 'center',
   },
 });

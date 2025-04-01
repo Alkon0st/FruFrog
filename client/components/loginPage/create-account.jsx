@@ -140,7 +140,7 @@ function CreateAccount() {
         <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onsubmit)}>
             <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Sign In')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.signInText}>
               Already have an account? <Text style={{fontWeight:'bold'}}>Sign In</Text>
             </Text>
@@ -155,9 +155,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headingStyle: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#008000',
-    fontWeight: 'normal',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   viewStyle: {
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     marginHorizontal: 20,
-    marginVertical: 80,
+    marginVertical: 20,
     marginTop: 2,
     padding: 100,
     borderRadius: 5,

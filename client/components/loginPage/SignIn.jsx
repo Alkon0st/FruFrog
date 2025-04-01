@@ -56,7 +56,7 @@ function SignInFunction() {
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <>
-                                <Text style={styles.textStyle}>Username or Email:</Text>
+                                <Text style={styles.textStyle}>Email</Text>
                                 <TextInput
                                     style={styles.textInputStyle}
                                     placeholder="Enter username or email"
@@ -80,7 +80,7 @@ function SignInFunction() {
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <>
-                                <Text style={styles.textStyle}>Password:</Text>
+                                <Text style={styles.textStyle}>Password</Text>
                                 <TextInput
                                     style={styles.textInputStyle}
                                     placeholder="Enter your password"
@@ -103,25 +103,19 @@ function SignInFunction() {
                     )}
                     
                     <View style={styles.buttonContainer}>
+                        <Pressable 
+                            style={styles.alternateButton}
+                            onPress={handleForgotPassword}
+                        >
+                            <Text style={styles.alternateButtonText}>Forgot Password?</Text>
+                        </Pressable>
+                        
                         <TouchableOpacity 
                             style={styles.button} 
                             onPress={formHandleSubmit(onSubmit)}
                         >
                             <Text style={styles.textButton}>Sign In</Text>
                         </TouchableOpacity>
-                        
-                        <Button
-                            title="Forgot Password?"
-                            onPress={handleForgotPassword}
-                            color="#6495ED"
-                        />
-                        
-                        <Pressable 
-                            style={styles.alternateButton}
-                            onPress={() => Alert.alert("Create Account", "Redirecting to registration page...")}
-                        >
-                            <Text style={styles.alternateButtonText}>Create Account</Text>
-                        </Pressable>
                     </View>
                     
                     <Modal
@@ -146,7 +140,8 @@ function SignInFunction() {
                     
                     {forgotPassword && (
                         <View style={styles.forgotPasswordContainer}>
-                            <Text style={styles.subHeadingStyle}>Reset Password</Text>
+                            <Text style={styles.subHeadingStyle}>Trouble Logging In?</Text>
+                            <Text style={styles.textStyle}>Enter your email and we'll send you a link to get back into your account</Text>
                             <TextInput
                                 style={styles.textInputStyle}
                                 placeholder="Email or username"
@@ -158,10 +153,10 @@ function SignInFunction() {
                                     setForgotPassword(false);
                                 }}
                             >
-                                <Text style={styles.textButton}>Send Reset Link</Text>
+                                <Text style={styles.textButton}>Send Login Link</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => setForgotPassword(false)}>
-                                <Text style={styles.linkText}>Back to Sign In</Text>
+                                <Text style={styles.linkText}>Back</Text>
                             </TouchableOpacity>
                         </View>
                     )}
@@ -190,17 +185,17 @@ const styles = StyleSheet.create({
     },
     subHeadingStyle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: 'normal',
         marginBottom: 15,
         textAlign: 'center',
     },
     textStyle: {
-        fontSize: 16,
+        fontSize: 14,
         marginBottom: 5,
     },
     textInputStyle: {
         height: 40,
-        borderColor: 'gray',
+        borderColor: '#008000',
         borderWidth: 1,
         marginBottom: 15,
         paddingHorizontal: 10,
@@ -211,7 +206,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     button: {
-        backgroundColor: '#008000',
+        backgroundColor: '#85BB65',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
@@ -219,20 +214,22 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color: 'white',
-        fontWeight: 'bold',
+        fontWeight: 'normal',
+        fontSize: 16,
     },
     buttonContainer: {
-        marginTop: 10,
+        marginBottom: 10,
     },
     alternateButton: {
-        marginTop: 10,
-        padding: 10,
+        marginLeft: 50,
         alignItems: 'center',
     },
     alternateButtonText: {
-        color: '#008000',
+        color: '#000',
         textDecorationLine: 'underline',
-        fontWeight: 'bold',
+        fontWeight: 'normal',
+        marginBottom: 20,
+        marginLeft: 20,
     },
     selectContainer: {
         marginBottom: 15,
