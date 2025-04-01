@@ -111,10 +111,14 @@ function SignInFunction() {
                         </Pressable>
                         
                         <TouchableOpacity 
-                            style={styles.button} 
+                           style={[
+                            styles.button,
+                            (!username || !password) && { backgroundColor: '#ccc' }
+                        ]}
                             onPress={formHandleSubmit(onSubmit)}
+                            disabled={!username || !password}
                         >
-                            <Text style={styles.textButton}>Sign In</Text>
+                            <Text style={styles.textButton}>Sign In</Text> 
                         </TouchableOpacity>
                     </View>
                     
@@ -141,7 +145,7 @@ function SignInFunction() {
                     {forgotPassword && (
                         <View style={styles.forgotPasswordContainer}>
                             <Text style={styles.subHeadingStyle}>Trouble Logging In?</Text>
-                            <Text style={styles.textStyle}>Enter your email and we'll send you a link to get back into your account</Text>
+                            <Text style={styles.textStyle}>Enter your email and we'll send you a link to get back into your account.</Text>
                             <TextInput
                                 style={styles.textInputStyle}
                                 placeholder="Email or username"
@@ -195,7 +199,7 @@ const styles = StyleSheet.create({
     },
     textInputStyle: {
         height: 40,
-        borderColor: '#008000',
+        borderColor: '#',
         borderWidth: 1,
         marginBottom: 15,
         paddingHorizontal: 10,
