@@ -218,9 +218,12 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   signInText: {
+    fontSize: 12,
     marginTop: 12, 
     textAlign: 'center', 
-    color: '#008000',
+    color: '#000',
+    textDecorationLine: 'underline',
+    fontWeight: 'normal',
     width: '100%',
   }
 });

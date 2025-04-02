@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Alert, Modal, Text, TextInput, Pressable, View, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 function SignInFunction() {
     const [username, setUsername] = useState('');
@@ -62,8 +63,7 @@ function SignInFunction() {
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <Text style={styles.headingStyle}>Sign In</Text>
-                    <TextInput placeholder='Email' value={email} onChangeText={setEmail} />
-                    <Button title="Send Login Link" onPress={handleSendEmail} />
+
                     
                     <Controller
                         control={control}
@@ -165,12 +165,15 @@ function SignInFunction() {
                             <TextInput
                                 style={styles.textInputStyle}
                                 placeholder="Email or username"
+                                value={email}
+                                onChangeText={setEmail}
                             />
                             <TouchableOpacity 
                                 style={styles.button}
                                 onPress={() => {
-                                    Alert.alert("Password Reset", "Instructions have been sent to your email");
-                                    setForgotPassword(false);
+                                    if (email.trim() !== '') {
+                                        handleSendEmail(true);
+                                    }
                                 }}
                             >
                                 <Text style={styles.textButton}>Send Login Link</Text>
@@ -180,13 +183,14 @@ function SignInFunction() {
                             </TouchableOpacity>
                         </View>
                     )}
-                    <Modal visible={emailSent} transparent={true}>
-                        <View>
-                            <Text>Email Sent</Text>
-                            <Text>We sent an email to {email} with a link to reset your password.</Text>
-                            <Pressable onPress={() => setEmailSent(false)}>
-                                <Text>OK</Text>
-                            </Pressable>
+                    <Modal visible={emailSent} transparent={true} animationType='slide'>
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <Text style={styles.modalText}>Check your email for the link, fellow frogger!</Text>
+                                <Pressable onPress={() => setEmailSent(false)}>
+                                    <Text style={styles.modalButton}>OK</Text>
+                                </Pressable>
+                            </View>
                         </View>
                     </Modal>
                 </View>
@@ -287,11 +291,14 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontWeight: 'italic',
+        color: '#008000',
         fontSize: 18,
     },
     modalButton: {
-        backgroundColor: '#008000',
+        textAlign: 'center',
+        color: 'white',
+        backgroundColor: '#85BB65',
         borderRadius: 5,
         padding: 10,
         elevation: 2,
