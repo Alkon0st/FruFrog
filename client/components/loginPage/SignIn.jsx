@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, Modal, Text, TextInput, Pressable, View, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
@@ -7,9 +7,12 @@ import { TextInput } from 'react-native-gesture-handler';
 function SignInFunction() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [emailSent, setEmailSent] = useState(false);
     const [showError, setShowError] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
+    const navigation = useNavigation();
     
     const { control, handleSubmit: formHandleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -39,6 +42,16 @@ function SignInFunction() {
     const handleForgotPassword = () => {
         setForgotPassword(true);
     };
+
+    const handleSendEmail = () => {
+        if (email.includes('@')) {
+            setEmailSent(true);
+        }
+        else 
+        {
+            Alert.alert("Please enter a valid email address");
+        }
+    };
     
     const handleModalClose = () => {
         setModalVisible(false);
@@ -49,6 +62,8 @@ function SignInFunction() {
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <Text style={styles.headingStyle}>Sign In</Text>
+                    <TextInput placeholder='Email' value={email} onChangeText={setEmail} />
+                    <Button title="Send Login Link" onPress={handleSendEmail} />
                     
                     <Controller
                         control={control}
@@ -165,11 +180,20 @@ function SignInFunction() {
                             </TouchableOpacity>
                         </View>
                     )}
+                    <Modal visible={emailSent} transparent={true}>
+                        <View>
+                            <Text>Email Sent</Text>
+                            <Text>We sent an email to {email} with a link to reset your password.</Text>
+                            <Pressable onPress={() => setEmailSent(false)}>
+                                <Text>OK</Text>
+                            </Pressable>
+                        </View>
+                    </Modal>
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>
     );
-};
+}
 
 const styles = StyleSheet.create({
     safeArea: {

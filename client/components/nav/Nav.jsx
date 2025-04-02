@@ -9,6 +9,7 @@ import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
 import LoginPage from '../loginPage/LoginPage';
 import CreateAccount from '../loginPage/create-account';
+import ForgotPassword from '../loginPage/ForgotPassword';
 
 import { View, StyleSheet, Image, Button, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -82,6 +83,25 @@ export default function Nav() {
                     <Text style={styles.idleText}>Login</Text>
                     </View>
                 ), 
+            }}/>
+            <TabNav.Screen name='Forgot Password' component={ForgotPassword} options={{
+                tabBarIcon: ({focused}) => (
+                    focused
+                    ? <View style={styles.view}> <Image
+                        source={require('./img/pad_active.png')}
+                        resizeMode='contain'
+                        style={styles.img}
+                    />
+                        <Text style={styles.focusedText}>Forgot Password</Text>
+                    </View>
+                    : <View style={styles.view}> <Image
+                    source={require('./img/pad_idle.png')}
+                    resizeMode='contain'
+                    style={styles.img}
+                    />
+                    <Text style={styles.idleText}>Forgot Password</Text>
+                    </View>
+                ),
             }}/>
             <TabNav.Screen name='Create Account' component={CreateAccount} options={{
                 tabBarIcon: ({focused}) => (
