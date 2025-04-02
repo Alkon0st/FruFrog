@@ -164,7 +164,7 @@ function SignInFunction() {
                             <Text style={styles.textStyle}>Enter your email and we'll send you a link to get back into your account.</Text>
                             <TextInput
                                 style={styles.textInputStyle}
-                                placeholder="Email or username"
+                                placeholder="Email"
                                 value={email}
                                 onChangeText={setEmail}
                             />
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     },
     textInputStyle: {
         height: 40,
-        borderColor: '#',
+        borderColor: '#85BB65',
         borderWidth: 1,
         marginBottom: 15,
         paddingHorizontal: 10,
