@@ -42,7 +42,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Username</Text>
+                    <Text style={styles.subHeadingStyle}>Username</Text>
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter your username"
@@ -66,7 +66,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Email</Text>
+                    <Text style={styles.subHeadingStyle}>Email</Text>
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter your email"
@@ -91,7 +91,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Password</Text>
+                    <Text style={styles.subHeadingStyle}>Password</Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
                             style={styles.textInputStyle}
@@ -118,7 +118,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Confirm Password</Text>
+                    <Text style={styles.subHeadingStyle}>Confirm Password</Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
                             style={styles.textInputStyle}
@@ -153,24 +153,24 @@ function CreateAccount() {
 const styles = StyleSheet.create({
   LinearGradient: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headingStyle: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#008000',
     fontWeight: 'bold',
     textAlign: 'center',
   },
   viewStyle: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'flex-start',
-    flex: 1,
     backgroundColor: 'white',
     marginHorizontal: 20,
-    marginVertical: 20,
-    marginTop: 2,
-    padding: 100,
-    borderRadius: 5,
+    marginVertical: 60,
+    marginTop: 20,
+    padding: 60,
+    borderRadius: 50,
   },
   textStyle: {
     fontSize: 12,
@@ -178,6 +178,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     alignSelf: 'flex-start',
     marginLeft: 30,
+  },
+  subHeadingStyle: {
+    fontSize: 16,
+    color: '#008000',
+    fontWeight: 'light',
+    marginBottom: 5,
+    alignSelf: 'flex-start',
   },
   textInputStyle: {
     borderWidth: 1,
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
   },
   signInText: {
     fontSize: 12,
-    marginTop: 12, 
+    marginTop: 18, 
     textAlign: 'center', 
     color: '#000',
     textDecorationLine: 'underline',

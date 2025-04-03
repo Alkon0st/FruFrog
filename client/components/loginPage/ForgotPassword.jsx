@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#E8F5E9', // Light green background to match the image
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 20,
+        padding: 20,
     },
     header: {
         alignItems: 'center',
@@ -98,19 +98,17 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     logo: {
-        width: 100,
-        height: 100,
         borderRadius: 50,
-        marginBottom: 10,
+        marginTop: 50,
     },
     goatText: {
         fontSize: 28,
         fontWeight: 'bold',
         color: '#000',
-        marginBottom: 40,
+        marginBottom: 70,
     },
     inputContainer: {
-        width: '80%',
+        width: '75%',
         alignItems: 'center',
     },
     inputWrapper: {
@@ -145,7 +143,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#888',
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: 100,
+        marginTop: 75,
     },
 });
 

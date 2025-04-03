@@ -75,7 +75,7 @@ function SignInFunction() {
                                 <Text style={styles.textStyle}>Email</Text>
                                 <TextInput
                                     style={styles.textInputStyle}
-                                    placeholder="Enter username or email"
+                                    placeholder="Enter email or username"
                                     onBlur={onBlur}
                                     onChangeText={(text) => {
                                         onChange(text);
