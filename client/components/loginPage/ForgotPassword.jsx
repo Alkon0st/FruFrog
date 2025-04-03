@@ -18,55 +18,63 @@ function ForgotPassword() {
     };
 
     return (
-        <View style={styles.container}>
-            {/* Header with Logo and Title */}
-            <View style={styles.header}>
-                <Text style={styles.headingStyle}>Change Password</Text>
-                <Image
-                    source={{ uri: 'https://via.placeholder.com/100' }} // Replace with actual frog logo URL or local asset
-                    style={styles.logo}
-                />
-                <Text style={styles.goatText}>GOAT24</Text>
-            </View>
-
-            {/* Input Fields */}
-            <View style={styles.inputContainer}>
-                <View style={styles.inputWrapper}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        secureTextEntry
-                        value={password}
-                        onChangeText={setPassword}
+        <LinearGradient
+            // Background Linear Gradient
+            start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+            locations={[0.47, 1]}
+            colors={['#FEFFF5', '#E0FDD9']}
+            style={styles.LinearGradient}
+        >
+            <View style={styles.container}>
+                {/* Header with Logo and Title */}
+                <View style={styles.header}>
+                    <Text style={styles.headingStyle}>Change Password</Text>
+                    <Image
+                        source={{ uri: 'https://via.placeholder.com/100' }} // Replace with actual frog logo URL or local asset
+                        style={styles.logo}
                     />
-                    {password.length >= 6 && <Text style={styles.checkmark}>✔</Text>}
+                    <Text style={styles.goatText}>GOAT24</Text>
                 </View>
-                <View style={styles.inputWrapper}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        secureTextEntry
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
+
+                {/* Input Fields */}
+                <View style={styles.inputContainer}>
+                    <View style={styles.inputWrapper}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            secureTextEntry
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        {password.length >= 6 && <Text style={styles.checkmark}>✔</Text>}
+                    </View>
+                    <View style={styles.inputWrapper}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Confirm Password"
+                            secureTextEntry
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                        />
+                        {password === confirmPassword && confirmPassword.length >= 6 && (
+                            <Text style={styles.checkmark}>✔</Text>
+                        )}
+                    </View>
+                </View>
+
+                {/* Change Password Button */}
+                <View style={styles.buttonContainer}>
+                    <Button
+                        title="Change Password"
+                        onPress={handleChangePassword}
+                        color="#4CAF50" // Green color for the button
                     />
-                    {password === confirmPassword && confirmPassword.length >= 6 && (
-                        <Text style={styles.checkmark}>✔</Text>
-                    )}
                 </View>
-            </View>
 
-            {/* Change Password Button */}
-            <View style={styles.buttonContainer}>
-                <Button
-                    title="Change Password"
-                    onPress={handleChangePassword}
-                    color="#4CAF50" // Green color for the button
-                />
+                {/* Footer */}
+                <Text style={styles.footer}>© Pond Patrol. All rights reserved.</Text>
             </View>
-
-            {/* Footer */}
-            <Text style={styles.footer}>© Pond Patrol. All rights reserved.</Text>
-        </View>
+        </LinearGradient>
     );
 }
 
@@ -81,10 +89,11 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#E8F5E9', // Light green background to match the image
+        backgroundColor: '#D8E4BC', // Light green background to match the image
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
+        padding: 30,
+        borderRadius: 20,
     },
     header: {
         alignItems: 'center',
@@ -108,7 +117,7 @@ const styles = StyleSheet.create({
         marginBottom: 70,
     },
     inputContainer: {
-        width: '75%',
+        width: '96%',
         alignItems: 'center',
     },
     inputWrapper: {
@@ -131,19 +140,19 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     checkmark: {
-        color: '#4CAF50', // Green checkmark
+        color: '#568203',
         fontSize: 20,
         marginLeft: 10,
     },
     buttonContainer: {
-        width: '80%',
+        width: '100%',
         marginTop: 20,
     },
     footer: {
         fontSize: 12,
         color: '#888',
         textAlign: 'center',
-        marginBottom: 100,
+        marginBottom: 50,
         marginTop: 75,
     },
 });
