@@ -208,6 +208,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         backgroundColor: 'white',
+        borderRadius: 20,
+        margin: 10,
     },
     headingStyle: {
         fontSize: 20,

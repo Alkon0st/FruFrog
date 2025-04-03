@@ -84,25 +84,6 @@ export default function Nav() {
                     </View>
                 ), 
             }}/>
-            <TabNav.Screen name='Forgot Password' component={ForgotPassword} options={{
-                tabBarIcon: ({focused}) => (
-                    focused
-                    ? <View style={styles.view}> <Image
-                        source={require('./img/pad_active.png')}
-                        resizeMode='contain'
-                        style={styles.img}
-                    />
-                        <Text style={styles.focusedText}>Forgot Password</Text>
-                    </View>
-                    : <View style={styles.view}> <Image
-                    source={require('./img/pad_idle.png')}
-                    resizeMode='contain'
-                    style={styles.img}
-                    />
-                    <Text style={styles.idleText}>Forgot Password</Text>
-                    </View>
-                ),
-            }}/>
             <TabNav.Screen name='Create Account' component={CreateAccount} options={{
                 tabBarIcon: ({focused}) => (
                     focused
@@ -119,6 +100,25 @@ export default function Nav() {
                     style={styles.img}
                     />
                     <Text style={styles.idleText}>Create Account</Text>
+                    </View>
+                ),
+            }}/>
+            <TabNav.Screen name='Forgot Password' component={ForgotPassword} options={{
+                tabBarIcon: ({focused}) => (
+                    focused
+                    ? <View style={styles.view}> <Image
+                        source={require('./img/pad_active.png')}
+                        resizeMode='contain'
+                        style={styles.img}
+                    />
+                        <Text style={styles.focusedText}>Forgot Password</Text>
+                    </View>
+                    : <View style={styles.view}> <Image
+                    source={require('./img/pad_idle.png')}
+                    resizeMode='contain'
+                    style={styles.img}
+                    />
+                    <Text style={styles.idleText}>Forgot Password</Text>
                     </View>
                 ),
             }}/>
