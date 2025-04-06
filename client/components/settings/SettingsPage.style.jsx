@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container:{
-        width: "100%",
+        width: "60%",
     },
     viewStyle: {
         display: 'flex',
@@ -18,6 +18,14 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: 'black',
         textAlign: 'center',
+        fontWeight: 'Medium',
+        marginBottom: 10,
+    },
+    subHeadingStyle: {
+        fontSize: 16,
+        color: 'black',
+        fontWeight: 'Medium',
+        marginBottom: 10,
     },
 });
 

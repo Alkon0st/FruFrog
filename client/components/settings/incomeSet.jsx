@@ -11,25 +11,26 @@ const IncomeForm = () => {
     lastUpdated: 'Not set'
   });
 
+  const currencySymbols = {
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    JPY: '¥',
+    CAD: 'C$'
+  };
+
   const handleSubmit = () => {
-    // Handle form submission logic here
     setShowSuccessMessage(true);
     setTimeout(() => setShowSuccessMessage(false), 3000);
   };
 
-  const FrequencyPickerItem = ({label, value}) => (
-    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-      <Text>{label}</Text>
-      {incomeData.frequency === value && <Icon name="check" size={20} color="#4CAF50" />}
-    </View>
-  );
   
   //const myIcon = <Icon name="check" size={30} color="#900" />;
 
     return (
       <ScrollView style={styles.container}>
         <View style={styles.formContainer}>
-          <Text style={styles.title}>Update Income</Text>
+          <Text style={styles.title}>Edit Pond</Text>
           
           <View style={styles.formGroup}>
             <Text style={styles.label}>Amount</Text>
@@ -37,6 +38,8 @@ const IncomeForm = () => {
               style={styles.input}
               placeholder="0.00"
               keyboardType="numeric"
+              value={incomeData.amount ? incomeData.amount.toString() : ''}
+              onChangeText={(text) => setIncomeData({...incomeData, amount: parseFloat(text) || 0})}
             />
           </View>
           
@@ -89,10 +92,12 @@ const IncomeForm = () => {
           )}
           
           <View style={styles.incomeDisplay}>
-            <Text style={styles.subtitle}>Current Income</Text>
+            <Text style={styles.subtitle}>Income details</Text>
             <View style={styles.incomeItem}>
               <Text style={styles.incomeLabel}>Amount:</Text>
-              <Text style={styles.incomeValue}>${incomeData.amount.toFixed(2)}</Text>
+              <Text style={styles.incomeValue}>
+                {currencySymbols[incomeData.currency]}{incomeData.amount.toFixed(2)}
+              </Text>
             </View>
             <View style={styles.incomeItem}>
               <Text style={styles.incomeLabel}>Currency:</Text>

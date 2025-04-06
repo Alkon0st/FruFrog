@@ -7,8 +7,8 @@ import IncomeForm from './incomeSet';
 function SettingsPage() {
     return (
         <View style ={styles.viewStyle}>
-            <Text style ={styles.headingStyle}>Settings Page</Text>
-            <Text style ={styles.textStyle}>This is the pee pee poo poo fart</Text>
+            <Text style ={styles.headingStyle}>Settings</Text>
+            <Text style ={styles.textStyle}>This is THE pee pee poo poo fart</Text>
             <IncomeForm />
         </View>
     );
