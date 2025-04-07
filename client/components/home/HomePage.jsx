@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {Pressable, Modal, StyleSheet, Text, View, Button, Dimensions, ScrollView} from 'react-native';
+import {Pressable, Modal, StyleSheet, Text, View, Button, Dimensions, ScrollView, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/ant-design';
 
 import AddUser from '../pondFunctions/AddUser';
 import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
-import HeaderButton from '../nav/HeaderNav';
+import HeaderNav from '../nav/HeaderNav';
 
 function HomePage() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -46,6 +46,7 @@ function HomePage() {
             </Modal>
 
             <ScrollView>
+                <HeaderNav />
                 <View>
                     {/*The button to summon popup*/}
                     <Pressable
@@ -58,6 +59,7 @@ function HomePage() {
                 <Text style ={styles.headingStyle}>Home Page</Text>
                 <Text style ={styles.textStyle}>This is the placeholder for the home page </Text>                 
             </ScrollView>
+
         </LinearGradient>
 
         </SafeAreaView>
