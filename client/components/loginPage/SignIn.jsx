@@ -3,6 +3,8 @@ import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity, StyleShe
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
+import axios from 'axios'; // Import axios
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function SignInFunction() {
     const [username, setUsername] = useState('');
@@ -10,7 +12,7 @@ function SignInFunction() {
     const [showError, setShowError] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
-    
+
     const { control, handleSubmit: formHandleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             username: '',
@@ -18,37 +20,52 @@ function SignInFunction() {
             role: ''
         }
     });
-    
-    const onSubmit = (data) => {
-        if (data.username === 'admin' && data.password === 'admin') {
+
+    const onSubmit = async (data) => {
+        try {
+            // Send login request to the server
+            const response = await axios.post('http://localhost:5000/api/auth/login', {
+                identifier: data.username, // Username or email
+                password: data.password,
+            });
+
+            // Handle successful login
+            const { token, user } = response.data;
+            console.log('Login successful:', user);
             setShowError(false);
-            setModalVisible(true);
-        } else {
+            setModalVisible(true); // Show success modal
+            Alert.alert('Success', `Welcome back, ${user.username}!`);
+
+            // save the token 
+            await AsyncStorage.setItem('token', token);
+
+            // Navigate to the home screen or dashboard
+            navigation.navigate('Home'); // Replace 'Home' with your target screen
+        } catch (error) {
+            console.error('Login error:', error.response?.data || error.message);
             setShowError(true);
             Alert.alert(
-                "Login Failed",
-                "Invalid username or password. Please try again.",
-                [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
+                'Login Failed',
+                error.response?.data?.message || 'Invalid username or password. Please try again.',
+                [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
             );
         }
     };
-    
+
     const handleForgotPassword = () => {
         setForgotPassword(true);
     };
-    
+
     const handleModalClose = () => {
         setModalVisible(false);
     };
-    
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <Text style={styles.headingStyle}>Sign In</Text>
-                    
+
                     <Controller
                         control={control}
                         rules={{
@@ -72,7 +89,7 @@ function SignInFunction() {
                         )}
                         name="username"
                     />
-                    
+
                     <Controller
                         control={control}
                         rules={{
@@ -97,11 +114,11 @@ function SignInFunction() {
                         )}
                         name="password"
                     />
-                    
+
                     {showError && (
                         <Text style={styles.errorText}>Invalid username or password</Text>
                     )}
-                    
+
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity 
                             style={styles.button} 
@@ -109,13 +126,13 @@ function SignInFunction() {
                         >
                             <Text style={styles.textButton}>Sign In</Text>
                         </TouchableOpacity>
-                        
+
                         <Button
                             title="Forgot Password?"
                             onPress={handleForgotPassword}
                             color="#6495ED"
                         />
-                        
+
                         <Pressable 
                             style={styles.alternateButton}
                             onPress={() => Alert.alert("Create Account", "Redirecting to registration page...")}
@@ -123,7 +140,7 @@ function SignInFunction() {
                             <Text style={styles.alternateButtonText}>Create Account</Text>
                         </Pressable>
                     </View>
-                    
+
                     <Modal
                         animationType="slide"
                         transparent={true}
@@ -143,7 +160,7 @@ function SignInFunction() {
                             </View>
                         </View>
                     </Modal>
-                    
+
                     {forgotPassword && (
                         <View style={styles.forgotPasswordContainer}>
                             <Text style={styles.subHeadingStyle}>Reset Password</Text>

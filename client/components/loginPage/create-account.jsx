@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios'; // Import axios
 
 function CreateAccount() {
   const navigation = useNavigation();
@@ -20,9 +21,17 @@ function CreateAccount() {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const password = watch('password') || '';
 
-  const onsubmit = (data) => {
-    console.log('Form Data: ', data);
-    alert('Your account has been successfully created.');
+  const onsubmit = async (data) => {
+    try {
+      // Replace with your server's endpoint
+      const response = await axios.post('http://localhost:5000/api/auth/signup', data);
+      console.log('Server Response:', response.data);
+      alert('Your account has been successfully created.');
+      navigation.navigate('Sign In'); // Navigate to Sign In page after success
+    } catch (error) {
+      console.error('Error creating account:', error.response?.data || error.message);
+      alert('Failed to create account. Please try again.');
+    }
   };
 
   return (
