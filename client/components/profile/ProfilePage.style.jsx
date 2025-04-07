@@ -1,6 +1,12 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+    modal: {
+        height: height,
+        width: width,
+    },
     page: {
         justifyContent: 'center',
         alignItems: 'center',
