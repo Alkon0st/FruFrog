@@ -51,7 +51,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Username</Text>
+                    <Text style={styles.subHeadingStyle}>Username</Text>
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter your username"
@@ -75,7 +75,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Email</Text>
+                    <Text style={styles.subHeadingStyle}>Email</Text>
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter your email"
@@ -100,7 +100,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Password</Text>
+                    <Text style={styles.subHeadingStyle}>Password</Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
                             style={styles.textInputStyle}
@@ -127,7 +127,7 @@ function CreateAccount() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                    <Text style={styles.headingStyle}>Confirm Password</Text>
+                    <Text style={styles.subHeadingStyle}>Confirm Password</Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
                             style={styles.textInputStyle}
@@ -149,7 +149,7 @@ function CreateAccount() {
         <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onsubmit)}>
             <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Sign In')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.signInText}>
               Already have an account? <Text style={{fontWeight:'bold'}}>Sign In</Text>
             </Text>
@@ -162,24 +162,24 @@ function CreateAccount() {
 const styles = StyleSheet.create({
   LinearGradient: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headingStyle: {
     fontSize: 20,
     color: '#008000',
-    fontWeight: 'normal',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   viewStyle: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'flex-start',
-    flex: 1,
     backgroundColor: 'white',
     marginHorizontal: 20,
-    marginVertical: 80,
-    marginTop: 2,
-    padding: 100,
-    borderRadius: 5,
+    marginVertical: 60,
+    marginTop: 20,
+    padding: 60,
+    borderRadius: 50,
   },
   textStyle: {
     fontSize: 12,
@@ -187,6 +187,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     alignSelf: 'flex-start',
     marginLeft: 30,
+  },
+  subHeadingStyle: {
+    fontSize: 16,
+    color: '#008000',
+    fontWeight: 'light',
+    marginBottom: 5,
+    alignSelf: 'flex-start',
   },
   textInputStyle: {
     borderWidth: 1,
@@ -227,9 +234,12 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   signInText: {
-    marginTop: 12, 
+    fontSize: 12,
+    marginTop: 18, 
     textAlign: 'center', 
-    color: '#008000',
+    color: '#000',
+    textDecorationLine: 'underline',
+    fontWeight: 'normal',
     width: '100%',
   }
 });
