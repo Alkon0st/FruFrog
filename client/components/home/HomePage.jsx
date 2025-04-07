@@ -4,7 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/ant-design';
 
-import CreatePond from '../pondFunctions/CreatePondFolder/CreatePond';
 import AddUser from '../pondFunctions/AddUser';
 import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
 import HeaderButton from '../nav/HeaderNav';
