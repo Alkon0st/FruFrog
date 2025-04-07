@@ -218,25 +218,6 @@ export default function Nav() {
                     </View>
                 ), 
             }} />
-            <TabNav.Screen name='Profile' component={ProfilePage}options={{
-                tabBarIcon: ({focused}) => (
-                    focused
-                    ? <View style={styles.view}> <Image
-                        source={require('./img/pad_active.png')}
-                        resizeMode='contain'
-                        style={styles.img}
-                    /> 
-                        <Text style={styles.focusedText}>Profile</Text>
-                    </View>
-                    : <View style={styles.view}> <Image
-                    source={require('./img/pad_idle.png')}
-                    resizeMode='contain'
-                    style={styles.img}
-                    />
-                    <Text style={styles.idleText}>Profile</Text>
-                    </View>
-                ), 
-            }} />
         </TabNav.Navigator>
     )
 }
