@@ -1,18 +1,24 @@
-import {StyleSheet, Text, View} from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
-import styles from './SettingsPage.style';
+import {Modal, Text, View, TouchableOpacity} from 'react-native';
+
 import IncomeForm from './incomeSet';
+import styles from './SettingsPage.style';
 
-import HeaderNav from '../nav/HeaderNav';
-
-
-function SettingsPage() {
+const SettingsPage = ({
+    visible,
+    onClose,
+    }) => {
     return (
-        <View style ={styles.viewStyle}>
-            <HeaderNav />
-            <Text style ={styles.headingStyle}>Settings</Text>
-            <IncomeForm />
-        </View>
+        <Modal 
+        animationType="slide"
+        visible={visible}
+        onRequestClose={onClose}
+        >
+            <View style ={styles.viewStyle}>
+                <TouchableOpacity onPress={onClose}> Back </TouchableOpacity>
+                <Text style ={styles.headingStyle}>Settings</Text>
+                <IncomeForm />
+            </View>
+        </Modal>
     );
 }
 

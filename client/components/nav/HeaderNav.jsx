@@ -13,9 +13,10 @@ import { useState } from 'react';
 
 
 export default function HeaderNav() {
-    const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [pondName, setPondName] = useState("Current Pond");
+    const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+    const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
 
     return (
         <View>
@@ -55,14 +56,21 @@ export default function HeaderNav() {
             
             {/* Modal call button for header nav */}
             <View style={styles.mainView}>
-                {/* profile button */}
+                {/* profile & settings button */}
                 <TouchableOpacity onPress={() => setIsProfileModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
                     <Text>Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
+                    <Text>Settings</Text>
                 </TouchableOpacity>
 
                 <ProfilePage
                 visible={isProfileModalVisible}
                 onClose={() => setIsProfileModalVisible(false)} 
+                />
+                <SettingsPage
+                visible={isSettingsModalVisible}
+                onClose={() => setIsSettingsModalVisible(false)} 
                 />
             </View>
         </View>
