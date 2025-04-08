@@ -16,7 +16,7 @@ const SettingsPage = ({
             {/* Header */}
             <View style={styles.headerContainer}>      
                 <TouchableOpacity onPress={onClose}> 
-                    <Text style={styles.buttonText}> ◀ </Text>
+                    <Text style={styles.buttonText}> X </Text>
                 </TouchableOpacity>
                 <View style={{flex: 1, alignSelf: 'center'}}>   
                     <Text style ={styles.headingStyle}>Settings</Text>
