@@ -3,12 +3,14 @@ import { TextInput } from 'react-native-gesture-handler';
 import styles from './SettingsPage.style';
 import IncomeForm from './incomeSet';
 
+import HeaderNav from '../nav/HeaderNav';
+
 
 function SettingsPage() {
     return (
         <View style ={styles.viewStyle}>
+            <HeaderNav />
             <Text style ={styles.headingStyle}>Settings</Text>
-            <Text style ={styles.textStyle}>This is THE pee pee poo poo fart</Text>
             <IncomeForm />
         </View>
     );
