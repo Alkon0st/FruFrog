@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontWeight: 'bold',
         color: '#000000',
-        fontSize: 24,
+        fontSize: 30,
     },
 
     modal: {
