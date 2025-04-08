@@ -3,11 +3,6 @@ import { StyleSheet, Dimensions } from "react-native";
 const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
-    buttonClose: {
-        margin: 5,
-        borderRadius: 20,
-        padding: 10,
-    },
     buttonText: {
         fontWeight: 'bold',
         color: '#000000',
@@ -24,8 +19,7 @@ const styles = StyleSheet.create({
     },
     // View styles
     headerContainer: {
-        paddingBottom: 10,
-        flex: 1,
+        margin: '10px',
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -69,6 +63,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#557549',
+        textAlign: 'center',
     },
     profileName: {
         color: '#000000',

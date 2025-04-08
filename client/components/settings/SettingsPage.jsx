@@ -13,20 +13,17 @@ const SettingsPage = ({
         visible={visible}
         onRequestClose={onClose}
         >
-            <View style={styles.headerContainer}>
-                <View style={[
-                {flex: 1},
-                ]}>               
-                    <TouchableOpacity onPress={onClose}> 
-                        <Text style={styles.buttonText}> ◀ </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={[
-                {flex: 1},
-                ]}>
+            {/* Header */}
+            <View style={styles.headerContainer}>      
+                <TouchableOpacity onPress={onClose}> 
+                    <Text style={styles.buttonText}> ◀ </Text>
+                </TouchableOpacity>
+                <View style={{flex: 1, alignSelf: 'center'}}>   
                     <Text style ={styles.headingStyle}>Settings</Text>
                 </View>
             </View>
+
+            {/* Main portion of settings */}
             <View style ={styles.viewStyle}>
                 <IncomeForm />
             </View>

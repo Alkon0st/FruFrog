@@ -7,13 +7,15 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     headerContainer: {
-        flexDirection: 'row',
         margin: '10px',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     headingStyle: {
         fontSize: 24,
-        color: 'black',
-        fontWeight: 'Medium',
+        fontWeight: 'bold',
+        color: '#557549',
+        textAlign: 'center',
     },
     
     container:{
