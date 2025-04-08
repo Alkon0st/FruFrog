@@ -13,9 +13,21 @@ const SettingsPage = ({
         visible={visible}
         onRequestClose={onClose}
         >
+            <View style={styles.headerContainer}>
+                <View style={[
+                {flex: 1},
+                ]}>               
+                    <TouchableOpacity onPress={onClose}> 
+                        <Text style={styles.buttonText}> ◀ </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[
+                {flex: 1},
+                ]}>
+                    <Text style ={styles.headingStyle}>Settings</Text>
+                </View>
+            </View>
             <View style ={styles.viewStyle}>
-                <TouchableOpacity onPress={onClose}> Back </TouchableOpacity>
-                <Text style ={styles.headingStyle}>Settings</Text>
                 <IncomeForm />
             </View>
         </Modal>

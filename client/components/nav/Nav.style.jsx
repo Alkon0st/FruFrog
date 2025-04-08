@@ -3,18 +3,11 @@ import { StyleSheet, Dimensions } from "react-native";
 const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
-    // mainView: {
-    //     display: 'flex',
-    //     justifyContent: 'left',
-    //     alignItems: 'flex-start',
-    //     flex: 1,
-    //     marginLeft: '10px',
-    // },
     mainView: {
+      display: 'flex',
       flex: 1,
       justifyContent: 'top',
-      alignItems: 'center',
-      backgroundColor: 'rgba(179, 228, 183, 0.5)'
+      alignItems: 'flex-start',
     },
     button: {
         margin: 5,
@@ -26,17 +19,23 @@ const styles = StyleSheet.create({
         borderColor: '#4F723A',
         borderWidth: '3px',
         marginTop: '10px',
+        marginLeft: '10px',
+        marginRight: '10px',
     },
     buttonClose: {
         backgroundColor: '#2196F3',
     },
     buttonRow: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'space-between',
-        alignSelf: 'stretch',
+        alignSelf: 'center',
         paddingRight: '20px',
         paddingLeft: '20px',
         paddingTop: '10px',
+    },
+    modalBackground: {
+      backgroundColor: 'rgba(179, 228, 183, 0.5)',
+      flex: 1,
     },
     modalView: {
       backgroundColor: 'white',

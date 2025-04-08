@@ -11,12 +11,9 @@ import styles from './Nav.style';
 import { Pressable, View, Text, TouchableOpacity, Modal } from 'react-native';
 import { useState } from 'react';
 
-
-export default function HeaderNav() {
+function PondPopupOptions () {
     const [modalVisible, setModalVisible] = useState(false);
     const [pondName, setPondName] = useState("Current Pond");
-    const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
-    const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
 
     return (
         <View>
@@ -30,7 +27,7 @@ export default function HeaderNav() {
                 setModalVisible(!modalVisible); //changes variable to not visible
             }}>
             {/* The popup itself */}
-            <View style={styles.mainView}>
+            <View style={styles.modalBackground}>
                 <View style={styles.modalView}>
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
@@ -53,26 +50,39 @@ export default function HeaderNav() {
                     <Text style={styles.textButton}>{pondName} ▼</Text>
                 </Pressable>
             </View>
-            
-            {/* Modal call button for header nav */}
-            <View style={styles.mainView}>
-                {/* profile & settings button */}
+        </View>
+    );
+};
+
+export default function HeaderNav() {
+    const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+    const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
+
+    return (
+        <View style={styles.mainView}>
+            <View style={styles.buttonRow}>
+                {/* profile - pond - settings buttons */}
                 <TouchableOpacity onPress={() => setIsProfileModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
                     <Text>Profile</Text>
                 </TouchableOpacity>
+
+                <PondPopupOptions />
+
                 <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
                     <Text>Settings</Text>
                 </TouchableOpacity>
-
-                <ProfilePage
-                visible={isProfileModalVisible}
-                onClose={() => setIsProfileModalVisible(false)} 
-                />
-                <SettingsPage
-                visible={isSettingsModalVisible}
-                onClose={() => setIsSettingsModalVisible(false)} 
-                />
             </View>
+
+            {/* Hidden Modals until called for profile and settings
+                */}
+            <ProfilePage
+            visible={isProfileModalVisible}
+            onClose={() => setIsProfileModalVisible(false)} 
+            />
+            <SettingsPage
+            visible={isSettingsModalVisible}
+            onClose={() => setIsSettingsModalVisible(false)} 
+            />
         </View>
     );
 }

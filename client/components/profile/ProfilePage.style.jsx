@@ -3,6 +3,17 @@ import { StyleSheet, Dimensions } from "react-native";
 const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+    buttonClose: {
+        margin: 5,
+        borderRadius: 20,
+        padding: 10,
+    },
+    buttonText: {
+        fontWeight: 'bold',
+        color: '#000000',
+        fontSize: 24,
+    },
+
     modal: {
         height: height,
         width: width,
@@ -13,7 +24,10 @@ const styles = StyleSheet.create({
     },
     // View styles
     headerContainer: {
-        paddingBottom: 10,        
+        paddingBottom: 10,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     informationContainer: {
         justifyContent: 'left',

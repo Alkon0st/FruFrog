@@ -12,9 +12,14 @@ const ProfilePage = ({
         onRequestClose={onClose}
         >
             <View style ={styles.page}>
-                <TouchableOpacity onPress={onClose}> Back </TouchableOpacity>
                 <View style={styles.headerContainer}>
-                <Text style={styles.pageHeader}>Avatar Editor</Text>
+                    <View style={[{alignContent:'flex-start'}]}>
+                    <TouchableOpacity onPress={onClose} style={styles.buttonClose}> 
+                        <Text style={[styles.questionButtonText, styles.buttonText]}> ◀ </Text>
+                    </TouchableOpacity>
+                    </View>
+
+                   <Text style={styles.pageHeader}>Avatar Editor</Text>
                 </View>
 
                 <View style={styles.profileContainer}>

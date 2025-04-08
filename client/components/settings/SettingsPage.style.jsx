@@ -1,6 +1,21 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+    buttonText: {
+        fontWeight: 'bold',
+        color: '#000000',
+        fontSize: 24,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        margin: '10px',
+    },
+    headingStyle: {
+        fontSize: 24,
+        color: 'black',
+        fontWeight: 'Medium',
+    },
+    
     container:{
         width: "60%",
     },
@@ -13,13 +28,6 @@ const styles = StyleSheet.create({
     textStyle: {
         fontSize: 28,
         color: 'DarkGreen',
-    },
-    headingStyle: {
-        fontSize: 30,
-        color: 'black',
-        textAlign: 'center',
-        fontWeight: 'Medium',
-        marginBottom: 10,
     },
     subHeadingStyle: {
         fontSize: 16,
