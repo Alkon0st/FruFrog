@@ -49,7 +49,7 @@ function PondPopupOptions ({triggerUpdate}) {
                 <Pressable
                     style={styles.currentPondButton}
                     onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={styles.textButton}>{pondName} ▲</Text>
+                    <Text style={styles.currentPondText}>{pondName} ▲</Text>
                 </Pressable>
                 <PondDisplay />
                 <View style={styles.buttonRow}>
@@ -66,7 +66,7 @@ function PondPopupOptions ({triggerUpdate}) {
                 <Pressable
                     style={[styles.button, styles.buttonOpen]}
                     onPress={() => setModalVisible(true)}>
-                    <Text style={styles.textButton}>{pondName} ▼</Text>
+                    <Text style={styles.currentPondText}>{pondName} ▼</Text>
                 </Pressable>
             </View>
         </View>
@@ -87,9 +87,7 @@ export default function HeaderNav() {
                 <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[
                     styles.button, 
                     styles.buttonOpen, 
-                    {borderRadius: '100%'}, 
-                    {alignContent: 'center'}, 
-                    {justifyContent: 'center'},
+                    {borderRadius: '100%'},
                     ]}>
                     <Image
                     source={require('./img/settings_icon.png')}

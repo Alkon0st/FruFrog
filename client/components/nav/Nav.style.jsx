@@ -10,18 +10,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '50%',
     borderRadius: 10,
-    backgroundColor: '#85BB65',
+    backgroundColor: '#FFFFFF',
     borderColor: '#4F723A',
-    borderWidth: '3px',
+    borderWidth: '2px',
     marginTop: '10px',
     marginLeft: '10px',
     marginRight: '10px',
   }, 
+  currentPondText: {
+    fontWeight: 'bold',
+    fontSize: '18px',
+  },
   mainView: {
     display: 'flex',
     flex: 1,
-    justifyContent: 'top',
-    alignItems: 'flex-start',
   },
   buttonOpen: {
       backgroundColor: '#85BB65',
@@ -36,7 +38,6 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignSelf: 'center',
       paddingRight: '20px',
       paddingLeft: '20px',
