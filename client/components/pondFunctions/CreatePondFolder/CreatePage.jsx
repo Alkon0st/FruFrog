@@ -6,7 +6,7 @@ import DeletePondModal from './modals/deletePondModal';
 
 import styles from './CreatePond.style';
 
-const CreatePage = () => {
+const CreatePage = ({ triggerUpdate }) => {
     const [isCreatePondModalVisible, setIsCreatePondModalVisible] = useState(false);
     const [newPond, setNewPond] = useState('');
     const [newThumbnail, setNewThumbnail] = useState('1');
@@ -20,6 +20,7 @@ const CreatePage = () => {
             pondList[newPond].push({name: "Thumbnail", list: [newThumbnail]});
             pondList[newPond].push({name: "Members", list: ["You"]});
 
+            triggerUpdate();
             setIsCreatePondModalVisible(false);
             setNewPond('');
             setNewThumbnail('1');
@@ -30,6 +31,7 @@ const CreatePage = () => {
         if (selectedPond) {
             delete pondList[selectedPond];
 
+            triggerUpdate();
             setIsDeletePondModalVisible(false);
             setSelectedPond('');
         }
