@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: width,
+    width: '100%',
     alignSelf: 'flex-start',
   },
   button: {

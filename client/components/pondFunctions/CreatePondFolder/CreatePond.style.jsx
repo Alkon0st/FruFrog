@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 
   popup: {
     flex: 1,
-    justifyContent:'flex-end',
+    justifyContent:'flex-start',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },

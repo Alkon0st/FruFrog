@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
     modal: {
         height: height,
-        width: width,
+        width: '100%',
     },
     page: {
         justifyContent: 'center',
