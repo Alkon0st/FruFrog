@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Icon from '@react-native-vector-icons/ant-design'
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Picker} from 'react-native';
 
 const IncomeForm = () => {
@@ -113,26 +112,19 @@ const IncomeForm = () => {
             </View>
           </View>
           
-          <View style={styles.budgetDisplay}>
-            <Text style={styles.subtitle}>Let's Begin Your Budget Journey</Text>
-            <View style={styles.budgetItem}>
-              <Text style={styles.budgetLabel}>Pond Name:</Text>
-              <Text style={styles.budgetValue}></Text>
-            </View>
-            <View style={styles.budgetItem}>
-              <Text style={styles.budgetLabel}>Amount ($):</Text>
-              <Text style={styles.budgetValue}></Text>
-            </View>
-            <TouchableOpacity style={styles.nextButton}>
-              <Text style={styles.nextButtonText}>Next</Text>
-            </TouchableOpacity>
-          </View>
+          
         </View>
       </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+  viewStyle: {
+    flex: 1,
+    backgroundColor: '#85BB65',
+    padding: 20,
+    width: '100%',
+  },
   container: {
     flex: 1,
     backgroundColor: '#85BB65',
@@ -228,33 +220,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#ddd',
-  },
-  budgetItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  budgetLabel: {
-    fontSize: 16,
-    color: '#555',
-  },
-  budgetValue: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  nextButton: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 15,
-  },
-  nextButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
