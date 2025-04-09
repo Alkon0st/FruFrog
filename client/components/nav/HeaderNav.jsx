@@ -3,7 +3,7 @@ import * as React from 'react';
 // all the pages 
 import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
-import AddUser from '../pondFunctions/AddUser';
+import AddUser from '../pondFunctions/AddUserFolder/AddUser';
 import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
 
 import styles from './Nav.style';
