@@ -67,7 +67,7 @@ function PondPopupOptions ({triggerUpdate}) {
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
                     <AddUser />
-                    <CreatePage triggerUpdate={triggerUpdate}/> 
+                    <CreatePage triggerUpdate={triggerUpdate} currentPond = {pondName} /> 
                 </View>
                 <ChangePondName pondName={pondName} setPondName={setPondName} triggerUpdate={triggerUpdate} />
                 </View>

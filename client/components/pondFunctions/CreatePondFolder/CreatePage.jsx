@@ -6,7 +6,7 @@ import DeletePondModal from './modals/deletePondModal';
 
 import styles from './CreatePond.style';
 
-const CreatePage = ({ triggerUpdate }) => {
+const CreatePage = ({ triggerUpdate, currentPond }) => {
     const [isCreatePondModalVisible, setIsCreatePondModalVisible] = useState(false);
     const [newPond, setNewPond] = useState('');
     const [newThumbnail, setNewThumbnail] = useState('1');
@@ -29,6 +29,10 @@ const CreatePage = ({ triggerUpdate }) => {
 
     const handleDeletePond = () => {
         if (selectedPond) {
+            if (selectedPond == currentPond) {
+                alert("You can't delete the current pond. (For now).");
+                return;
+            }
             delete pondList[selectedPond];
 
             triggerUpdate();
