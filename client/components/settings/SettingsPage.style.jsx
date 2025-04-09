@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     },
     
     container:{
-        width: "60%",
+        width: "100%",
     },
     viewStyle: {
         display: 'flex',

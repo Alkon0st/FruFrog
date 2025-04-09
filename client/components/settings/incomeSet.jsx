@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#85BB65',
+    width: '100%',
   },
   formContainer: {
     padding: 20,
