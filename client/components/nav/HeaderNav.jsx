@@ -47,7 +47,7 @@ function PondPopupOptions ({triggerUpdate}) {
             <View style={styles.modalBackground}>
                 <View style={styles.modalView}>
                 <Pressable
-                    style={[styles.button, styles.buttonOpen]}
+                    style={styles.currentPondButton}
                     onPress={() => setModalVisible(!modalVisible)}>
                     <Text style={styles.textButton}>{pondName} ▲</Text>
                 </Pressable>
