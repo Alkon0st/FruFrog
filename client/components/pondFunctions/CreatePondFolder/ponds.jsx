@@ -20,4 +20,11 @@ export const deletePond = (pondName) => {
     }
 }
 
+export const renamePond = ( oldPondName, newPondName ) => {
+    if (pondList[oldPondName]) {
+        pondList[newPondName] = pondList[oldPondName];
+        delete pondList[oldPondName];
+    }
+}
+
 export default pondList;

@@ -11,18 +11,30 @@ import styles from './Nav.style';
 
 import { Pressable, View, Text, TouchableOpacity, Modal, Image, TextInput, Button } from 'react-native';
 import { useState } from 'react';
+import { renamePond } from '../pondFunctions/CreatePondFolder/ponds';
 
 // change current pond name
-function ChangePondName ({ pondName, setPondName }) {
+function ChangePondName ({ pondName, setPondName, triggerUpdate }) {
+    const [ newPondName, setNewPondName ] = useState(pondName);
+
+    const handleRenamePond = () => {
+        if (newPondName && newPondName !== pondName) {
+            renamePond(pondName, newPondName);
+            setPondName(newPondName);
+            triggerUpdate()
+        }
+    }
+
     return (
         <View style={styles.popup}>
         <View style={styles.popupContent}>
             <Text style={styles.textStyle}>Change Pond Name:</Text>
             <TextInput
                 style = {styles.textInputStyle}
-                value={pondName}
-                onChangeText={newPondName => setPondName(newPondName)}
+                value={newPondName}
+                onChangeText={setNewPondName}
             />
+            <Button title="Rename" onPress={handleRenamePond} />
         </View>
     </View>      
     )
@@ -51,13 +63,13 @@ function PondPopupOptions ({triggerUpdate}) {
                     onPress={() => setModalVisible(!modalVisible)}>
                     <Text style={styles.currentPondText}>{pondName} ▲</Text>
                 </Pressable>
-                <PondDisplay />
+                <PondDisplay key={pondName}/>
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
                     <AddUser />
                     <CreatePage triggerUpdate={triggerUpdate}/> 
                 </View>
-                <ChangePondName pondName={pondName} setPondName={setPondName} />
+                <ChangePondName pondName={pondName} setPondName={setPondName} triggerUpdate={triggerUpdate} />
                 </View>
             </View>
             </Modal>
