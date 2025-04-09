@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
     },
     pondView: {
         //backgroundColor: '#c3edab',
-        padding: '10px',
+        paddingLeft: '10%',
+        paddingRight: '10%',
     },
     pondSubView: {
         flexDirection: 'row',
