@@ -9,8 +9,24 @@ import PondDisplay from '../pondFunctions/pondDisplay';
 
 import styles from './Nav.style';
 
-import { Pressable, View, Text, TouchableOpacity, Modal, Image } from 'react-native';
+import { Pressable, View, Text, TouchableOpacity, Modal, Image, TextInput, Button } from 'react-native';
 import { useState } from 'react';
+
+// change current pond name
+function ChangePondName ({ pondName, setPondName }) {
+    return (
+        <View style={styles.popup}>
+        <View style={styles.popupContent}>
+            <Text style={styles.textStyle}>Change Pond Name:</Text>
+            <TextInput
+                style = {styles.textInputStyle}
+                value={pondName}
+                onChangeText={newPondName => setPondName(newPondName)}
+            />
+        </View>
+    </View>      
+    )
+}
 
 function PondPopupOptions () {
     const [modalVisible, setModalVisible] = useState(false);
@@ -41,6 +57,7 @@ function PondPopupOptions () {
                     <AddUser />
                     <CreatePage /> 
                 </View>
+                <ChangePondName pondName={pondName} setPondName={setPondName} />
                 </View>
             </View>
             </Modal>
