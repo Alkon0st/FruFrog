@@ -12,6 +12,7 @@ import {
 import AddSubcategoryModal from './modals/addSubcategoryModal';
 import AddCategoryModal from './modals/addCategoryModal';
 import EditSubcategoryModal from './modals/editSubcategoryModal';
+import HeaderNav from '../nav/HeaderNav';
 
 const BudgetPage = () => {
     const [visible, setVisible] = useState({});
@@ -35,6 +36,7 @@ const BudgetPage = () => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
+                <HeaderNav />
                 <Text style={styles.h1}>Budget Page</Text>
 
                 <Text style={styles.h2}>Spending Power</Text>
