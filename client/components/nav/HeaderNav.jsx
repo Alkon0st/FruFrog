@@ -64,15 +64,16 @@ export default function HeaderNav() {
         <View style={styles.mainView}>
             <View style={styles.buttonRow}>
                 {/* profile - pond - settings buttons */}
-                <TouchableOpacity onPress={() => setIsProfileModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
-                    <Text>Profile</Text>
+                <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
+                    <Text>Settings</Text>
                 </TouchableOpacity>
                 
                 <PondPopupOptions />
 
-                <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
-                    <Text>Settings</Text>
+                <TouchableOpacity onPress={() => setIsProfileModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
+                    <Text>Profile</Text>
                 </TouchableOpacity>
+
             </View>
 
             {/* Hidden Modals until called for profile and settings
