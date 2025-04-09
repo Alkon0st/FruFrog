@@ -9,7 +9,7 @@ import PondDisplay from '../pondFunctions/pondDisplay';
 
 import styles from './Nav.style';
 
-import { Pressable, View, Text, TouchableOpacity, Modal } from 'react-native';
+import { Pressable, View, Text, TouchableOpacity, Modal, Image } from 'react-native';
 import { useState } from 'react';
 
 function PondPopupOptions () {
@@ -63,9 +63,23 @@ export default function HeaderNav() {
     return (
         <View style={styles.mainView}>
             <View style={styles.buttonRow}>
-                {/* profile - pond - settings buttons */}
-                <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
-                    <Text>Settings</Text>
+                {/* settings - pond - profile buttons */}
+                <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[
+                    styles.button, 
+                    styles.buttonOpen, 
+                    {borderRadius: '100%'}, 
+                    {alignContent: 'center'}, 
+                    {justifyContent: 'center'},
+                    ]}>
+                    <Image
+                    source={require('./img/settings_icon.png')}
+                    tintColor={'#FFFFFF'}
+                    resizeMode='contain'
+                    style={[
+                        {width: '120%'},
+                        {height: '120%'}, 
+                    ]}
+                    />
                 </TouchableOpacity>
                 
                 <PondPopupOptions />
