@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, SafeAreaView, Modal, TouchableOpacity, ScrollView, Pressable } from "react-native";
 import pondList from './ponds';
 import CreatePondModal from './modals/createPondModal';
+import DeletePondModal from './modals/deletePondModal';
 
 import styles from './CreatePond.style';
 
@@ -9,6 +10,9 @@ const CreatePage = () => {
     const [isCreatePondModalVisible, setIsCreatePondModalVisible] = useState(false);
     const [newPond, setNewPond] = useState('');
     const [newThumbnail, setNewThumbnail] = useState('1');
+
+    const [isDeletePondModalVisible, setIsDeletePondModalVisible] = useState(false);
+    const [selectedPond, setSelectedPond] = useState('');
 
     const handleAddPond = () => {
         if (newPond) {
@@ -22,12 +26,25 @@ const CreatePage = () => {
         }
     };
 
+    const handleDeletePond = () => {
+        if (selectedPond) {
+            delete pondList[selectedPond];
+
+            setIsDeletePondModalVisible(false);
+            setSelectedPond('');
+        }
+    };
+
     return (
         <SafeAreaView>
             <ScrollView>
                 <View>
                     <TouchableOpacity onPress={() => setIsCreatePondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
                         <Text style={styles.textButton}>Create Pond</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={() => setIsDeletePondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
+                        <Text style={styles.textButton}>Delete Pond</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -41,6 +58,13 @@ const CreatePage = () => {
                 setNewThumbnail={setNewThumbnail}
                 handleAddPond={handleAddPond}
             />
+
+            <DeletePondModal 
+                visible={isDeletePondModalVisible}
+                onClose={() => setIsDeletePondModalVisible(false)}
+                selectedPond={selectedPond}
+                setSelectedPond={setSelectedPond}
+                handleDeletePond={handleDeletePond}/>
         </SafeAreaView>
     );
 };
