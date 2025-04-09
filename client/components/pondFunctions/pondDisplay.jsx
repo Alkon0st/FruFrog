@@ -29,14 +29,12 @@ const PondDisplay = () => {
     );
 };
 
-const { width, height } = Dimensions.get('screen')
-
 const styles = StyleSheet.create({
     mainView: {
-        width: width,
+        width: '100%',
     },
     line: {
-        marginTop: '5%',
+        marginTop: '2%',
         borderBottomColor: '#6a9153',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
     },
     pondName: {
         fontSize: '120%',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     pondLabel: {
         marginLeft: '10px',
