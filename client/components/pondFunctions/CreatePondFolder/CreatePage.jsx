@@ -40,7 +40,11 @@ const CreatePage = ({ triggerUpdate }) => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View>
+                <View style = {[
+                    {flexDirection: 'row'},
+                    {justifyContent: 'space-between'},
+                    {alignSelf: 'center'},
+                ]}>
                     <TouchableOpacity onPress={() => setIsCreatePondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
                         <Text style={styles.textButton}>Create Pond</Text>
                     </TouchableOpacity>
