@@ -4,6 +4,7 @@ import Bill from './bill';
 import AddBillModal from './addBillModal';
 import React, { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import HeaderNav from '../nav/HeaderNav';
 
 // Main Bill Split Page
 const BillSplitPage = () => {
@@ -26,6 +27,7 @@ const BillSplitPage = () => {
         <LinearGradient colors={['#FFFFFF', '#d6faf9']}>
         <View style={styles.page}>
         <View style={styles.pageContainer}>
+        <HeaderNav />
 
         {/* Header */}
         <View style={styles.billHeader}>
