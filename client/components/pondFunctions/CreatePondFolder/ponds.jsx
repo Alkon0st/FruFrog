@@ -13,4 +13,11 @@ export const addPond = (pondName) => {
     }
 }
 
+// delete pond object
+export const deletePond = (pondName) => {
+    if (pondList[pondName]) {
+        delete pondList[pondName];
+    }
+}
+
 export default pondList;
