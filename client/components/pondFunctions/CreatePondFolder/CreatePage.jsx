@@ -8,7 +8,7 @@ import styles from './CreatePond.style';
 const CreatePage = () => {
     const [isCreatePondModalVisible, setIsCreatePondModalVisible] = useState(false);
     const [newPond, setNewPond] = useState('');
-    const [newThumbnail, setNewThumbnail] = useState('');
+    const [newThumbnail, setNewThumbnail] = useState('1');
 
     const handleAddPond = () => {
         if (newPond) {
@@ -18,7 +18,7 @@ const CreatePage = () => {
 
             setIsCreatePondModalVisible(false);
             setNewPond('');
-            setNewThumbnail('');
+            setNewThumbnail('1');
         }
     };
 
@@ -32,7 +32,6 @@ const CreatePage = () => {
                 </View>
             </ScrollView>
             
-
             <CreatePondModal
                 visible={isCreatePondModalVisible}
                 onClose={() => setIsCreatePondModalVisible(false)}
