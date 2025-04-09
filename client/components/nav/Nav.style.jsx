@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       elevation: 5,
       width: width,
-      alignSelf: 'flex-start',
+      alignSelf: 'center',
     },
     button: {
         margin: 5,
