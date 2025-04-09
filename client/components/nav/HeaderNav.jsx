@@ -5,6 +5,7 @@ import ProfilePage from '../profile/ProfilePage'
 import SettingsPage from '../settings/SettingsPage'
 import AddUser from '../pondFunctions/AddUserFolder/AddUser';
 import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
+import PondDisplay from '../pondFunctions/pondDisplay';
 
 import styles from './Nav.style';
 
@@ -30,10 +31,11 @@ function PondPopupOptions () {
             <View style={styles.modalBackground}>
                 <View style={styles.modalView}>
                 <Pressable
-                    style={[styles.button, styles.buttonClose]}
+                    style={[styles.button, styles.buttonOpen]}
                     onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={styles.textButton}>Hide</Text>
+                    <Text style={styles.textButton}>{pondName} ▲</Text>
                 </Pressable>
+                <PondDisplay />
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
                     <AddUser />
@@ -65,7 +67,7 @@ export default function HeaderNav() {
                 <TouchableOpacity onPress={() => setIsProfileModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
                     <Text>Profile</Text>
                 </TouchableOpacity>
-
+                
                 <PondPopupOptions />
 
                 <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
