@@ -3,9 +3,8 @@ import { useNavigation } from "@react-navigation/native";
 import React from 'react';
 
 import SignIn from './SignIn';
-import CreateAccount from './create-account';
 import { LinearGradient } from "expo-linear-gradient";
-import ForgotPassword from "./ForgotPassword";
+
 
 function LoginPage() {
   const navigation = useNavigation();
@@ -27,7 +26,7 @@ function LoginPage() {
           {/* Function call for Sign In button */}
           <SignIn />
           {/* Function call for Create Account button */}
-          <TouchableOpacity onPress={() => navigation.navigate('Create Account')}
+          <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}
               style={styles.buttonStyle}
           >
               <Text style={styles.textButton}>Create Account</Text>

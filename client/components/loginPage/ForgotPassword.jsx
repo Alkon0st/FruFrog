@@ -11,7 +11,7 @@ function ForgotPassword() {
     const handleChangePassword = () => {
         if (password === confirmPassword && password.length >= 6) {
             Alert.alert('Success', 'Your password has been changed.');
-            navigation.navigate('SignIn');
+            navigation.navigate('Login');
         } else {
             Alert.alert('Error', 'Password does not match or is too short (minimum 6 characters)');
         }

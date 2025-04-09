@@ -5,6 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import axios from 'axios'; // Import axios
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 function SignInFunction() {
     const [username, setUsername] = useState('');
@@ -14,6 +15,8 @@ function SignInFunction() {
     const [showError, setShowError] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
+   
+     const navigation = useNavigation();
 
     const { control, handleSubmit: formHandleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -30,19 +33,22 @@ function SignInFunction() {
                 identifier: data.username, // Username or email
                 password: data.password,
             });
-
+ 
+            
             // Handle successful login
             const { token, user } = response.data;
             console.log('Login successful:', user);
             setShowError(false);
             setModalVisible(true); // Show success modal
+           
+
             Alert.alert('Success', `Welcome back, ${user.username}!`);
 
             // save the token 
             await AsyncStorage.setItem('token', token);
 
             // Navigate to the home screen or dashboard
-            navigation.navigate('Home'); // Replace 'Home' with your target screen
+            navigation.navigate('Nav'); // Replace 'Home' with your target screen
         } catch (error) {
             console.error('Login error:', error.response?.data || error.message);
             setShowError(true);
@@ -55,6 +61,7 @@ function SignInFunction() {
     };
 
     const handleForgotPassword = () => {
+        navigation.navigate('ForgotPassword');
         setForgotPassword(true);
     };
 

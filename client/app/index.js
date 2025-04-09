@@ -1,7 +1,10 @@
 import { View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {Budget, Nav, HomePage, HeaderButton} from '../components';
+import {Budget, CreateAccount} from '../components';
+import Nav from '../components/nav/Nav';
+import ForgotPassword from '../components/loginPage/ForgotPassword';
+import LoginPage from '../components/loginPage/LoginPage';
 
 
 const Stack = createStackNavigator();
@@ -10,10 +13,15 @@ const Home = () => {
     return (
         <NavigationIndependentTree>
             <NavigationContainer>
-                <Stack.Navigator name="Home" component={HomePage} />
+                <Stack.Navigator>
+                    <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
+                    <Stack.Screen name="CreateAccount" component={CreateAccount}/>
+                    <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
+                    <Stack.Screen name="Nav" component={Nav} />
+                </Stack.Navigator>
             </NavigationContainer>
         </NavigationIndependentTree>
-    //    <Nav/>
+
         
     );
 };

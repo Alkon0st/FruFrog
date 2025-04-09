@@ -17,9 +17,14 @@ import HomePage from "./home/HomePage"
 import Nav from "./nav/Nav";
 import HeaderButton from './nav/HeaderNav';
 
+//login
+import LoginPage from "./loginPage/LoginPage";
+import CreateAccount from "./loginPage/create-account";
 
 export {
     Nav,
     HomePage,
     budgetPage,
+    LoginPage,
+    CreateAccount
 };

@@ -32,7 +32,7 @@ export default function Nav() {
                     alignItems: 'center',
                     flexDirection: 'row',
                 }}}>
-            <TabNav.Screen name='Login' component={LoginPage} options={{
+            {/* <TabNav.Screen name='Login' component={LoginPage} options={{
                 tabBarIcon: ({focused}) => (
                     focused
                     ? <View style={styles.view}> <Image
@@ -69,8 +69,8 @@ export default function Nav() {
                     <Text style={styles.idleText}>Create Account</Text>
                     </View>
                 ),
-            }}/>
-            <TabNav.Screen name='Forgot Password' component={ForgotPassword} options={{
+            }}/> */}
+            {/* <TabNav.Screen name='Forgot Password' component={ForgotPassword} options={{
                 tabBarIcon: ({focused}) => (
                     focused
                     ? <View style={styles.view}> <Image
@@ -88,7 +88,7 @@ export default function Nav() {
                     <Text style={styles.idleText}>Forgot Password</Text>
                     </View>
                 ),
-            }}/>
+            }}/> */}
             <TabNav.Screen name='Home' component={HomePage} options={{
                 tabBarIcon: ({focused}) => (
                     // When focused is bitten lilypad
