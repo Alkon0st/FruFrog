@@ -1,33 +1,17 @@
-import {Modal, Text, View, TouchableOpacity} from 'react-native';
-
-import IncomeForm from './incomeSet';
+import {StyleSheet, Text, View} from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import styles from './SettingsPage.style';
+import IncomeForm from './incomeSet';
 
-const SettingsPage = ({
-    visible,
-    onClose,
-    }) => {
+
+function SettingsPage() {
     return (
-        <Modal 
-        animationType="slide"
-        visible={visible}
-        onRequestClose={onClose}
-        >
-            {/* Header */}
-            <View style={styles.headerContainer}>      
-                <TouchableOpacity onPress={onClose}> 
-                    <Text style={styles.buttonText}> X </Text>
-                </TouchableOpacity>
-                <View style={{flex: 1, alignSelf: 'center'}}>   
-                    <Text style ={styles.headingStyle}>Settings</Text>
-                </View>
-            </View>
-
-            {/* Main portion of settings */}
-            <View style ={styles.viewStyle}>
-                <IncomeForm />
-            </View>
-        </Modal>
+        <View style ={styles.viewStyle}>
+            <Text style ={styles.headingStyle}>Settings</Text>
+            <Text style={styles.subHeadingStyle}>Rainbow Songs settings</Text>
+            <Text style ={styles.textStyle}>This is THE pee pee poo poo fart</Text>
+            <IncomeForm />
+        </View>
     );
 }
 
