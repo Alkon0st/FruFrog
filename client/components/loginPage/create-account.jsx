@@ -155,19 +155,15 @@ function CreateAccount() {
               )}
               name="confirmPassword"
           />
-          <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onsubmit)}>
-              <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity 
-              style={[
+          <TouchableOpacity style={[
+              //(!username || !email || !password || !confirmPassword) && { backgroundColor: '#ccc' }
               styles.button,
-              (!username || !password) && { backgroundColor: '#ccc' }
-          ]}
-              onPress={formHandleSubmit(onsubmit)}
-              disabled={!username || !password}
-          >
-              <Text style={styles.textButton}>Sign In</Text> 
-          </TouchableOpacity> */}
+              ]} 
+              onPress={handleSubmit(onsubmit)}
+              // disabled={!username || !email || !password || !confirmPassword}
+              >
+              <Text style={styles.textButton}>Sign Up</Text>
+          </TouchableOpacity>
         </View>
 
         </SafeAreaView>
