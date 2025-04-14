@@ -83,8 +83,6 @@ function SignInFunction() {
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <Text style={styles.headingStyle}>Sign In</Text>
-
                     <Controller
                         control={control}
                         rules={{
@@ -224,19 +222,16 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
-        padding: 20,
+        padding: '7%',
         flex: 1,
         justifyContent: 'center',
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
         margin: 10,
-    },
-    headingStyle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-        color: '#008000',
+        width: 300,
+        marginBottom: '10%',
     },
     subHeadingStyle: {
         fontSize: 18,
@@ -276,8 +271,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     alternateButton: {
-        marginLeft: 50,
-        alignItems: 'center',
+        marginRight: '1%',
+        alignItems: 'flex-end',
     },
     alternateButtonText: {
         color: '#000',

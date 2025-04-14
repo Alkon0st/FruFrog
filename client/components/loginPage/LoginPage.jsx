@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React from 'react';
 
@@ -10,32 +10,36 @@ function LoginPage() {
   const navigation = useNavigation();
 
   return (
+    
     <LinearGradient
       // Background Linear Gradient
-      start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-      locations={[0.47, 1]}
-      colors={['#FEFFF5', '#E0FDD9']}
+      locations={[0, 0.47, 1]}
+      colors = {['#FFFFFF', '#FEFFF5', '#E0FDD9']}
       style={styles.LinearGradient}>
       
 
       <View style={styles.viewStyle}>
-          <Text style={styles.headingStyle}>Welcome Back</Text>
-          <Text style={styles.textStyle}>Log in to see what you have toad-do</Text>
+          <Image
+            source={require('./img/frufrog_icon.png')}
+            resizeMode='contain'
+            style={styles.img}
+            /> 
       
 
           {/* Function call for Sign In button */}
           <SignIn />
+
+          <View style={styles.pageBreak}>
+            <View style={styles.lineBreak} />
+            <Text style={{width: 50, textAlign: 'center', fontWeight:'bold'}}>OR</Text>
+            <View style={styles.lineBreak} />
+            </View>
+
           {/* Function call for Create Account button */}
           <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}
               style={styles.buttonStyle}
           >
               <Text style={styles.textButton}>Create Account</Text>
-          </TouchableOpacity>
-          {/* Function call for Forgot Password button */}
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')}
-              style={styles.alternateButtonStyle}
-          >
-              <Text style={styles.textButton}>Plan My Budget</Text>
           </TouchableOpacity>
           <Text style={styles.footer}>© Pond Patrol. All rights reserved.</Text>
       </View>
@@ -44,6 +48,24 @@ function LoginPage() {
 }
 
 const styles = StyleSheet.create({
+    pageBreak:{
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        paddingBottom: '10%', 
+        width: '100%', 
+        paddingRight: '10%', 
+        paddingLeft: '10%'
+    },
+    lineBreak:{
+        flex: 1, 
+        height: 1, 
+        backgroundColor: '#000000'
+    },
+    img: {
+        width: 369, 
+        height: 232,
+        position: 'relative',
+    },
   LinearGradient: {
       flex: 1,
       justifyContent: 'center',
@@ -69,7 +91,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#85BB65',
       padding: 10,
       borderRadius: 5,
-      width: '100%',
+      width: '70%',
       alignItems: 'center',
       marginBottom: 10,
   },
