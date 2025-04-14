@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         paddingHorizontal: 10,
         borderRadius: 5,
+        width: '100%',
     },
     errorText: {
         color: 'red',
@@ -147,16 +148,18 @@ const styles = StyleSheet.create({
       marginTop: 10,
       textAlign: 'center',
   },  
+  showHideContainer: {
+    marginTop: '-9%',
+    marginBottom: 10,
+    alignItems: 'flex-end'
+  },
   showHideText: {
     color: '#067AFF',
-    marginLeft: -40,
     marginTop: 10,
-    zIndex: 1,
+    marginLeft: 5,
   },
   passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     width: '100%',
   },
   errorText: {

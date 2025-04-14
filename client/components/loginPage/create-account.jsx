@@ -110,7 +110,7 @@ function CreateAccount() {
               render={({ field: { onChange, onBlur, value } }) => (
                   <>
                       <Text style={styles.textStyle}>Password</Text>
-                      <View style={styles.passwordContainer}>
+                        <View style={styles.passwordContainer}>
                           <TextInput
                               style={styles.textInputStyle}
                               placeholder="Enter your password"
@@ -119,10 +119,10 @@ function CreateAccount() {
                               value={value}
                               secureTextEntry={!passwordVisible}
                           />
-                          <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+                          <TouchableOpacity style={styles.showHideContainer} onPress={() => setPasswordVisible(!passwordVisible)}>
                               <Text style={styles.showHideText}>{passwordVisible ? "Hide" : "Show"}</Text>
                           </TouchableOpacity>
-                      </View>
+                          </View>
                       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
                   </>
               )}
@@ -138,17 +138,17 @@ function CreateAccount() {
                   <>
                       <Text style={styles.textStyle}>Confirm Password</Text>
                       <View style={styles.passwordContainer}>
-                          <TextInput
-                              style={styles.textInputStyle}
-                              placeholder="Confirm password"
-                              onBlur={onBlur}
-                              onChangeText={onChange}
-                              value={value}
-                              secureTextEntry={!confirmPasswordVisible}
-                          />
-                          <TouchableOpacity onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
-                              <Text style={styles.showHideText}>{confirmPasswordVisible ? "Hide" : "Show"}</Text>
-                          </TouchableOpacity>
+                        <TextInput
+                            style={styles.textInputStyle}
+                            placeholder="Confirm password"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            secureTextEntry={!confirmPasswordVisible}
+                        />
+                        <TouchableOpacity style={styles.showHideContainer} onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+                            <Text style={styles.showHideText}>{confirmPasswordVisible ? "Hide" : "Show"}</Text>
+                        </TouchableOpacity>
                       </View>
                       {errors.confirmPassword && (<Text style={styles.errorText}>{errors.confirmPassword.message}</Text>)}
                   </>
@@ -157,7 +157,7 @@ function CreateAccount() {
           />
           <TouchableOpacity style={[
               //(!username || !email || !password || !confirmPassword) && { backgroundColor: '#ccc' }
-              styles.button,
+              styles.button, {marginTop: 10},
               ]} 
               onPress={handleSubmit(onsubmit)}
               // disabled={!username || !email || !password || !confirmPassword}
