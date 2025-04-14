@@ -1,35 +1,28 @@
 import { View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
-import Reac, {useState} from 'react';
-import { Stack, useRouter } from 'expo-router';
-import HookComponent from '../components/hookComponent';
-import {Budget, Nav, HomePage, HeaderButton} from '../components';
+import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import {Budget, CreateAccount} from '../components';
+import Nav from '../components/nav/Nav';
+import ForgotPassword from '../components/loginPage/ForgotPassword';
+import LoginPage from '../components/loginPage/LoginPage';
 
+
+const Stack = createStackNavigator();
 const Home = () => {
-    const router = useRouter();
-
-    const [showHookComponent, setShowHookComponent] = useState(false);
-    const fetchData = () => {
-    setShowHookComponent(true);
-    };
 
     return (
-        <Nav/>
-        // <HomePage/>
-        // <SafeAreaView>
-        //     <View>
-        //         <Text>Home</Text>
-        //         <Nav/>
-        //         <Budget/>
+        <NavigationIndependentTree>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
+                    <Stack.Screen name="CreateAccount" component={CreateAccount}/>
+                    <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
+                    <Stack.Screen name="Nav" component={Nav} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </NavigationIndependentTree>
 
-
-        //         {/* this section is for api call testing*/}
-        //         {showHookComponent && <HookComponent />}
-        //         <TouchableOpacity onPress={fetchData} style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5 }}>
-        //             <Text style={{ color: 'white', textAlign: 'center' }}>Fetch Data</Text>
-        //         </TouchableOpacity>
-                
-        //     </View>
-        // </SafeAreaView>
+        
     );
 };
 export default Home;

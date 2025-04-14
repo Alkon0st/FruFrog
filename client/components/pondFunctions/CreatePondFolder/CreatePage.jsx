@@ -2,13 +2,17 @@ import { useState } from 'react';
 import { View, Text, SafeAreaView, Modal, TouchableOpacity, ScrollView, Pressable } from "react-native";
 import pondList from './ponds';
 import CreatePondModal from './modals/createPondModal';
+import DeletePondModal from './modals/deletePondModal';
 
 import styles from './CreatePond.style';
 
-const CreatePage = () => {
+const CreatePage = ({ triggerUpdate, currentPond }) => {
     const [isCreatePondModalVisible, setIsCreatePondModalVisible] = useState(false);
     const [newPond, setNewPond] = useState('');
-    const [newThumbnail, setNewThumbnail] = useState('');
+    const [newThumbnail, setNewThumbnail] = useState('1');
+
+    const [isDeletePondModalVisible, setIsDeletePondModalVisible] = useState(false);
+    const [selectedPond, setSelectedPond] = useState('');
 
     const handleAddPond = () => {
         if (newPond) {
@@ -16,41 +20,45 @@ const CreatePage = () => {
             pondList[newPond].push({name: "Thumbnail", list: [newThumbnail]});
             pondList[newPond].push({name: "Members", list: ["You"]});
 
+            triggerUpdate();
             setIsCreatePondModalVisible(false);
             setNewPond('');
-            setNewThumbnail('');
+            setNewThumbnail('1');
+        }
+    };
+
+    const handleDeletePond = () => {
+        if (selectedPond) {
+            if (selectedPond == currentPond) {
+                alert("You can't delete the current pond. (For now).");
+                return;
+            }
+            delete pondList[selectedPond];
+
+            triggerUpdate();
+            setIsDeletePondModalVisible(false);
+            setSelectedPond('');
         }
     };
 
     return (
         <SafeAreaView>
             <ScrollView>
-                <View>
+                <View style = {[
+                    {flexDirection: 'row'},
+                    {justifyContent: 'space-between'},
+                    {alignSelf: 'center'},
+                ]}>
                     <TouchableOpacity onPress={() => setIsCreatePondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
                         <Text style={styles.textButton}>Create Pond</Text>
                     </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={() => setIsDeletePondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
+                        <Text style={styles.textButton}>Delete Pond</Text>
+                    </TouchableOpacity>
                 </View>
-                {Object.keys(pondList).map((pond) => (
-                    <View key={pond} style={styles.pondView}>
-                            <Text style={styles.pondName}>
-                                {pond}
-                            </Text>
-                            {pondList[pond].map((detail) => (    
-                                <View key={detail.name} style={styles.pondSubView}>
-                                    <Text style={styles.pondLabel}>
-                                        {/* Displays thumbnail & members */}
-                                        {detail.name}: 
-                                    </Text>
-                                    <Text style={styles.pondDetail}>
-                                        {detail.list.map((item) => <Text>{item}, </Text>)}
-                                    </Text>
-                                </View> 
-                            ))}
-                    </View>
-                ))}
             </ScrollView>
             
-
             <CreatePondModal
                 visible={isCreatePondModalVisible}
                 onClose={() => setIsCreatePondModalVisible(false)}
@@ -60,6 +68,13 @@ const CreatePage = () => {
                 setNewThumbnail={setNewThumbnail}
                 handleAddPond={handleAddPond}
             />
+
+            <DeletePondModal 
+                visible={isDeletePondModalVisible}
+                onClose={() => setIsDeletePondModalVisible(false)}
+                selectedPond={selectedPond}
+                setSelectedPond={setSelectedPond}
+                handleDeletePond={handleDeletePond}/>
         </SafeAreaView>
     );
 };

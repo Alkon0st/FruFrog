@@ -27,14 +27,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: width,
+    width: '100%',
     alignSelf: 'flex-start',
   },
   button: {
     margin: 5,
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
     backgroundColor: '#89d149',
   },
   buttonOpen: {

@@ -3,7 +3,11 @@ import { Alert, Modal, Text, Pressable, View, Button, TouchableOpacity, StyleShe
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
+import axios from 'axios'; // Import axios
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+
+import styles from './LoginPage.style';
 
 function SignInFunction() {
     const [username, setUsername] = useState('');
@@ -13,8 +17,9 @@ function SignInFunction() {
     const [showError, setShowError] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
-    const navigation = useNavigation();
-    
+   
+     const navigation = useNavigation();
+
     const { control, handleSubmit: formHandleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             username: '',
@@ -22,25 +27,43 @@ function SignInFunction() {
             role: ''
         }
     });
-    
+
     const onSubmit = async (data) => {
-        setIsLoading(true);
-        setTimeout(() => {
-            if (data.username === 'admin' && data.password === 'admin') {
-                setShowError(false);
-                setIsLoading(false);
-                setModalVisible(true);
-                navigation.replace('HomePage', { username: data.username });
-                Alert.alert("Login Successful", "Welcome back, " + data.username + "!");
-            } else {
-                setShowError(true);
-                Alert.alert("Sign In Failed", "Invalid username or password");
-                setIsLoading(false);
-            }
-        },1500);
+        try {
+            // Send login request to the server
+            const response = await axios.post('http://localhost:5000/api/auth/login', {
+                identifier: data.username, // Username or email
+                password: data.password,
+            });
+ 
+            
+            // Handle successful login
+            const { token, user } = response.data;
+            console.log('Login successful:', user);
+            setShowError(false);
+            setModalVisible(true); // Show success modal
+           
+
+            Alert.alert('Success', `Welcome back, ${user.username}!`);
+
+            // save the token 
+            await AsyncStorage.setItem('token', token);
+
+            // Navigate to the home screen or dashboard
+            navigation.navigate('Nav'); // Replace 'Home' with your target screen
+        } catch (error) {
+            console.error('Login error:', error.response?.data || error.message);
+            setShowError(true);
+            Alert.alert(
+                'Login Failed',
+                error.response?.data?.message || 'Invalid username or password. Please try again.',
+                [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
+            );
+        }
     };
-    
+
     const handleForgotPassword = () => {
+        navigation.navigate('ForgotPassword');
         setForgotPassword(true);
     };
 
@@ -57,14 +80,11 @@ function SignInFunction() {
     const handleModalClose = () => {
         setModalVisible(false);
     };
-    
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <Text style={styles.headingStyle}>Sign In</Text>
-
-                    
                     <Controller
                         control={control}
                         rules={{
@@ -88,7 +108,7 @@ function SignInFunction() {
                         )}
                         name="username"
                     />
-                    
+
                     <Controller
                         control={control}
                         rules={{
@@ -113,11 +133,11 @@ function SignInFunction() {
                         )}
                         name="password"
                     />
-                    
+
                     {showError && (
                         <Text style={styles.errorText}>Invalid username or password</Text>
                     )}
-                    
+
                     <View style={styles.buttonContainer}>
                         <Pressable 
                             style={styles.alternateButton}
@@ -137,7 +157,7 @@ function SignInFunction() {
                             <Text style={styles.textButton}>Sign In</Text> 
                         </TouchableOpacity>
                     </View>
-                    
+
                     <Modal
                         animationType="slide"
                         transparent={true}
@@ -157,7 +177,7 @@ function SignInFunction() {
                             </View>
                         </View>
                     </Modal>
-                    
+
                     {forgotPassword && (
                         <View style={styles.forgotPasswordContainer}>
                             <Text style={styles.subHeadingStyle}>Trouble Logging In?</Text>
@@ -199,123 +219,4 @@ function SignInFunction() {
     );
 }
 
-const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-    },
-    container: {
-        padding: 20,
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        borderRadius: 20,
-        margin: 10,
-    },
-    headingStyle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-        color: '#008000',
-    },
-    subHeadingStyle: {
-        fontSize: 18,
-        fontWeight: 'normal',
-        marginBottom: 15,
-        textAlign: 'center',
-    },
-    textStyle: {
-        fontSize: 14,
-        marginBottom: 5,
-    },
-    textInputStyle: {
-        height: 40,
-        borderColor: '#85BB65',
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-    },
-    errorText: {
-        color: 'red',
-        marginBottom: 10,
-    },
-    button: {
-        backgroundColor: '#85BB65',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    textButton: {
-        color: 'white',
-        fontWeight: 'normal',
-        fontSize: 16,
-    },
-    buttonContainer: {
-        marginBottom: 10,
-    },
-    alternateButton: {
-        marginLeft: 50,
-        alignItems: 'center',
-    },
-    alternateButtonText: {
-        color: '#000',
-        textDecorationLine: 'underline',
-        fontWeight: 'normal',
-        marginBottom: 20,
-        marginLeft: 20,
-    },
-    selectContainer: {
-        marginBottom: 15,
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-        fontWeight: 'italic',
-        color: '#008000',
-        fontSize: 18,
-    },
-    modalButton: {
-        textAlign: 'center',
-        color: 'white',
-        backgroundColor: '#85BB65',
-        borderRadius: 5,
-        padding: 10,
-        elevation: 2,
-        marginTop: 15,
-    },
-    forgotPasswordContainer: {
-        marginTop: 20,
-        padding: 15,
-        borderTopWidth: 1,
-        borderTopColor: '#008000',
-    },
-    linkText: {
-        color: '#007BFF',
-        textAlign: 'center',
-        marginTop: 10,
-    },
-});
 export default SignInFunction;

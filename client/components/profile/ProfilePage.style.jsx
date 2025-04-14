@@ -1,13 +1,27 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+    buttonText: {
+        fontWeight: 'bold',
+        color: '#000000',
+        fontSize: 30,
+    },
+
+    modal: {
+        height: height,
+        width: '100%',
+    },
     page: {
         justifyContent: 'center',
         alignItems: 'center',
     },
     // View styles
     headerContainer: {
-        paddingBottom: 10,        
+        margin: '10px',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     informationContainer: {
         justifyContent: 'left',
@@ -49,6 +63,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         color: '#557549',
+        textAlign: 'center',
     },
     profileName: {
         color: '#000000',

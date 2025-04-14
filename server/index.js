@@ -1,12 +1,18 @@
 // this is the entry point of our program
 require('dotenv').config();
 const express = require('express');
+const admin = require('firebase-admin');
 const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoute');
 const cors = require('cors');
 
 const app = express();
+admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+});
+
 app.use(cors());
 app.use(bodyParser.json());
 
