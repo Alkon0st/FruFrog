@@ -20,19 +20,15 @@
     "@react-navigation/material-top-tabs": "^7.1.1",
     "@react-navigation/native": "^7.0.18",
     "@react-navigation/stack": "^7.2.2",
-<<<<<<< HEAD
-    "axios": "^1.8.2",
-    "expo": "^52.0.44",
-=======
     "axios": "^1.8.4",
     "expo": "^52.0.40",
->>>>>>> refs/remotes/origin/main
     "expo-constants": "~17.0.2",
     "expo-linear-gradient": "^14.0.2",
     "expo-linking": "~7.0.2",
     "expo-router": "~4.0.2",
     "expo-splash-screen": "~0.29.7",
     "expo-status-bar": "~2.0.0",
+    "firebase": "^11.6.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.54.2",
