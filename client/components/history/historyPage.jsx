@@ -39,7 +39,7 @@ function HistoryPage() {
     return (
         <LinearGradient
             locations={[0, 0.47, 1]}
-            colors = {['#FFFFFF', '#FEFFF5', '#E0FDD9']}
+            colors = {['#F1FFFF', '#FEFFF5', '#B1F1EF']}
             style={styles.LinearGradient}
             >
             <HeaderNav navigation={navigation} title="History" />
