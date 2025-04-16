@@ -26,7 +26,7 @@ function HistoryPage() {
         <View style={styles.itemContainer}>
             <Text style={styles.dateText}>{item.date}</Text>
             <View style={styles.expenseRow}>
-                <Icon name={item.icon} size={24} color="#4CAF50" style={styles.icon} />
+                <Icon name={item.icon} size={24} color="#008000" style={styles.icon} />
                 <View style={styles.expenseDetails}>
                     <Text style={styles.categoryText}>{item.category}</Text>
                     <Text style={styles.nameText}>{item.name}</Text>
