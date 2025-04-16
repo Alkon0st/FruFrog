@@ -21,9 +21,6 @@ const expenseData = [
 
 function HistoryPage() {
     const navigation = useNavigation();
-    const [searchText, setSearchText] = React.useState('');
-    const [selectedCategory, setSelectedCategory] = React.useState('All');
-    const [selectedDate, setSelectedDate] = React.useState('All');
 
     const renderItem = ({ item }) => (
         <View style={styles.itemContainer}>
@@ -41,7 +38,6 @@ function HistoryPage() {
         
     return (
         <LinearGradient
-            // Background Linear Gradient
             locations={[0, 0.47, 1]}
             colors = {['#FFFFFF', '#FEFFF5', '#E0FDD9']}
             style={styles.LinearGradient}
