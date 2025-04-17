@@ -34,7 +34,7 @@ const { width, height } = Dimensions.get('window')
 const styles = StyleSheet.create({
     viewStyle: {
         display: 'flex',
-        justifyConten: 'center',
+        justifyContent: 'center',
         alignItems: 'stretch',
         flex: 1,
     },
