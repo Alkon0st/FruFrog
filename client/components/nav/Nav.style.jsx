@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   buttonRow: {
       flexDirection: 'row',
       alignSelf: 'center',
+      alignItems: 'center',
       paddingRight: '20px',
       paddingLeft: '20px',
       paddingTop: '10px',
@@ -71,7 +72,6 @@ const styles = StyleSheet.create({
       elevation: 2,
       backgroundColor: '#89d149',
       alignItems: 'center',
-      flex: 1,
   },
 });
 

@@ -106,8 +106,8 @@ export default function HeaderNav() {
                     tintColor={'#FFFFFF'}
                     resizeMode='contain'
                     style={[
-                        {width: '120%'},
-                        {height: '120%'}, 
+                        {width: 35},
+                        {height: 35}, 
                     ]}
                     />
                 </TouchableOpacity>
