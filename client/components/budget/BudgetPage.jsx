@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import budgetCategories from './budgetCategories';
 import styles from "./budgetPage.style";
 import {
@@ -34,8 +35,13 @@ const BudgetPage = () => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container}>                
+            <LinearGradient
+                colors = {['#F1FEFE', '#B2F0EF']}
+                style = {styles.page}
+            >
             <ScrollView>
+
                 <HeaderNav />
                 <Text style={styles.h1}>Budget Page</Text>
 
@@ -90,6 +96,7 @@ const BudgetPage = () => {
                     </View>
                 ))}
             </ScrollView>
+            </LinearGradient>
 
             <AddCategoryModal
                 visible={isCategoryModalVisible}
