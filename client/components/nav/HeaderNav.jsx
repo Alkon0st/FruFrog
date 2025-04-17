@@ -114,8 +114,27 @@ export default function HeaderNav() {
                 
                 <PondPopupOptions triggerUpdate={triggerUpdate}/>
 
-                <TouchableOpacity onPress={() => setIsProfileModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
-                    <Text>Profile</Text>
+                <TouchableOpacity onPress={() => setIsProfileModalVisible(true)}
+                    style={{
+                        marginLeft: '10px',
+                        marginRight: '10px',}}>
+                    <Image
+                        source={require('../profile/img/1.png')}
+                        resizeMode='contain'
+                        style={[
+                            {width: 60},
+                            {height: 60},
+                            {position: 'absolute'},
+                        ]}
+                        />
+                    <View style={{
+                        position: 'relative',
+                        borderWidth: 3, 
+                        borderRadius: 30,
+                        borderColor: '#4F723A',
+                        width: 61,
+                        height: 61,
+                        }}/>
                 </TouchableOpacity>
 
             </View>
