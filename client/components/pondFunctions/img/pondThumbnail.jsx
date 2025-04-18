@@ -1,5 +1,6 @@
 import { Image, StyleSheet } from "react-native";
 
+// list of thumbnail images, each mapped to a number
 const images = {
     1: require('./1.png'),
     2: require('./2.png'),
@@ -11,6 +12,8 @@ const images = {
     8: require('./8.png'),
 }
 
+
+//takes in a number and exports the <Image> based on selection input
 const Thumbnail = ({selection}) => {
 
     if (selection >=1 && selection <=8 ) {
