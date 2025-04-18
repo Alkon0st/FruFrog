@@ -32,6 +32,9 @@ const SettingsPage = ({
                 <View style={styles.header}>
                     <Text style={styles.headingStyle}> Settings </Text>
                 </View>
+
+                {/* This is an attempt to balance the header layout */}
+                <View style={{ width: 50 }} /> 
             </View>
 
             {/* Main portion of settings */}

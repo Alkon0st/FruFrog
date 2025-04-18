@@ -34,10 +34,9 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         position: 'absolute',
+        top: 40,
         left: 10,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        height: '100%',
+        padding: 10,
     },
     buttonText: {
         fontWeight: 'bold',
@@ -49,6 +48,9 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         position: 'relative',
         paddingHorizontal: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     header: {
         flex: 1,
