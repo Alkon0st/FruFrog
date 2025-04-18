@@ -15,7 +15,7 @@ const SettingsPage = ({
 
     const renderChevron = (isVisible) => (
         <Text style={styles.menuChevron}>
-            {isVisible ? '▼' : '▲'}
+            {isVisible ? '▲' : '▼'}
         </Text>
     );
 
