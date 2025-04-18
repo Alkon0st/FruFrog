@@ -49,7 +49,7 @@ function CreateAccount() {
 
       <SafeAreaProvider>
         <SafeAreaView style={styles.safeArea}>
-          <View style={styles.container}>
+          <View style={[styles.container]}>
             <Controller
               control={control}
               rules={{
@@ -167,13 +167,15 @@ function CreateAccount() {
               <Text style={styles.textButton}>Sign Up</Text>
             </TouchableOpacity>
           </View>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.signInText}>
+              Already have an account? <Text style={{ fontWeight: 'bold' }}>Sign In</Text>
+            </Text>
+          </TouchableOpacity>
         </SafeAreaView>
       </SafeAreaProvider>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.signInText}>
-          Already have an account? <Text style={{ fontWeight: 'bold' }}>Sign In</Text>
-        </Text>
-      </TouchableOpacity>
+      <Text style={styles.footer}>© Pond Patrol. All rights reserved.</Text>
     </LinearGradient>
   );
 }

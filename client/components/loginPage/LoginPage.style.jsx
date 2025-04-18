@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
     },
     container: {
         padding: '7%',
-        flex: 1,
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: 10,
@@ -14,7 +13,7 @@ const styles = StyleSheet.create({
         borderColor: '#D9D9D9',
         margin: 10,
         width: 300,
-        marginBottom: '10%',
+        marginBottom: '5%',
     },
     subHeadingStyle: {
         fontSize: 18,
@@ -146,6 +145,7 @@ const styles = StyleSheet.create({
       fontSize: 12,
       color: '#888',
       marginTop: 10,
+      marginBottom: 10,
       textAlign: 'center',
   },  
   showHideContainer: {
@@ -166,6 +166,9 @@ const styles = StyleSheet.create({
     color: '#800D00',
     marginBottom: 10,
     alignSelf: 'flex-start',
+  },
+  signInText: {
+    textAlign: 'center',
   },
 });
 
