@@ -22,10 +22,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    menuItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     menuText: {
         fontWeight: 'bold',
         color: '#22470C',
         fontSize: 20,
+        marginLeft: 10,
     },
     menuChevron: {
         color: '#000000',

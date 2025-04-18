@@ -49,10 +49,16 @@ const SettingsPage = ({
                 <View style={styles.viewStyle}>
                     <TouchableOpacity 
                     style={styles.menuButton}
-                    onPress={() => setIsSetIncomeVisible(prev => !prev)}>
-                        <Text style={styles.menuText}> <Thumbnail selection={2} /> Edit Pond </Text>
-                        {renderChevron(isSetIncomeVisible)}
+                    onPress={() => setIsEditPondVisible(prev => !prev)}>
+                        <View style={styles.menuItem}>
+                            <Thumbnail selection={2} />
+                            <Text style={styles.menuText}> Edit Pond </Text>
+                        </View>
+                        {renderChevron(isEditPondVisible)}
                     </TouchableOpacity>
+
+
+
                 </View>
 
             {/* Universal Settings */}
