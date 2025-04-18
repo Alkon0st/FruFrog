@@ -2,6 +2,7 @@ import {Modal, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import { useState } from 'react';
 
 import IncomeForm from './incomeSet';
+import Thumbnail from '../pondFunctions/img/pondThumbnail';
 import styles from './SettingsPage.style';
 
 const SettingsPage = ({
@@ -10,6 +11,7 @@ const SettingsPage = ({
     currentPond,
 }) => {
     const [isSetIncomeVisible, setIsSetIncomeVisible] = useState(false);
+    const [isEditPondVisible, setIsEditPondVisible] = useState(false);
 
     const renderChevron = (isVisible) => (
         <Text style={styles.menuChevron}>
@@ -48,7 +50,7 @@ const SettingsPage = ({
                     <TouchableOpacity 
                     style={styles.menuButton}
                     onPress={() => setIsSetIncomeVisible(prev => !prev)}>
-                        <Text style={styles.menuText}> Set Income </Text>
+                        <Text style={styles.menuText}> <Thumbnail selection={2} /> Edit Pond </Text>
                         {renderChevron(isSetIncomeVisible)}
                     </TouchableOpacity>
                 </View>
