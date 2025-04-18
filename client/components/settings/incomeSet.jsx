@@ -3,7 +3,6 @@ import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Picker}
 
 const IncomeForm = ({
   visible, 
-  onClose,
 }) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [incomeData, setIncomeData] = useState({
