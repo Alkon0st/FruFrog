@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   mainView: {
     display: 'flex',
     flex: 1,
+    marginTop: 30,
   },
   buttonOpen: {
       backgroundColor: '#85BB65',

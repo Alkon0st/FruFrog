@@ -17,7 +17,7 @@ const Home = () => {
                     <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
                     <Stack.Screen name="CreateAccount" component={CreateAccount}/>
                     <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
-                    <Stack.Screen name="Nav" component={Nav} />
+                    <Stack.Screen name="Nav" component={Nav} options={{ headerShown: false }} />
                 </Stack.Navigator>
             </NavigationContainer>
         </NavigationIndependentTree>
