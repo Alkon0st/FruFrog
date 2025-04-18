@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Picker} from 'react-native';
 
-const IncomeForm = () => {
+const IncomeForm = ({
+  visible, 
+  onClose,
+}) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [incomeData, setIncomeData] = useState({
     amount: 0,
@@ -24,7 +27,7 @@ const IncomeForm = () => {
   };
 
   
-  //const myIcon = <Icon name="check" size={30} color="#900" />;
+  if (!visible) return null;
 
     return (
       <ScrollView style={styles.container}>
@@ -67,7 +70,7 @@ const IncomeForm = () => {
                 selectedValue={incomeData.frequency}
                 onValueChange={(value) => setIncomeData({...incomeData, frequency: value})}
               >
-              // Need each of the following to display the check icon while selected  
+              {/* Need each of the following to display the check icon while selected   */}
                 <Picker.Item label="Hourly" value="hourly" color={incomeData.frequency === "hourly" ? "#4CAF50" : "#000"} />
                 <Picker.Item label="Daily" value="daily" color={incomeData.frequency === "daily" ? "#4CAF50" : "#000"} />  
                 <Picker.Item label="Weekly" value="weekly" color={incomeData.frequency === "weekly" ? "#4CAF50" : "#000"}  />

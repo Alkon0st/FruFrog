@@ -40,9 +40,8 @@ function ChangePondName ({ pondName, setPondName, triggerUpdate }) {
     )
 }
 
-function PondPopupOptions ({triggerUpdate}) {
+function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
     const [modalVisible, setModalVisible] = useState(false);
-    const [pondName, setPondName] = useState("Current Pond");
 
     return (
         <View>
@@ -88,6 +87,7 @@ function PondPopupOptions ({triggerUpdate}) {
 export default function HeaderNav() {
     const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
+    const [pondName, setPondName] = useState("Current Pond");
 
     const [_, forceUpdate] = useState(0);
     const triggerUpdate = () => forceUpdate(prev => prev + 1);
@@ -112,7 +112,11 @@ export default function HeaderNav() {
                     />
                 </TouchableOpacity>
                 
-                <PondPopupOptions triggerUpdate={triggerUpdate}/>
+                <PondPopupOptions 
+                    triggerUpdate={triggerUpdate}             
+                    pondName={pondName} 
+                    setPondName={setPondName}
+                    />
 
                 <TouchableOpacity onPress={() => setIsProfileModalVisible(true)}
                     style={{
@@ -148,6 +152,7 @@ export default function HeaderNav() {
             <SettingsPage
             visible={isSettingsModalVisible}
             onClose={() => setIsSettingsModalVisible(false)} 
+            currentPond={pondName}
             />
         </View>
     );

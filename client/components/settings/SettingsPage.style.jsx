@@ -1,15 +1,57 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+    settingHeader: {
+        backgroundColor: '#F6F6F6',
+        padding: 5,
+        paddingLeft: 20,
+        paddingRight: 10,
+    },
+    settingHeaderText: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: '#22470C80'
+    },
+    menuButton: {
+        padding: 10,
+        paddingRight: 30,
+        borderWidth: 2,
+        borderColor: '#F6F6F6',
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    menuText: {
+        fontWeight: 'bold',
+        color: '#000000',
+        fontSize: 20,
+    },
+    menuChevron: {
+        color: '#000000',
+        fontSize: 25,
+        textAlign: 'right',
+    },
+    closeButton: {
+        position: 'absolute',
+        left: 10,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        height: '100%',
+    },
     buttonText: {
         fontWeight: 'bold',
         color: '#000000',
         fontSize: 30,
     },
     headerContainer: {
-        margin: '10px',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        margin: 10,
+        paddingTop: 10,
+        position: 'relative',
+        paddingHorizontal: 10,
+    },
+    header: {
+        flex: 1,
     },
     headingStyle: {
         fontSize: 24,
@@ -23,9 +65,8 @@ const styles = StyleSheet.create({
     },
     viewStyle: {
         display: 'flex',
-        justifyConten: 'center',
-        alignItems: 'center',
-        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'stretch',
     },
     textStyle: {
         fontSize: 28,
