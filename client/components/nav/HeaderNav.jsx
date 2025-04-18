@@ -13,33 +13,6 @@ import { Pressable, View, Text, TouchableOpacity, Modal, Image, TextInput, Butto
 import { useState } from 'react';
 import { renamePond } from '../pondFunctions/CreatePondFolder/ponds';
 
-// change current pond name
-function ChangePondName ({ pondName, setPondName, triggerUpdate }) {
-    const [ newPondName, setNewPondName ] = useState(pondName);
-
-    const handleRenamePond = () => {
-        if (newPondName && newPondName !== pondName) {
-            renamePond(pondName, newPondName);
-            setPondName(newPondName);
-            triggerUpdate()
-        }
-    }
-
-    return (
-        <View style={styles.popup}>
-        <View style={styles.popupContent}>
-            <Text style={styles.textStyle}>Change Pond Name:</Text>
-            <TextInput
-                style = {styles.textInputStyle}
-                value={newPondName}
-                onChangeText={setNewPondName}
-            />
-            <Button title="Rename" onPress={handleRenamePond} />
-        </View>
-    </View>      
-    )
-}
-
 function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -68,7 +41,6 @@ function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
                     <AddUser />
                     <CreatePage triggerUpdate={triggerUpdate} currentPond = {pondName} /> 
                 </View>
-                <ChangePondName pondName={pondName} setPondName={setPondName} triggerUpdate={triggerUpdate} />
                 </View>
             </View>
             </Modal>
@@ -152,7 +124,9 @@ export default function HeaderNav() {
             <SettingsPage
             visible={isSettingsModalVisible}
             onClose={() => setIsSettingsModalVisible(false)} 
-            currentPond={pondName}
+            pondName={pondName}
+            setPondName={setPondName}
+            triggerUpdate={triggerUpdate}
             />
         </View>
     );
