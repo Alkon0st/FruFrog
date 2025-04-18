@@ -1,14 +1,18 @@
 import {Modal, Text, View, TouchableOpacity, ScrollView} from 'react-native';
 import { useState } from 'react';
 
-import IncomeForm from './incomeSet';
-import Thumbnail from '../pondFunctions/img/pondThumbnail';
 import styles from './SettingsPage.style';
+
+import Thumbnail from '../pondFunctions/img/pondThumbnail';
+import ChangePondName from '../pondFunctions/editPond';
+import IncomeForm from './incomeSet';
 
 const SettingsPage = ({
     visible, 
     onClose,
-    currentPond,
+    pondName,
+    setPondName,
+    triggerUpdate,
 }) => {
     const [isSetIncomeVisible, setIsSetIncomeVisible] = useState(false);
     const [isEditPondVisible, setIsEditPondVisible] = useState(false);
@@ -44,7 +48,7 @@ const SettingsPage = ({
             {/* Pond Settings */}
             <ScrollView style={{marginTop: 10}}>
                 <View style={styles.settingHeader}> 
-                    <Text style={styles.settingHeaderText}>{currentPond} Settings</Text>
+                    <Text style={styles.settingHeaderText}>{pondName} Settings</Text>
                 </View>
                 <View style={styles.viewStyle}>
                     <TouchableOpacity 
@@ -57,7 +61,13 @@ const SettingsPage = ({
                         {renderChevron(isEditPondVisible)}
                     </TouchableOpacity>
 
-
+                    
+                    <ChangePondName 
+                        pondName={pondName} 
+                        setPondName={setPondName} 
+                        triggerUpdate={triggerUpdate} 
+                        visible={isEditPondVisible} 
+                    />
 
                 </View>
 
