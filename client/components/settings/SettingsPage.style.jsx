@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     },
     menuText: {
         fontWeight: 'bold',
-        color: '#000000',
+        color: '#22470C',
         fontSize: 20,
     },
     menuChevron: {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     headingStyle: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#557549',
+        color: '#000000',
         textAlign: 'center',
     },
     
