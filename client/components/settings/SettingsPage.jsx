@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import styles from './SettingsPage.style';
 
-import Thumbnail from '../pondFunctions/img/pondThumbnail';
-import ChangePondName from '../pondFunctions/editPond';
+import PondThumbnail from '../pondFunctions/img/pondThumbnail';
+import EditPond from '../pondFunctions/editPond';
 import IncomeForm from './incomeSet';
 
 const SettingsPage = ({
@@ -12,6 +12,8 @@ const SettingsPage = ({
     onClose,
     pondName,
     setPondName,
+    thumbnail,
+    setThumbnail,
     triggerUpdate,
 }) => {
     const [isSetIncomeVisible, setIsSetIncomeVisible] = useState(false);
@@ -55,16 +57,18 @@ const SettingsPage = ({
                     style={styles.menuButton}
                     onPress={() => setIsEditPondVisible(prev => !prev)}>
                         <View style={styles.menuItem}>
-                            <Thumbnail selection={2} />
+                            <PondThumbnail selection={2} />
                             <Text style={styles.menuText}> Edit Pond </Text>
                         </View>
                         {renderChevron(isEditPondVisible)}
                     </TouchableOpacity>
 
                     
-                    <ChangePondName 
+                    <EditPond 
                         pondName={pondName} 
                         setPondName={setPondName} 
+                        thumbnail={thumbnail}
+                        setThumbnail={setThumbnail}
                         triggerUpdate={triggerUpdate} 
                         visible={isEditPondVisible} 
                     />

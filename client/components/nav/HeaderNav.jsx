@@ -60,6 +60,7 @@ export default function HeaderNav() {
     const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
     const [pondName, setPondName] = useState("Current Pond");
+    const [thumbnail, setThumbnail] = useState(1);
 
     const [_, forceUpdate] = useState(0);
     const triggerUpdate = () => forceUpdate(prev => prev + 1);
@@ -126,6 +127,8 @@ export default function HeaderNav() {
             onClose={() => setIsSettingsModalVisible(false)} 
             pondName={pondName}
             setPondName={setPondName}
+            thumbnail={thumbnail}
+            setThumbnail={setThumbnail}
             triggerUpdate={triggerUpdate}
             />
         </View>

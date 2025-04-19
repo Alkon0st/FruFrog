@@ -14,7 +14,7 @@ const images = {
 
 
 //takes in a number and exports the <Image> based on selection input
-const Thumbnail = ({selection}) => {
+const PondThumbnail = ({selection}) => {
 
     if (selection >=1 && selection <=8 ) {
         return <Image 
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Thumbnail;
+export default PondThumbnail;
