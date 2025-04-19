@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 import { renamePond } from './CreatePondFolder/ponds';
+import PondThumbnail from './img/pondThumbnail';
 
 // change current pond name
 export default function EditPond ({ 
@@ -27,13 +28,13 @@ export default function EditPond ({
     return (
         <View style={styles.dropDownContainer}>
             {/* Change Thumbnail */}
-            <Text style={styles.header}>Change Pond Name:</Text>
+            <Text style={styles.header}>Pond Thumbnail</Text>
             <View style={styles.dropDownItem}>
                 
             </View>
 
             {/* Change Pond Name */}
-            <Text style={styles.header}>Change Pond Name:</Text>
+            <Text style={styles.header}>Pond Name</Text>
             <View style={styles.dropDownItem}>
                 <TextInput
                     value={newPondName}

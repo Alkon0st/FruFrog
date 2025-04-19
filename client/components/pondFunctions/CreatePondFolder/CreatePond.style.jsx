@@ -26,8 +26,10 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 5,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 10,
+    minWidth: 118,
+    minHeight: 40,
   },
   buttonOpen: {
     backgroundColor: '#85BB65',
@@ -37,6 +39,10 @@ const styles = StyleSheet.create({
   },
   buttonClose: {
     backgroundColor: '#2196F3',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
   },
   modalText: {
     marginBottom: 15,

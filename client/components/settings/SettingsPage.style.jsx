@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         margin: 10,
-        paddingTop: 10,
+        paddingTop: 40,
         position: 'relative',
         paddingHorizontal: 10,
         flexDirection: 'row',

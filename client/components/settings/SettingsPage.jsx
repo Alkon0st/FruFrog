@@ -57,7 +57,7 @@ const SettingsPage = ({
                     style={styles.menuButton}
                     onPress={() => setIsEditPondVisible(prev => !prev)}>
                         <View style={styles.menuItem}>
-                            <PondThumbnail selection={2} />
+                            <PondThumbnail selection={thumbnail} />
                             <Text style={styles.menuText}> Edit Pond </Text>
                         </View>
                         {renderChevron(isEditPondVisible)}

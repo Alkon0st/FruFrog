@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TextInput, Button, Modal } from 'react-native';
-import Select from 'react-select';
+import { View, Text, TextInput, Button, Modal, ScrollView, TouchableOpacity} from 'react-native';
 import styles from '../CreatePond.style';
+import PondThumbnail from '../../img/pondThumbnail';
 
 const CreatePondModal = ({
     visible,
@@ -13,12 +13,7 @@ const CreatePondModal = ({
     handleAddPond,
 }) => {
     //for sample options
-    let options = [
-        {value: '1', label: 'option 1'},
-        {value: '2', label: 'option 2'},
-        {value: '3', label: 'option 3'},
-        {value: '4', label: 'option 4'},
-    ]
+    let thumbnailOptions = [1,2,3,4,5,6,7,8]
 
     return (
         <Modal
@@ -29,6 +24,9 @@ const CreatePondModal = ({
         >
             <View style={styles.popup}>
                 <View style={styles.popupContent}>
+                    <TouchableOpacity onPress={onClose}> 
+                        <Text style={{fontSize: 30}}> ◀ </Text>
+                    </TouchableOpacity>
                     <Text style={styles.headingStyle}> Add New Pond </Text>
                     <Text style={styles.textStyle}>Pond Name:</Text>
                     <TextInput
@@ -40,14 +38,49 @@ const CreatePondModal = ({
                     />
                     
                     <Text style={styles.textStyle}>Thumbnail:</Text>
-                    <Select
-                        options={options}
-                        style={styles.textInputStyle}
-                        value={options.find(option => option.value === newThumbnail)}
-                        onChange={(selectedOption) => setNewThumbnail(selectedOption.value)}
-                    />
-                    <Button style={[styles.button, styles.buttonOpen]} title="Add" onPress={handleAddPond} />
-                    <Button style={[styles.button, styles.buttonOpen]} title="Cancel" onPress={onClose} />
+                    <View style={{width: '100%', marginBottom: 20 }}>
+                        <ScrollView 
+                            horizontal 
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 5}}
+                            style={{marginBottom: 20}}>
+                            {thumbnailOptions.map((value) => {
+                                const isSelected = newThumbnail === value;
+                                return(
+                                    <TouchableOpacity
+                                    key={value}
+                                    style={{
+                                        marginRight:10,
+                                        padding: 5,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                    onPress={() => setNewThumbnail(value)}
+                                    >
+                                        <View style={{ position: 'relative'}}>
+                                            <PondThumbnail selection={value} />
+                                            {isSelected && (
+                                                <View style = {{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    bottom: 0,
+                                                    borderRadius: 30,
+                                                    backgroundColor: '#D9D9D980'
+                                                }}/>
+                                            )
+
+                                            }
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                            )}
+                        </ScrollView>
+                    </View>
+                    <TouchableOpacity style={[styles.button, styles.buttonOpen]} onPress={handleAddPond}>
+                        <Text style={styles.buttonText}> Create Pond </Text>
+                    </TouchableOpacity>
                 </View>
             </View>            
         </Modal>
