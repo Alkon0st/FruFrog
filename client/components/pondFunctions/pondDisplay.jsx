@@ -1,26 +1,18 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, Dimensions} from "react-native";
 import pondList from "./CreatePondFolder/ponds";
+import PondThumbnail from "./img/pondThumbnail";
 
-const PondDisplay = () => {
+const PondDisplay = ({
+    currentPond,
+}) => {
     return (
         <SafeAreaView style = {styles.mainView}> 
             <ScrollView>
                 {Object.keys(pondList).map((pond) => (
                     <View key={pond} style={styles.pondView}>
                             <Text style={styles.pondName}>
-                                {pond}
+                                <PondThumbnail selection={0} /> {pond}
                             </Text>
-                            {pondList[pond].map((detail) => (    
-                                <View key={detail.name} style={styles.pondSubView}>
-                                    <Text style={styles.pondLabel}>
-                                        {/* Displays thumbnail & members */}
-                                        {detail.name}: 
-                                    </Text>
-                                    <Text style={styles.pondDetail}>
-                                        {detail.list.map((item) => <Text>{item}, </Text>)}
-                                    </Text>
-                                </View> 
-                            ))}
                         <View style={styles.line} />
                     </View>
                 ))}
@@ -40,6 +32,7 @@ const styles = StyleSheet.create({
     },
     pondView: {
         //backgroundColor: '#c3edab',
+        marginTop: 10,
         paddingLeft: '10%',
         paddingRight: '10%',
     },
@@ -61,3 +54,17 @@ const styles = StyleSheet.create({
 });
 
 export default PondDisplay;
+
+
+// TAKEN OUT (after {pond})
+// {pondList[pond].map((detail) => (    
+//     <View key={detail.name} style={styles.pondSubView}>
+//         <Text style={styles.pondLabel}>
+//             {/* Displays thumbnail & members */}
+//             {detail.name}: 
+//         </Text>
+//         <Text style={styles.pondDetail}>
+//             {detail.list.map((item) => <Text>{item}, </Text>)}
+//         </Text>
+//     </View> 
+// ))}

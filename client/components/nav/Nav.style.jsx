@@ -4,18 +4,15 @@ const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   currentPondButton: {
+    margin: 5,
+    marginTop: 10,
     padding: 10,
     elevation: 2,
     alignItems: 'center',
-    flex: 1,
-    width: '50%',
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
     borderColor: '#4F723A',
     borderWidth: '2px',
-    marginTop: '10px',
-    marginLeft: '10px',
-    marginRight: '10px',
   }, 
   currentPondText: {
     fontWeight: 'bold',

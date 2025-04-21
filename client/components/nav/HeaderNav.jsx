@@ -29,16 +29,18 @@ function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
             }}>
             {/* The popup itself */}
             <View style={styles.modalBackground}>
-                <View style={styles.modalView}>
-                <Pressable
-                    style={styles.currentPondButton}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={styles.currentPondText}>{pondName} ▲</Text>
-                </Pressable>
-                <PondDisplay key={pondName}/>
+                <View style={[styles.modalView, {paddingTop: 50}]}>
+                <View style={styles.buttonRow}>
+                    <Pressable
+                        style={styles.currentPondButton}
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.currentPondText}>{pondName} ▲</Text>
+                    </Pressable>
+                    <AddUser />
+                </View>
+                <PondDisplay currentPond={pondName}/>
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
-                    <AddUser />
                     <CreatePage triggerUpdate={triggerUpdate} currentPond = {pondName} /> 
                 </View>
                 </View>
@@ -47,7 +49,7 @@ function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
             <View>
                 {/*The button to summon popup*/}
                 <Pressable
-                    style={[styles.button, styles.buttonOpen]}
+                    style={[styles.currentPondButton]}
                     onPress={() => setModalVisible(true)}>
                     <Text style={styles.currentPondText}>{pondName} ▼</Text>
                 </Pressable>
