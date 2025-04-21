@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, FlatList } from "react-native"
 import styles from "./historyPage.style";
 import HeaderNav from '../nav/HeaderNav';
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,6 +21,19 @@ const expenseData = [
 
 function HistoryPage() {
     const navigation = useNavigation();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    
+    // Categories for filter
+    const categories = ['All', 'Food', 'Bill', 'Grocery', 'Gas', 'Maintenance'];
+
+    // Filter data based on search query and selected category
+    const filteredData = expenseData.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            item.category.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
 
     const renderItem = ({ item }) => (
         <View style={styles.itemContainer}>
@@ -35,28 +48,51 @@ function HistoryPage() {
             </View>
         </View>
     );
-        
+
     return (
         <LinearGradient
             locations={[0, 0.47, 1]}
-            colors = {['#F1FFFF', '#FEFFF5', '#B1F1EF']}
+            colors={['#F1FFFF', '#FEFFF5', '#B1F1EF']}
             style={styles.LinearGradient}
-            >
+        >
             <HeaderNav navigation={navigation} title="History" />
             <View style={styles.viewStyle}>
                 <Text style={styles.textStyle}>Expense Records</Text>
             </View>
-            <TextInput
-                style={styles.searchBar}
-                placeholder="Search Keywords Here..."
-                placeholderTextColor={"#A9A9A9"}
-            />
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchBar}
+                    placeholder="Search Keywords Here..."
+                    placeholderTextColor={"#A9A9A9"}
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
+                <View style={styles.filterContainer}>
+                    {categories.map(category => (
+                        <TouchableOpacity
+                            key={category}
+                            style={[
+                                styles.filterButton,
+                                selectedCategory === category && styles.filterButtonActive
+                            ]}
+                            onPress={() => setSelectedCategory(category)}
+                        >
+                            <Text style={[
+                                styles.filterText,
+                                selectedCategory === category && styles.filterTextActive
+                            ]}>
+                                {category}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            </View>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.formContainer}>
                     <Text style={styles.title}>January 2025</Text>
                 </View>
                 <FlatList
-                    data={expenseData}
+                    data={filteredData}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
@@ -77,6 +113,12 @@ function HistoryPage() {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => navigation.navigate('AddExpense')} // Adjust navigation target as needed
+            >
+                <Icon name="plus" size={30} color="#fff" />
+            </TouchableOpacity>
         </LinearGradient>
     );
 }

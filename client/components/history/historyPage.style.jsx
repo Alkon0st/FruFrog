@@ -88,6 +88,51 @@ const styles = StyleSheet.create({
   toggleButton: {
     padding: 10,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    marginBottom: 10,
+},
+filterContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginLeft: 10,
+},
+filterButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    backgroundColor: '#e0e0e0',
+    marginRight: 5,
+    marginBottom: 5,
+},
+filterButtonActive: {
+    backgroundColor: '#4CAF50',
+},
+filterText: {
+    color: '#333',
+    fontSize: 12,
+},
+filterTextActive: {
+    color: '#fff',
+},
+addButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#4CAF50',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+},
 });
 
 export default styles;
