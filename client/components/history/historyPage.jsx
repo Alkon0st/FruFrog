@@ -24,10 +24,8 @@ function HistoryPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
     
-    // Categories for filter
     const categories = ['All', 'Food', 'Bill', 'Grocery', 'Gas', 'Maintenance'];
 
-    // Filter data based on search query and selected category
     const filteredData = expenseData.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                             item.category.toLowerCase().includes(searchQuery.toLowerCase());
@@ -115,12 +113,11 @@ function HistoryPage() {
             </ScrollView>
             <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => navigation.navigate('AddExpense')} // Adjust navigation target as needed
+                onPress={() => navigation.navigate('AddExpense')}
             >
                 <Icon name="plus" size={30} color="#fff" />
             </TouchableOpacity>
         </LinearGradient>
     );
 }
-
 export default HistoryPage;
