@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Modal, Text, Pressable, View, Button, TouchableOpacity } from 'react-native';
+import {Alert, Modal, Text, Pressable, View, Button, TouchableOpacity, Image } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 // SafeAreaView & associated are modules that automatically applies padding for views that are not covered
 import { useForm, Controller } from 'react-hook-form';
@@ -230,7 +230,12 @@ const AddUser = () => {
         <Pressable
           style={[styles.button, styles.buttonOpen]}
           onPress={() => setModalVisible(true)}>
-          <Text style={styles.textButton}>Add User</Text>
+          <View style={styles.row}>
+            <Image 
+              source={require('../../img/add_user.png')}
+              resizeMode='contain'
+              style={styles.img} />
+          </View>
         </Pressable>
       </SafeAreaView>
     </SafeAreaProvider>

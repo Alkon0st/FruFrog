@@ -3,6 +3,16 @@ import { StyleSheet, Dimensions } from "react-native";
 const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  img: {
+    width: 25,
+    height: 25,
+    tintColor: '#FFFFFF',
+  },
   fixToText: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -32,8 +42,10 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 5,
-    borderRadius: 20,
-    padding: 10,
+    marginTop: 10,
+    borderRadius: 30,
+    padding: 8,
+    paddingLeft: 9,
     backgroundColor: '#89d149',
   },
   buttonOpen: {
