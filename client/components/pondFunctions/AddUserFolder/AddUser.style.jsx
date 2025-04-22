@@ -5,7 +5,10 @@ const { width, height } = Dimensions.get('window')
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  header: {
+    flex: 1,
     alignItems: 'center',
   },
   img: {
@@ -28,7 +31,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     padding: 35,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -37,7 +39,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: '100%',
+    minWidth: '100%',
+    minHeight: 415,
     alignSelf: 'flex-start',
   },
   button: {
@@ -46,7 +49,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 8,
     paddingLeft: 9,
-    backgroundColor: '#89d149',
   },
   buttonOpen: {
     backgroundColor: '#85BB65',
@@ -54,7 +56,12 @@ const styles = StyleSheet.create({
     borderWidth: '3px',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    alignContent: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  textClose: {
+    color: '#000000',
+    fontSize: 25,
   },
   modalText: {
     marginBottom: 15,
