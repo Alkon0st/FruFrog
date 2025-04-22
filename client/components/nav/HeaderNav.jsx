@@ -64,6 +64,9 @@ export default function HeaderNav() {
     const [pondName, setPondName] = useState("Current Pond");
     const [thumbnail, setThumbnail] = useState(1);
 
+    // UNIMPLEMENTED
+    const admin = true;
+
     const [_, forceUpdate] = useState(0);
     const triggerUpdate = () => forceUpdate(prev => prev + 1);
 
@@ -132,6 +135,7 @@ export default function HeaderNav() {
             thumbnail={thumbnail}
             setThumbnail={setThumbnail}
             triggerUpdate={triggerUpdate}
+            admin={admin}
             />
         </View>
     );

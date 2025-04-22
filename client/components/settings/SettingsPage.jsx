@@ -1,10 +1,11 @@
-import {Modal, Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {Modal, Text, View, TouchableOpacity, ScrollView, Image} from 'react-native';
 import { useState } from 'react';
 
 import styles from './SettingsPage.style';
 
 import PondThumbnail from '../pondFunctions/img/pondThumbnail';
 import EditPond from '../pondFunctions/editPond';
+import MemberManage from '../pondFunctions/memberManage';
 import IncomeForm from './incomeSet';
 
 const SettingsPage = ({
@@ -15,9 +16,11 @@ const SettingsPage = ({
     thumbnail,
     setThumbnail,
     triggerUpdate,
+    admin
 }) => {
     const [isSetIncomeVisible, setIsSetIncomeVisible] = useState(false);
     const [isEditPondVisible, setIsEditPondVisible] = useState(false);
+    const [isMemberVisible, setIsMemberVisible] = useState(false);
 
     const renderChevron = (isVisible) => (
         <Text style={styles.menuChevron}>
@@ -53,25 +56,48 @@ const SettingsPage = ({
                     <Text style={styles.settingHeaderText}>{pondName} Settings</Text>
                 </View>
                 <View style={styles.viewStyle}>
-                    <TouchableOpacity 
-                    style={styles.menuButton}
-                    onPress={() => setIsEditPondVisible(prev => !prev)}>
-                        <View style={styles.menuItem}>
-                            <PondThumbnail selection={thumbnail} />
-                            <Text style={styles.menuText}> Edit Pond </Text>
-                        </View>
-                        {renderChevron(isEditPondVisible)}
-                    </TouchableOpacity>
 
-                    
-                    <EditPond 
-                        pondName={pondName} 
-                        setPondName={setPondName} 
-                        thumbnail={thumbnail}
-                        setThumbnail={setThumbnail}
-                        triggerUpdate={triggerUpdate} 
-                        visible={isEditPondVisible} 
-                    />
+                    {/* Only shows up IF admin is TRUE */}
+                    {admin && (
+                        <View>
+                            {/* Edit Pond (Name & Thumbnail) */}
+                            <TouchableOpacity 
+                            style={styles.menuButton}
+                            onPress={() => setIsEditPondVisible(prev => !prev)}>
+                                <View style={styles.menuItem}>
+                                    <PondThumbnail selection={thumbnail} />
+                                    <Text style={styles.menuText}> Edit Pond </Text>
+                                </View>
+                                {renderChevron(isEditPondVisible)}
+                            </TouchableOpacity>
+                            <EditPond 
+                                pondName={pondName} 
+                                setPondName={setPondName} 
+                                thumbnail={thumbnail}
+                                setThumbnail={setThumbnail}
+                                triggerUpdate={triggerUpdate} 
+                                visible={isEditPondVisible} 
+                            />
+                            
+                            {/* Member Management */}
+                            <TouchableOpacity 
+                            style={styles.menuButton}
+                            onPress={() => setIsMemberVisible(prev => !prev)}>
+                                <View style={styles.menuItem}>
+                                    <Image  
+                                        source={require('../img/members.png')}
+                                        resizeMode='contain'
+                                        style={styles.img}/>
+                                    <Text style={styles.menuText}> Member Management </Text>
+                                </View>
+                                {renderChevron(isMemberVisible)}
+                            </TouchableOpacity>
+                            <MemberManage 
+                                triggerUpdate={triggerUpdate} 
+                                visible={isMemberVisible} 
+                            />
+                        </View>
+                    )}
 
                 </View>
 
