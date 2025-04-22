@@ -11,7 +11,7 @@ import styles from './Nav.style';
 
 import { Pressable, View, Text, TouchableOpacity, Modal, Image, TextInput, Button } from 'react-native';
 import { useState } from 'react';
-
+import ProfilePicture from '../profile/img/profilePicture';
 function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -99,23 +99,7 @@ export default function HeaderNav() {
                     style={{
                         marginLeft: '10px',
                         marginRight: '10px',}}>
-                    <Image
-                        source={require('../profile/img/1.png')}
-                        resizeMode='contain'
-                        style={[
-                            {width: 60},
-                            {height: 60},
-                            {position: 'absolute'},
-                        ]}
-                        />
-                    <View style={{
-                        position: 'relative',
-                        borderWidth: 3, 
-                        borderRadius: 30,
-                        borderColor: '#4F723A',
-                        width: 61,
-                        height: 61,
-                        }}/>
+                    <ProfilePicture selection={1}/>
                 </TouchableOpacity>
 
             </View>
