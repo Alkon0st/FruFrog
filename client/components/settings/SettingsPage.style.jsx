@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     img: {
-        height: 44,
-        width: 44,
+        height: 40,
+        width: 40,
         tintColor: '#22470C',
     },
     settingHeader: {
@@ -17,8 +17,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#22470C80'
     },
+    // Menu option styling
     menuButton: {
-        paddingVertical: 10,
+        paddingVertical: 15,
         paddingRight: 30,
         paddingLeft: 20,
         borderWidth: 2,
@@ -39,10 +40,31 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     menuChevron: {
-        color: '#000000',
+        color: '#22470C',
         fontSize: 25,
         textAlign: 'right',
     },
+    // submenu (like set icon) styling
+    subMenuContainer: {
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        backgroundColor: '#FAFAFA',
+        borderWidth: 1,
+        borderColor: '#F6F6F6',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    subMenuItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    subMenuHeader: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#22470C',
+    },
+
     closeButton: {
         position: 'absolute',
         top: 40,
@@ -60,7 +82,6 @@ const styles = StyleSheet.create({
         position: 'relative',
         paddingHorizontal: 10,
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
     },
     header: {
