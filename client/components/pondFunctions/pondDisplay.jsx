@@ -1,18 +1,50 @@
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, Dimensions} from "react-native";
-import pondList from "./CreatePondFolder/ponds";
+import { useState, useEffect } from "react";
+import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebase"; // Make sure the path matches yours
 import PondThumbnail from "./img/pondThumbnail";
 
-const PondDisplay = ({
-    currentPond,
-}) => {
+const PondDisplay = ({ currentPond }) => {
+    const [userPonds, setUserPonds] = useState([]);
+
+    // Fetch ponds the user is in
+    const fetchUserPonds = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (!user) return;
+
+        try {
+            const q = query(
+                collection(db, "ponds"),
+                where("members", "array-contains", user.uid)
+            );
+
+            const querySnapshot = await getDocs(q);
+            const ponds = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            setUserPonds(ponds);
+        } catch (error) {
+            console.error("Error fetching user ponds:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUserPonds();
+    }, []);
+
     return (
-        <SafeAreaView style = {styles.mainView}> 
+        <SafeAreaView style={styles.mainView}>
             <ScrollView>
-                {Object.keys(pondList).map((pond) => (
-                    <View key={pond} style={styles.pondView}>
-                            <Text style={styles.pondName}>
-                                <PondThumbnail selection={0} /> {pond}
-                            </Text>
+                {userPonds.map((pond) => (
+                    <View key={pond.id} style={styles.pondView}>
+                        <Text style={styles.pondName}>
+                            <PondThumbnail selection={parseInt(pond.thumbnail) || 0} /> {pond.name}
+                        </Text>
                         <View style={styles.line} />
                     </View>
                 ))}
@@ -20,6 +52,7 @@ const PondDisplay = ({
         </SafeAreaView>
     );
 };
+
 
 const styles = StyleSheet.create({
     mainView: {

@@ -11,7 +11,6 @@ import styles from './Nav.style';
 
 import { Pressable, View, Text, TouchableOpacity, Modal, Image, TextInput, Button } from 'react-native';
 import { useState } from 'react';
-import { renamePond } from '../pondFunctions/CreatePondFolder/ponds';
 
 function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
     const [modalVisible, setModalVisible] = useState(false);

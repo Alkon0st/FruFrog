@@ -124,7 +124,6 @@ const SettingsPage = ({
                         onClose={() => setIsLeaveVisible(false)}
                     />
                 </View>
-
             {/* Universal Settings */}
                 <View style={styles.settingHeader}> 
                     <Text style={styles.settingHeaderText}>Universal Settings</Text>

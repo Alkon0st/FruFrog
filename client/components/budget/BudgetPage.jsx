@@ -20,6 +20,7 @@ const BudgetPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+
     const [newCategory, setNewCategory] = useState('');
     const [newSubCategory, setNewSubCategory] = useState('');
     const [newSubCategoryAmount, setNewSubCategoryAmount] = useState('');

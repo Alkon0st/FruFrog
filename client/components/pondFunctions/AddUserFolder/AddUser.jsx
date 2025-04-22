@@ -5,7 +5,6 @@ import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-gesture-handler';
 import Select from 'react-select';
-
 import styles from './AddUser.style';
 
 function AddCodeFunction() {

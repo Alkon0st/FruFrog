@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { View, Text, SafeAreaView, Modal, TouchableOpacity, ScrollView, Pressable } from "react-native";
-import pondList from './ponds';
+import {db}  from '../../../firebase/firebase';
+import { collection, addDoc, doc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
 import CreatePondModal from './modals/createPondModal';
 import DeletePondModal from './modals/deletePondModal';
+
 
 import styles from './CreatePond.style';
 
@@ -14,30 +17,73 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
     const [isDeletePondModalVisible, setIsDeletePondModalVisible] = useState(false);
     const [selectedPond, setSelectedPond] = useState('');
 
-    const handleAddPond = () => {
-        if (newPond) {
-            pondList[newPond] = [];
-            pondList[newPond].push({name: "Thumbnail", list: [newThumbnail]});
-            pondList[newPond].push({name: "Members", list: ["You"]});
+    const handleAddPond = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
 
-            triggerUpdate();
-            setIsCreatePondModalVisible(false);
-            setNewPond('');
-            setNewThumbnail('1');
+        if (newPond) {
+            try {
+                await addDoc(collection(db, "ponds"), {
+                    name: newPond,
+                    thumbnail: newThumbnail,
+                    owner: user.uid,
+                    members: [user.uid],
+                    budgets: [],
+                    billList: [],
+                    createdAt: new Date(),
+                });
+                triggerUpdate();
+                setIsCreatePondModalVisible(false);
+                setNewPond('');
+                setNewThumbnail('1');
+            } catch (error) {
+                console.error("Error adding pond: ", error);
+                alert("Error creating pond. Please try again.");
+            }
         }
     };
 
-    const handleDeletePond = () => {
-        if (selectedPond) {
-            if (selectedPond == currentPond) {
-                alert("You can't delete the current pond. (For now).");
-                return;
+    const handleDeletePond = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+    
+        if (selectedPond === currentPond) {
+            alert("You can't delete the current pond. (For now).");
+            return;
+        }
+    
+        if (!user) {
+            alert("You must be logged in to delete a pond.");
+            return;
+        }
+    
+        try {
+            // Find the pond by name
+            const q = query(collection(db, "ponds"), where("name", "==", selectedPond));
+            const querySnapshot = await getDocs(q);
+    
+            if (!querySnapshot.empty) {
+                const pondDoc = querySnapshot.docs[0];
+                const docRef = pondDoc.ref;
+                const pondData = pondDoc.data();
+    
+                // Check ownership
+                if (pondData.owner !== user.uid) {
+                    alert("Only the owner can delete this pond.");
+                    return;
+                }
+    
+                await deleteDoc(docRef);
+    
+                triggerUpdate();
+                setIsDeletePondModalVisible(false);
+                setSelectedPond('');
+            } else {
+                alert("Pond not found.");
             }
-            delete pondList[selectedPond];
-
-            triggerUpdate();
-            setIsDeletePondModalVisible(false);
-            setSelectedPond('');
+        } catch (error) {
+            console.error("Error deleting pond: ", error);
+            alert("Something went wrong while deleting the pond.");
         }
     };
 

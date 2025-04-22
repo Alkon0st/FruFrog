@@ -31,6 +31,7 @@ function SignInFunction() {
                 // Use Firebase Authentication to sign in
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
+                
 
                 console.log("User signed in successfully:", user);
                 setModalVisible(true); // Show success modal

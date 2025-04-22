@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-import { renamePond } from './CreatePondFolder/ponds';
+
 import styles from '../settings/SettingsPage.style';
 import PondThumbnail from './img/pondThumbnail';
 
@@ -15,7 +15,7 @@ export default function EditPond ({
     visible }) {
     const [ newPondName, setNewPondName ] = useState(pondName);
     const [ newThumbnail, setNewThumbnail ] = useState(thumbnail);
-
+    
     const handleRenamePond = () => {
         if (newPondName && newPondName !== pondName) {
             renamePond(pondName, newPondName);
