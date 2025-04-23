@@ -42,9 +42,13 @@ const bodyParser = require('body-parser');
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const authRoutes = require('./routes/authRoute');
 const billRoutes = require('./routes/billRoute');
 const cors = require('cors');
+=======
+const plaid = require('plaid');
+>>>>>>> Stashed changes
 =======
 const plaid = require('plaid');
 >>>>>>> Stashed changes
@@ -65,9 +69,12 @@ const PLAID_ENV = 'sandbox'; // Use 'sandbox', 'development', or 'production'
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 app.use('/api/auth', authRoutes);
 app.use('/api/bills', billRoutes);
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -79,6 +86,9 @@ const plaidClient = new plaid.Client({
 });
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
