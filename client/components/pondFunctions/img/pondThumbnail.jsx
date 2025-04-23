@@ -14,19 +14,19 @@ const images = {
 
 
 //takes in a number and exports the <Image> based on selection input
-const PondThumbnail = ({selection}) => {
+const PondThumbnail = ({selection, optionalStyle}) => {
 
     if (selection >=1 && selection <=8 ) {
         return <Image 
             source={images[selection]}
             resizeMode='contain'
-            style={styles.img} />
+            style={[styles.img, optionalStyle]} />
     }
 
     return <Image 
         source={images[1]}
         resizeMode='contain'
-        style={styles.img} />
+        style={[styles.img, optionalStyle]} />
     
 }
 

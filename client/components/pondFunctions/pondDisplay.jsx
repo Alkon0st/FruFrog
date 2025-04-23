@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image } from "react-native";
 import { getAuth } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase"; // Make sure the path matches yours
@@ -41,11 +41,25 @@ const PondDisplay = ({ currentPond }) => {
         <SafeAreaView style={styles.mainView}>
             <ScrollView>
                 {userPonds.map((pond) => (
-                    <View key={pond.id} style={styles.pondView}>
-                        <Text style={styles.pondName}>
-                            <PondThumbnail selection={parseInt(pond.thumbnail) || 0} /> {pond.name}
-                        </Text>
-                        <View style={styles.line} />
+                    <View 
+                        key={pond.id} 
+                        style={[
+                            styles.pondView,
+                            pond.name === currentPond && styles.activePond
+                        ]}
+                    >
+                        {pond.name === currentPond && <View style={styles.marker}/>}
+                        <View style={styles.nameRow}>
+                            <PondThumbnail selection={parseInt(pond.thumbnail) || 0} />
+                            <Text style={styles.pondName}>{pond.name}</Text>
+                        </View>
+                        {pond.name === currentPond && (
+                            <Image
+                                source={require('../nav/img/current_pond.png')}
+                                resizeMode='contain'
+                                style={styles.img}
+                            />
+                        )}
                     </View>
                 ))}
             </ScrollView>
@@ -58,46 +72,43 @@ const styles = StyleSheet.create({
     mainView: {
         width: '100%',
     },
-    line: {
-        marginTop: '2%',
-        borderBottomColor: '#6a9153',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
     pondView: {
         //backgroundColor: '#c3edab',
         marginTop: 10,
-        paddingLeft: '10%',
-        paddingRight: '10%',
-    },
-    pondSubView: {
+        paddingRight: 10,
+        paddingLeft: 25,
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderColor: '#D0D0D0',
         flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'relative',
     },
     pondName: {
-        fontSize: '120%',
+        fontSize: 25,
         fontWeight: 'bold',
+        marginLeft: 10,
+        color: '#22470C',
     },
-    pondLabel: {
-        marginLeft: '10px',
-        textDecorationLine: 'underline',
+    nameRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    pondDetail: {
-        textDecorationLine: 'none',
-        marginLeft: '5px',
-    }
+    marker: {
+        position: 'absolute',
+        left: 0,
+        height: '100%',
+        width: 14,
+        backgroundColor: '#85BB65',
+    },
+    img: {
+        width: 47,
+        height: 47,
+    },
+    activePond: {
+        backgroundColor: '#E4E4E4',
+    },
 });
 
 export default PondDisplay;
-
-
-// TAKEN OUT (after {pond})
-// {pondList[pond].map((detail) => (    
-//     <View key={detail.name} style={styles.pondSubView}>
-//         <Text style={styles.pondLabel}>
-//             {/* Displays thumbnail & members */}
-//             {detail.name}: 
-//         </Text>
-//         <Text style={styles.pondDetail}>
-//             {detail.list.map((item) => <Text>{item}, </Text>)}
-//         </Text>
-//     </View> 
-// ))}

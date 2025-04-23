@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'black',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   textInputStyle: {
     fontSize: 20,
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
 
   popup: {
     flex: 1,
-    justifyContent:'flex-start',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
-    alignItems: 'flex-start',
   },
   pondView: {
     backgroundColor: '#c3edab',
@@ -108,7 +107,80 @@ const styles = StyleSheet.create({
   pondDetail: {
     textDecorationLine: 'none',
     marginLeft: '5px',
-  }
+  },
+
+  //For Modal
+  labelContainer:{
+    marginTop: 20,
+    width: 151,
+    height: 48,
+    backgroundColor: '#85BB65',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  labelText:{
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#FFFFFF'
+  },
+  itemContainer:{
+    marginBottom: 10,
+    width: 367,
+    minHeight: 80,
+    backgroundColor: '#B2E196',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  innerContainer:{
+    padding: 10,
+    width: 322,
+    minHeight: 32,
+    borderRadius: 6,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+  },
+
+  //For Thumbnail Scrolling
+  editThumbnailScrollContent: {
+      paddingVertical: 10,
+      paddingHorizontal: 5,
+      alignItems: 'center',
+      width: 305,
+  },
+  editThumbnailButton: {
+      marginRight: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  selectedOverlay: {      
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderRadius: 30,
+      backgroundColor: '#D9D9D980',
+  },
+
+  // Confirm Button for Create Pond
+  createButton: {
+    margin: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#4F723A',
+    backgroundColor: '#85BB65',
+    width: 118,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  createText: {
+    fontSize: 15,
+    color: '#FFFFFF',
+  },
 });
 
 export default styles;

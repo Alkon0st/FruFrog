@@ -30,18 +30,18 @@ const IncomeForm = ({
 
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.formContainer}>
-          <Text style={styles.title}>Edit Pond</Text>
-          
+        <View style={styles.formContainer}>          
           <View style={styles.formGroup}>
             <Text style={styles.label}>Amount</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="0.00"
-              keyboardType="numeric"
-              value={incomeData.amount ? incomeData.amount.toString() : ''}
-              onChangeText={(text) => setIncomeData({...incomeData, amount: parseFloat(text) || 0})}
-            />
+            <View style={styles.pickerContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="0.00"
+                keyboardType="numeric"
+                value={incomeData.amount ? incomeData.amount.toString() : ''}
+                onChangeText={(text) => setIncomeData({...incomeData, amount: parseFloat(text) || 0})}
+              />
+            </View>
           </View>
           
           <View style={styles.formGroup}>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#85BB65',
+    backgroundColor: '#F0F0F0',
     width: '100%',
   },
   formContainer: {
@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#ddd',
+    borderWidth: 10,
+    borderColor: '#B2E196',
     borderRadius: 5,
     backgroundColor: '#fff',
   },

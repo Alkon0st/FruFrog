@@ -172,6 +172,28 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
+    //Content for Edit Thumbnail
+    editThumbnailScrollContent: {
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+        alignItems: 'center',
+        width: 305,
+    },
+    editThumbnailButton: {
+        marginRight: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    selectedOverlay: {      
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: 30,
+        backgroundColor: '#D9D9D980',
+    },
+
 });
 
 export default styles;
