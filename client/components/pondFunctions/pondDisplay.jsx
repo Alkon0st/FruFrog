@@ -86,9 +86,10 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     pondName: {
-        fontSize: '120%',
+        fontSize: 25,
         fontWeight: 'bold',
         marginLeft: 10,
+        color: '#22470C',
     },
     nameRow: {
         flexDirection: 'row',
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     },
     activePond: {
         backgroundColor: '#E4E4E4',
-    }
+    },
 });
 
 export default PondDisplay;
