@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 const connectDB = require('./config/db');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoute');
+const billRoutes = require('./routes/billRoute');
 const cors = require('cors');
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 connectDB();
 
 app.use('/api/auth', authRoutes);
+app.use('/api/bills', billRoutes);
 
 
 
