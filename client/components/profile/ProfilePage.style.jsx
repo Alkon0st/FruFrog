@@ -3,9 +3,11 @@ import { StyleSheet, Dimensions } from "react-native";
 const styles = StyleSheet.create({
     page: { 
         flex: 1,
+        justifyContent: 'space-between',
     },
-    bottomContainer: {
-        
+    container: {
+        flex: 1, 
+        justifyContent: 'flex-start',
     },
 
     //Header 
@@ -42,6 +44,41 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         width: 332,
         minHeight: 128,
+
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        padding: 15,
+        rowGap: 10,
+        columnGap: 5,
+    },
+
+    // Profile Styling  
+    selectionContainer: {
+        position: 'relative',
+        width: 60,
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    editProfileButton: {
+        marginRight: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    selectedOverlay: {      
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: 30,
+        backgroundColor: '#D9D9D980',
+    },
+    checkmark: {
+        position: 'absolute',
+        width: 32,
+        height: 32,
     },
 
     //Confirm Changes button
@@ -98,9 +135,9 @@ const styles = StyleSheet.create({
     
   footer: {
     fontSize: 12,
-    color: '#888',
-    marginTop: 10,
-    marginBottom: 10,
+    fontStyle: 'italic',
+    color: '#8D8D8D',
+    marginVertical: 20,
     textAlign: 'center',
     },  
 });

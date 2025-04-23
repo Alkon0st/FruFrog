@@ -22,14 +22,14 @@ const images = {
 
 
 //takes in a number and exports the <Image> based on selection input
-const ProfilePicture = ({selection}) => {
+const ProfilePicture = ({selection, optionalStyle}) => {
 
-    if (selection >=1 && selection <=8 ) {
+    if (selection >=1 && selection <=16 ) {
         return <View>
             <Image 
                 source={images[selection]}
                 resizeMode='contain'
-                style={styles.img} />
+                style={[styles.img, optionalStyle]} />
             <View style={styles.outline} />
         </View>
     }
@@ -38,7 +38,7 @@ const ProfilePicture = ({selection}) => {
         <Image 
             source={images[1]}
             resizeMode='contain'
-            style={styles.img} />
+            style={[styles.img, optionalStyle]} />
         <View style={styles.outline} />
     </View>
 }
