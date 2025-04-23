@@ -119,8 +119,8 @@ filterTextActive: {
 },
 addButton: {
     position: 'absolute',
-    bottom: 20,
-    right: 20,
+    top: 80,
+    left: 20,
     backgroundColor: '#4CAF50',
     borderRadius: 30,
     width: 60,
@@ -132,6 +132,7 @@ addButton: {
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    zIndex: 1000, 
 },
 });
 
