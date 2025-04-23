@@ -4,44 +4,66 @@ import { Picker } from '@react-native-picker/picker';
 
 // Bill Modal Component
 const AddBillModal = ({ visible, onSubmit, onClose }) => {
-  const [billTitle, setBillTitle] = React.useState('');
-  const [billDate, setBillDate] = React.useState('');
-  const [billPaid, setBillPaid] = React.useState('');
-  const [billTotal, setBillTotal] = React.useState('');
-  const [category, setCategory] = useState('Rent');
-  const [tax, setTax] = useState('0');
-
-  const handleSubmit = () => {
-    if (!billTitle || !billDate || !billTotal) return;
-
-    const newBill = {
-      title: billTitle,
-      date: billDate,
-      paid: parseFloat(billPaid) || 0,
-      total: parseFloat(billTotal),
-      tax: parseFloat(tax),
-    };
-
-    onSubmit(newBill);
-    setBillCategory('');
-    setBillTitle('');
-    setBillDate('');
-    setBillPaid('');
-    setBillTotal('');
-    setCategory('Rent');
-    setBillDate('');
-  }
-
   useEffect(() => {
     if (visible) {
       const today = new Date();
-      const formattedDate = today.toISOString().split('T')[0];
+      const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May.', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = months[today.getMonth()];
+      const year = today.getFullYear();
+      const formattedDate = `${month} ${day}, ${year}`;
       setBillDate(formattedDate);
     }
   }, [visible]);
 
+  // Bill values
+  const [billDate, setBillDate] = React.useState('');
+  const [category, setCategory] = useState('Rent');
+  const [billTitle, setBillTitle] = React.useState('');
+  const [billAmount, setBillAmount] = React.useState('');
+  const [billTax, setBillTax] = useState('0');
+
+  // Tax split switch
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((prev) => !prev);
+
+  // Reset fields after create bill
+  const resetFields = () => {
+    setBillTitle('');
+    setBillAmount('');
+    setBillTax('0');
+    setCategory('Rent');
+    setIsEnabled(false);
+  };
+
+  // Even split and create bill
+  const handleEvenSplit = () => {
+    const amount = parseFloat(billAmount) || 0;
+    const tax = parseFloat(billTax) || 0;
+    const members = 2;
+  
+    const total = isEnabled ? amount + tax : amount;
+    const splitAmount = total / members;
+    const percentPaid = amount / total;
+  
+    const bill = {
+      title: billTitle,
+      date: billDate,
+      category,
+      amount,
+      tax,
+      splitTax: isEnabled,
+      members,
+      paid: splitAmount.toFixed(2),
+      percentPaid: percentPaid.toFixed(2),
+      total: total.toFixed(2),
+    };
+  
+    console.log('Prepared bill:', bill);
+    onSubmit && onSubmit(bill);
+    resetFields();
+    onClose();
+  };
 
   return (
     <Modal
@@ -86,8 +108,8 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
           <Text>Total: $</Text>
           <TextInput
             style={styles.totalInput}
-            value={billTotal}
-            onChangeText={setBillTotal}
+            value={billAmount}
+            onChangeText={setBillAmount}
             keyboardType="numeric"
           />
           </View>
@@ -96,7 +118,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
             <TouchableOpacity onPress={onClose} style={styles.button}>
             <Text style={styles.buttonText}>Custom Split</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onClose} style={styles.button}>
+            <TouchableOpacity onPress={handleEvenSplit} style={styles.button}>
             <Text style={styles.buttonText}>Even Split</Text>
             </TouchableOpacity>
           </View>
@@ -107,12 +129,12 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
         <View style={styles.taxContainer}>
         <View style={{flexDirection: 'row'}}>
           <Text style={{color: 'white'}}>$</Text>
-          {/* <TextInput
+          <TextInput
             style={styles.taxInput}
-            value={tax}
-            onChangeText={setTax}
+            value={billTax}
+            onChangeText={setBillTax}
             keyboardType="numeric"
-          /> */}
+          />
           </View>
           <Text style={styles.taxText}>Split Tax</Text>
           <Switch
@@ -178,7 +200,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: 'white',
     marginBottom: 10,
-    width: '20%',
+    width: 35,
     color: 'white',
   },
   membersSection: {
