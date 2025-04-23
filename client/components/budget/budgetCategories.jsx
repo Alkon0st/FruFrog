@@ -2,73 +2,58 @@
 
 // budgetCategories object contains the categories and subcategories of the budget
 // this is a sample object, you can add more categories and subcategories as needed; server will send the budgetCategories object to the client
-let budgetCategories = {
-    Housing: [
-        { name: "Rent Payments", amount: 1000.15 },
-        { name: "Mortgage Payments", amount: 500.10 },
-        { name: "Property Taxes", amount: 0 },
-        { name: "HOA Payments", amount: 0 },
-        { name: "Home Maintenance Costs", amount: 0 }
-    ],
-    Transportation: [
-        { name: "Car Payments", amount: 500.00 },
-        { name: "Car Warranty", amount: 25.00 },
-        { name: "Gas", amount: 0 },
-        { name: "Parking Fees", amount: 0 },
-        { name: "Maintenance", amount: 0 }
-    ],
-    Food: [
-        { name: "Groceries", amount: 100 },
-        { name: "Restaurants", amount: 0 },
-        { name: "Pet Food", amount: 0 }
-    ],
-    Utilities: [
-        { name: "Electricity", amount: 0 },
-        { name: "Water", amount: 0 },
-        { name: "Internet", amount: 0 },
-        { name: "Phones", amount: 0 },
-        { name: "Garbage", amount: 0 }
-    ],
-    Entertainment: [
-        { name: "Subscriptions", amount: 0 },
-        { name: "Concerts", amount: 0 },
-        { name: "Movies", amount: 0 },
-        { name: "Vacation", amount: 0 }
-    ],
-    Others: []
+import { doc, setDoc, getDoc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
+
+// Add a new category with empty items
+export const addCategory = async (pondId, categoryName) => {
+    const categoryRef = doc(db, "ponds", pondId, "budgets", categoryName);
+    await setDoc(categoryRef, { items: [] });
 };
 
-// Add a new category to the budgetCategories object
-export const addCategory = (categoryName) => {
-    if (!budgetCategories[categoryName]) {
-        budgetCategories[categoryName] = [];
-    }
-}
-// Add a new subcategory to the budgetCategories object
-export const addSubCategory = (categoryName, subCategoryName, Amount) => {
-    if (budgetCategories[categoryName]) {
-        budgetCategories[categoryName].push({name: subCategoryName, amount: Amount});
-    } else {
-        budgetCategories[categoryName] = [{name: subCategoryName, amount: 0}];
-    }
-}
-// Update the amount of a subcategory
-export const updateSubCategoryAmount = (categoryName, subCategoryName, amount) => {
-    if (budgetCategories[categoryName]) {
-        const subCategory = budgetCategories[categoryName].find(sub => sub.name === subCategoryName);
-        if (subCategory) {
-            subCategory.amount = amount;
-        }
-    }
-}
-export const deleteCategory = (categoryName) => {
-    delete budgetCategories[categoryName];
-}
+// Add a new subcategory (or create category if it doesn't exist)
+export const addSubCategory = async (pondId, categoryName, subCategoryName, amount) => {
+    const categoryRef = doc(db, "ponds", pondId, "budgets", categoryName);
+    const categorySnap = await getDoc(categoryRef);
 
-export const deleteSubCategory = (categoryName, subCategoryName) => {
-    if (budgetCategories[categoryName]) {
-        budgetCategories[categoryName] = budgetCategories[categoryName].filter(sub => sub.name !== subCategoryName);
-    }
-}
+    let updatedItems = [];
 
-export default budgetCategories;
+    if (categorySnap.exists()) {
+        updatedItems = categorySnap.data().items;
+    }
+
+    updatedItems.push({ name: subCategoryName, amount });
+
+    await setDoc(categoryRef, { items: updatedItems });
+};
+
+// Update amount of a specific subcategory
+export const updateSubCategoryAmount = async (pondId, categoryName, subCategoryName, newAmount) => {
+    const categoryRef = doc(db, "ponds", pondId, "budgets", categoryName);
+    const categorySnap = await getDoc(categoryRef);
+
+    if (!categorySnap.exists()) return;
+
+    const updatedItems = categorySnap.data().items.map(sub =>
+        sub.name === subCategoryName ? { ...sub, amount: newAmount } : sub
+    );
+
+    await updateDoc(categoryRef, { items: updatedItems });
+};
+
+// Delete a category
+export const deleteCategory = async (pondId, categoryName) => {
+    const categoryRef = doc(db, "ponds", pondId, "budgets", categoryName);
+    await deleteDoc(categoryRef);
+};
+
+// Delete a subcategory
+export const deleteSubCategory = async (pondId, categoryName, subCategoryName) => {
+    const categoryRef = doc(db, "ponds", pondId, "budgets", categoryName);
+    const categorySnap = await getDoc(categoryRef);
+
+    if (!categorySnap.exists()) return;
+
+    const filteredItems = categorySnap.data().items.filter(sub => sub.name !== subCategoryName);
+    await updateDoc(categoryRef, { items: filteredItems });
+};

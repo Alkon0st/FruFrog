@@ -1,7 +1,7 @@
 import {Modal, Text, View, TouchableOpacity, ScrollView, Image} from 'react-native';
 import { useState } from 'react';
-
 import styles from './SettingsPage.style';
+// import { usePlaidLink } from 'react-native-plaid-link-sdk';
 
 import PondThumbnail from '../pondFunctions/img/pondThumbnail';
 import EditPond from '../pondFunctions/editPond';
@@ -28,6 +28,44 @@ const SettingsPage = ({
     const [isBankVisible, setIsBankVisible] = useState(false);
     const [isDisconnectVisible, setIsDisconnectVisible] = useState(false);
     const [isFaqVisible, setIsFaqVisible] = useState(false);
+
+    // const { open, ready } = usePlaidLink({
+    //     tokenConfig: async () => {
+    //         const response = await fetch('http://localhost:3000/create_link_token', {
+    //             method: 'POST',
+    //         });
+    //         const { link_token } = await response.json();
+    //         return link_token;
+    //     },
+    //     onSuccess: (publicToken, metadata) => {
+    //         fetch('http://localhost:3000/exchange_public_token', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({ public_token: publicToken }),
+    //         })
+    //             .then((response) => response.json())
+    //             .then((data) => {
+    //                 Alert.alert('Success', 'Bank account connected successfully!');
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error exchanging public token:', error);
+    //                 Alert.alert('Error', 'Failed to connect bank account.');
+    //             });
+    //     },
+    //     onExit: (error, metadata) => {
+    //         if (error) {
+    //             console.error('Error during Plaid Link:', error);
+    //             Alert.alert('Error', 'Failed to connect bank account.');
+    //         }
+    //     },
+    // });
+
+    // useEffect(() => {
+    //     let isMounted = true;
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, []);
 
 
     const renderChevron = (isVisible) => (
