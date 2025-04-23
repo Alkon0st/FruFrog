@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'top',
     alignItems: 'center',
-    backgroundColor: 'rgba(179, 228, 183, 0.5)'
   },
   modalView: {
     paddingVertical: 40,
