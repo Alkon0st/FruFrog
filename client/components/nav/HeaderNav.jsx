@@ -9,7 +9,7 @@ import PondDisplay from '../pondFunctions/pondDisplay';
 
 import styles from './Nav.style';
 
-import { Pressable, View, Text, TouchableOpacity, Modal, Image, TextInput, Button } from 'react-native';
+import { TouchableOpacity, View, Text, Modal, Image} from 'react-native';
 import { useState } from 'react';
 import ProfilePicture from '../profile/img/profilePicture';
 function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
@@ -30,12 +30,18 @@ function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
             <View style={styles.modalBackground}>
                 <View style={[styles.modalView, {paddingTop: 50}]}>
                 <View style={styles.buttonRow}>
-                    <Pressable
+                    {/* For balance */}
+                    <View style={{width:44}} />
+                    {/* CLOSE BUTTON */}
+                    <TouchableOpacity
                         style={styles.currentPondButton}
                         onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={styles.currentPondText}>{pondName} ▲</Text>
-                    </Pressable>
-                    <AddUser />
+                    </TouchableOpacity>
+                    {/* ADD USER FUNCTION */}
+                    <AddUser 
+                        pondName={pondName} 
+                    />
                 </View>
                 <PondDisplay currentPond={pondName}/>
                 <View style={styles.buttonRow}>
@@ -47,11 +53,11 @@ function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
             </Modal>
             <View>
                 {/*The button to summon popup*/}
-                <Pressable
+                <TouchableOpacity
                     style={[styles.currentPondButton]}
                     onPress={() => setModalVisible(true)}>
                     <Text style={styles.currentPondText}>{pondName} ▼</Text>
-                </Pressable>
+                </TouchableOpacity>
             </View>
         </View>
     );

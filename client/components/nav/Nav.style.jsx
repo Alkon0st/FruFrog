@@ -36,10 +36,8 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
       flexDirection: 'row',
-      alignSelf: 'center',
       alignItems: 'center',
-      paddingRight: '20px',
-      paddingLeft: '20px',
+      paddingHorizontal: '20px',
       paddingTop: '10px',
   },
   modalBackground: {
