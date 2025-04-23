@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
     alignSelf: 'center',
@@ -42,12 +42,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   itemContainer: {
+    backgroundColor: '#85BB65',
     marginBottom: 20,
   },
   dateText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#B2E196',
+    color: '#000',
     marginBottom: 5,
   },
   expenseRow: {
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
 },
 filterContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     flexWrap: 'wrap',
     marginLeft: 10,
 },
@@ -103,7 +104,7 @@ filterButton: {
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 15,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#85BB65',
     marginRight: 5,
     marginBottom: 5,
 },
@@ -119,9 +120,9 @@ filterTextActive: {
 },
 addButton: {
     position: 'absolute',
-    top: 80,
+    top: 120,
     left: 20,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#89d149',
     borderRadius: 30,
     width: 60,
     height: 60,
