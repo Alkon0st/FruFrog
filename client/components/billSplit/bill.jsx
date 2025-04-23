@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "./billSplitPage.style";
+import styles from "./bill.style";
 import { View, Text } from 'react-native';
 
 // Bill Component
@@ -12,13 +12,14 @@ const Bill = ({ title, date, paid, total }) => {
       </View>
 
       <View style={styles.billPaidSection}>
-        <Text style={styles.billPaid}>Paid: ${paid}</Text>
+        <Text style={styles.billPaid}>${paid}</Text>
         <Text style={styles.billPercent}>{paid/total*100}% Paid</Text>
       </View>
 
       <View style={{
         borderBottomWidth: 1,
         width: '100%',
+        borderColor: '#9e9e9e',
       }} />
 
       <View style={styles.billMembersSection}>
