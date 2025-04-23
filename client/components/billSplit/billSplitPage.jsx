@@ -2,26 +2,30 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./billSplitPage.style";
 import Bill from './bill';
 import AddBillModal from './addBillModal';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import HeaderNav from '../nav/HeaderNav';
 
 // Main Bill Split Page
 const BillSplitPage = () => {
-    // Functions
-    // Add Bill Button Modal
+    const [bills, setBills] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    //  Default Bills List
-    const [bills, setBills] = useState([
-        { title: "Foo Rent", date: 'March 01, 2025', paid: 0, total: 56.67 },
-      ]);
+  
+    useEffect(() => {
+      fetch('http://localhost:5000/api/bills')
+        .then(res => res.json())
+        .then(data => setBills(data.reverse()))
+        .catch(err => console.error('Failed to fetch bills:', err));
+    }, []);
+  
+    const addBill = () => {
+      fetch('http://localhost:5000/api/bills')
+        .then(res => res.json())
+        .then(data => setBills(data.reverse()));
+      setModalVisible(false);
+    };
 
-    // Variables
-    const addBill = (newBill) => {
-        setBills([newBill, ...bills]);
-        setModalVisible(false);
-      };
-
+    console.log(bills)
     return (
         // Page Container
         <LinearGradient colors={['#FFFFFF', '#d6faf9']}>
@@ -47,10 +51,11 @@ const BillSplitPage = () => {
 
         {/* Bill Listing */}
         <View style={styles.billList}>
-        {bills.map((bill, index) => (
+            {bills.map((bill, index) => (
             <Bill key={index} {...bill} />
             ))}
         </View>
+        
         </View>
         </View>
         </LinearGradient>

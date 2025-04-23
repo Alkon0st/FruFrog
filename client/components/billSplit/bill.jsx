@@ -7,7 +7,7 @@ const Bill = ({ title, date, paid, total }) => {
   return (
     <View style={styles.billContainer}>
       <View style={styles.billTitleSection}>
-        <text style={styles.billTitle}>{title}</text>
+        <Text style={styles.billTitle}>{title}</Text>
         <Text style={styles.billDate}>{date}</Text>
       </View>
 

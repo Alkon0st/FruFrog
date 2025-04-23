@@ -21,7 +21,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
   const [category, setCategory] = useState('Rent');
   const [billTitle, setBillTitle] = React.useState('');
   const [billAmount, setBillAmount] = React.useState('');
-  const [billTax, setBillTax] = useState('0');
+  const [billTax, setBillTax] = useState('');
 
   // Tax split switch
   const [isEnabled, setIsEnabled] = useState(false);
@@ -31,13 +31,13 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
   const resetFields = () => {
     setBillTitle('');
     setBillAmount('');
-    setBillTax('0');
+    setBillTax('');
     setCategory('Rent');
     setIsEnabled(false);
   };
 
   // Even split and create bill
-  const handleEvenSplit = () => {
+  const handleEvenSplit = async () => {
     const amount = parseFloat(billAmount) || 0;
     const tax = parseFloat(billTax) || 0;
     const members = 2;
@@ -58,11 +58,26 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
       percentPaid: percentPaid.toFixed(2),
       total: total.toFixed(2),
     };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/bills', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bill),
+      });
   
-    console.log('Prepared bill:', bill);
-    onSubmit && onSubmit(bill);
-    resetFields();
-    onClose();
+      const data = await response.json();
+  
+      if (response.ok) {
+        onSubmit && onSubmit(data.bill);
+        resetFields();
+        onClose();
+      } else {
+        console.error(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -76,6 +91,10 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
       <View style={styles.modalContent}>
         {/* Main Section */}
         <View style={styles.inputContainer}>
+          {/* Date */}
+          <View style={styles.dateSection}>
+          <Text style={styles.date}>{billDate}</Text>
+          </View>
           {/* TODO: Stylize category dropdown /*}
           {/* Category */}
           <View style={styles.categorySection}>
@@ -94,10 +113,6 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
             value={billTitle}
             onChangeText={setBillTitle}
           />
-          {/* Date */}
-          <View style={styles.dateSection}>
-          <Text style={styles.date}>{billDate}</Text>
-          </View>
           {/* TODO: Implement members /*}
           {/* Members */}
           <View style={styles.membersSection}>
@@ -171,22 +186,23 @@ const styles = StyleSheet.create({
   },
   categorySection: {
     alignItems: 'left',
-    padding: 10,
+    marginBottom: 10,
   },
   dateSection: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   date: {
     color: '#989898',
   },
   titleInput: {
-    marginBottom: 10,
+    marginBottom: 5,
     placeholderTextColor: 'cecece',
     backgroundColor: '#f4f4f4',
     fontSize: 13,
-    marginBottom: 20,
+    borderRadius: 5,
+    padding: 5,
+    width: '75%',
   },
   totalInput: {
     borderBottomWidth: 1,
@@ -206,6 +222,7 @@ const styles = StyleSheet.create({
   membersSection: {
     backgroundColor: '#b2e196',
     marginBottom: 10,
+    height: 25,
   },
   buttonRow: {
     flexDirection: 'row',
