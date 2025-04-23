@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     marginTop: 30,
+    alignItems: 'center',
   },
   buttonOpen: {
       backgroundColor: '#85BB65',
