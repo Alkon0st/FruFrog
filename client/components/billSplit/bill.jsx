@@ -13,13 +13,14 @@ const Bill = ({ title, date, paid, total }) => {
 
       <View style={styles.billPaidSection}>
         <Text style={styles.billPaid}>${paid}</Text>
-        <Text style={styles.billPercent}>{paid/total*100}% Paid</Text>
+        <Text style={styles.billPercent}>{Math.round((parseFloat(paid) / parseFloat(total)) * 100)}% Paid</Text>
       </View>
 
       <View style={{
         borderBottomWidth: 1,
         width: '100%',
         borderColor: '#9e9e9e',
+        marginBottom: 10,
       }} />
 
       <View style={styles.billMembersSection}>

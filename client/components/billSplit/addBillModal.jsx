@@ -159,6 +159,10 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
             onValueChange={toggleSwitch}
           />
         </View>
+        {/* Close Button */}
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={{color: 'white'}}>✖</Text>
+        </TouchableOpacity>
       </View>
     </View>
 
@@ -248,6 +252,12 @@ const styles = StyleSheet.create({
   taxText: {
     color: 'white',
   },
+  closeButton: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    padding: 5,
+  }
 });
 
 export default AddBillModal;

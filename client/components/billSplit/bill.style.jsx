@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 // Bill Styles
 const styles = StyleSheet.create({
     billContainer: {
-        width: "35%",
+        width: "45%",
         backgroundColor: "white",
         padding: 10,
         marginTop: 15,
@@ -19,8 +19,7 @@ const styles = StyleSheet.create({
     },
     billPaidSection: {
         width: '48%',
-        justifyContent: 'right',
-        alignItems: 'right',
+        alignItems: 'center',
    },
     billMembersSection: {
         width: '48%',
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
     billTotalSection: {
         width: '48%',
         justifyContent: 'center',
-        alignItems: 'right',
+        alignItems: 'center',
    },
     billTitle: {
         fontSize: 20,
