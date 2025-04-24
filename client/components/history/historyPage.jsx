@@ -8,15 +8,16 @@ import { ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const expenseData = [
-    { id: '1', date: '01 - Wednesday', category: 'Food', icon: 'fastfood', name: "Domino's", amount: '$12.89' },
-    { id: '2', date: '02 - Thursday', category: 'Bill', icon: 'receipt', name: 'Escape Room', amount: '$60 (Owe: $15)' },
-    { id: '3', date: '02 - Thursday', category: 'Food', icon: 'fastfood', name: "Dave's Hot Chicken", amount: '$11.56' },
-    { id: '4', date: '05 - Sunday', category: 'Grocery', icon: 'shopping-cart', name: "Trader Joe's", amount: '$39.77' },
-    { id: '5', date: '05 - Sunday', category: 'Gas', icon: 'local-gas-station', name: 'Chevron', amount: '$48.60' },
-    { id: '6', date: '05 - Sunday', category: 'Grocery', icon: 'shopping-cart', name: 'Walmart', amount: '$10.51' },
-    { id: '7', date: '17 - Friday', category: 'Maintenance', icon: 'build', name: 'Oil Change', amount: '$50.67' },
-    { id: '8', date: '17 - Friday', category: 'Grocery', icon: 'shopping-cart', name: "Farmer's Market", amount: '$33.72' },
-    { id: '9', date: '17 - Friday', category: 'Grocery', icon: 'shopping-cart', name: 'Target', amount: '$3.15' },
+    { date: '01 - Wednesday', category: 'Food', icon: 'fastfood', name: "Domino's", amount: '$12.89' },
+    { date: '02 - Thursday', category: 'Entertainment', icon: 'receipt', name: 'Escape Room', amount: '$60 (Owe: $15)' },
+    { date: '02 - Thursday', category: 'Food', icon: 'fastfood', name: "Dave's Hot Chicken", amount: '$11.56' },
+    { date: '05 - Sunday', category: 'Food', icon: 'shopping-cart', name: "Trader Joe's", amount: '$39.77' },
+    { date: '05 - Sunday', category: 'Others', icon: 'local-gas-station', name: 'Chevron', amount: '$48.60' },
+    { date: '05 - Sunday', category: 'Others', icon: 'shopping-cart', name: 'Walmart', amount: '$10.51' },
+    { date: '15 - Wednesday', category: 'Rent', icon: 'your-mom-house', name: "my place", amount: '$1,599' },
+    { date: '17 - Friday', category: 'Utilities', icon: 'build', name: 'Oil Change', amount: '$50.67' },
+    { date: '17 - Friday', category: 'Food', icon: 'shopping-cart', name: "Farmer's Market", amount: '$33.72' },
+    { date: '17 - Friday', category: 'Food', icon: 'shopping-cart', name: 'Target', amount: '$3.15' },
 ];
 
 function HistoryPage() {
@@ -24,7 +25,7 @@ function HistoryPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
     
-    const categories = ['All', 'Food', 'Bill', 'Grocery', 'Gas', 'Maintenance'];
+    const categories = ['All', 'Food', 'Entertainment', 'Rent', 'Others', 'Utilities'];
 
     const filteredData = expenseData.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -37,10 +38,16 @@ function HistoryPage() {
         <View style={styles.itemContainer}>
             <Text style={styles.dateText}>{item.date}</Text>
             <View style={styles.expenseRow}>
-                <Icon name={item.icon} size={24} color="#008000" style={styles.icon} />
+                <Icon name={item.icon} size={20} color="#008000" style={styles.icon} />
                 <View style={styles.expenseDetails}>
                     <Text style={styles.categoryText}>{item.category}</Text>
                     <Text style={styles.nameText}>{item.name}</Text>
+                    <TouchableOpacity
+                        style={styles.buttonText}
+                        onPress={() => navigation.navigate('Bill Split')}
+                    >
+                        <Text style={styles.buttonTextStyle}>View Bill</Text>
+                    </TouchableOpacity>
                 </View>
                 <Text style={styles.amountText}>{item.amount}</Text>
             </View>
@@ -92,31 +99,10 @@ function HistoryPage() {
                 <FlatList
                     data={filteredData}
                     renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
                     style={styles.flatList}
                 />
-                <View style={styles.toggleContainer}>
-                    <TouchableOpacity style={styles.toggleButton}>
-                        <Icon name="calendar-day" size={24} color="#4CAF50" />
-                        <Text style={styles.toggleText}>Today</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.toggleButton}>
-                        <Icon name="calendar-week" size={24} color="#4CAF50" />
-                        <Text style={styles.toggleText}>Week</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.toggleButton}>
-                        <Icon name="calendar-month" size={24} color="#4CAF50" />
-                        <Text style={styles.toggleText}>Month</Text>
-                    </TouchableOpacity>
-                </View>
             </ScrollView>
-            <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => navigation.navigate('AddExpense')}
-            >
-                <Icon name="plus" size={30} color="#fff" />
-            </TouchableOpacity>
         </LinearGradient>
     );
 }

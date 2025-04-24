@@ -1,19 +1,21 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  textStyle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
   // could use select container for history page as resource
   LinearGradient: {
     flex: 1,
   },
   viewStyle: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginTop: 50,
     padding: 20,
+  },
+  textStyle: {
+    fontSize: 32,
+    color: '#000',
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginLeft: 75,
   },
   searchBar: {
     height: 40,
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
 filterContainer: {
     flexDirection: 'column',
     flexWrap: 'wrap',
-    marginLeft: 10,
+    marginLeft: 25,
 },
 filterButton: {
     paddingVertical: 5,
@@ -118,22 +120,14 @@ filterText: {
 filterTextActive: {
     color: '#fff',
 },
-addButton: {
-    position: 'absolute',
-    top: 120,
-    left: 20,
-    backgroundColor: '#89d149',
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    zIndex: 1000, 
+buttonText: {
+    position: 'center',
+},
+buttonTextStyle: {
+    color: '#808080',
+    fontSize: 10,
+    fontWeight: 'light',
+    textDecorationLine: 'underline',
 },
 });
 
