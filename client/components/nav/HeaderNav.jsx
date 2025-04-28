@@ -28,10 +28,10 @@ function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
             }}>
             {/* The popup itself */}
             <View style={styles.modalBackground}>
-                <View style={[styles.modalView, {paddingTop: 50}]}>
+                <View style={[styles.modalView, {paddingTop: 30}]}>
                 <View style={styles.buttonRow}>
                     {/* For balance */}
-                    <View style={{width:44}} />
+                    <View style={{width:50}} />
                     {/* CLOSE BUTTON */}
                     <TouchableOpacity
                         style={styles.currentPondButton}
