@@ -11,6 +11,7 @@ const ProfilePage = ({
     }) => {
 
     const [ newProfile, setNewProfile ] = useState(profile);
+    const [ selectedProfile, setSelectedProfile ] = useState(profile)
     let ProfileOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     
     return (
@@ -39,6 +40,15 @@ const ProfilePage = ({
 
             <View style={styles.container}>
                 {/* Main portion of profile */}
+
+                {/* Top Part that shows Selected Profile */}
+                <View style={styles.currentProfileContainer}> 
+                    <ProfilePicture 
+                        selection={selectedProfile} 
+                        optionalStyle={{width: 100, height: 100}}
+                        optionalOutlineStyle={{width: 101, height: 101}} 
+                    />
+                </View>
                 <View style={styles.contentContainer}>
                     {ProfileOptions.map((value) => {
                         const isSelected = newProfile === value;

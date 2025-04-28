@@ -22,7 +22,11 @@ const images = {
 
 
 //takes in a number and exports the <Image> based on selection input
-const ProfilePicture = ({selection, optionalStyle}) => {
+// params:
+//      selection - int that corresponds to an image id
+//      optionalStyle - optional styling done to the image ex. optionalStyle={width:100, height:100}
+//      optionalOutlineStyle - same with optionalStyle except with the outline
+const ProfilePicture = ({selection, optionalStyle, optionalOutlineStyle}) => {
 
     if (selection >=1 && selection <=16 ) {
         return <View>
@@ -30,7 +34,7 @@ const ProfilePicture = ({selection, optionalStyle}) => {
                 source={images[selection]}
                 resizeMode='contain'
                 style={[styles.img, optionalStyle]} />
-            <View style={styles.outline} />
+            <View style={[styles.outline, optionalOutlineStyle]} />
         </View>
     }
 
@@ -39,7 +43,7 @@ const ProfilePicture = ({selection, optionalStyle}) => {
             source={images[1]}
             resizeMode='contain'
             style={[styles.img, optionalStyle]} />
-        <View style={styles.outline} />
+        <View style={[styles.outline, optionalOutlineStyle]} />
     </View>
 }
 
@@ -53,7 +57,7 @@ const styles = StyleSheet.create({
     outline: {
         position: 'relative',
         borderWidth: 3, 
-        borderRadius: 30,
+        borderRadius: 60,
         borderColor: '#4F723A',
         width: 61,
         height: 61,

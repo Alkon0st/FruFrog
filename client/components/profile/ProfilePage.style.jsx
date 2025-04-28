@@ -53,6 +53,12 @@ const styles = StyleSheet.create({
         columnGap: 5,
     },
 
+    //Current Profile Display (at the top of ProfilePage)
+    currentProfileContainer: {
+        alignSelf: 'center',
+        marginTop: 20,
+    },
+
     // Profile Styling  
     selectionContainer: {
         position: 'relative',
