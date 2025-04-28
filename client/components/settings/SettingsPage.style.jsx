@@ -194,6 +194,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#D9D9D980',
     },
 
+    //Content for FAQ
+    listItem: {
+        margin: 3,
+    },
+    listItemText: {
+        fontSize: 15,
+    },
+
 });
 
 export default styles;

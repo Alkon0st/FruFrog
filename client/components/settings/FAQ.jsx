@@ -1,4 +1,4 @@
-import { View, Text, } from 'react-native';
+import { View, Text, FlatList, } from 'react-native';
 import styles from './SettingsPage.style';
 
 // change current pond name
@@ -9,23 +9,37 @@ export default function FAQ ({
 
     return (
         <View style={styles.dropDownContainer}>
-            <Text> TEMP PLACEHOLDER & TEXT </Text>
-            <Text> 
-                Most icons are provided by Flaticon:
-                Invite friends icons created by See Icons
-                Credit card icons created by Octopocto
-                Delete icons created by Ilham Fitrotul Hayat
-                Name icons created by Andrejs Kirma
-                Photo icons created by Pixel perfect
-                Danger icons created by Freepik
-                Employee icons created by Adrly
-                Tick icons created by Maxim Basinski Premium
-                Dollar icons created by dmitri13
-                Logout icons created by Afian Rochmah Afif
-                Question icons created by Freepik
-                Pencil icons created by Anggara
-                User icons created by Krome
-            </Text>
+            <Text style={styles.dropDownHeader}> TEMP PLACEHOLDER & TEXT </Text>
+            
+            <Text style={styles.dropDownHeader}> Credits:</Text>
+            <View style={[
+                styles.dropDownItem, 
+                {alignItems: 'flex-start', 
+                    padding: 10,
+                }
+            ]}>
+                <Text style={{fontWeight: 'bold'}}>Most Icons were Provided by Flaticon</Text>
+                <FlatList 
+                    data={[
+                        { key: 'Invite friends icons created by See Icons' },
+                        { key: 'Name icons created by Andrejs Kirma' },
+                        { key: 'Photo icons created by Pixel perfect' },
+                        { key: 'Employee icons created by Adrly' },
+                        { key: 'Tick icons created by Maxim Basinski Premium' },
+                        { key: 'Dollar icons created by dmitri13' },
+                        { key: 'Logout icons created by Afian Rochmah Afif' },
+                        { key: 'Question icons created by Freepik' },
+                        { key: 'Pencil icons created by Anggara' },
+                    ]}
+                    renderItem={({ item }) => {
+                        return(
+                            <View style={styles.listItem}>
+                                <Text style={styles.listItemText}>{`\u2022 ${item.key}`}</Text>
+                            </View>
+                        );
+                    }}
+                />
+            </View>
         </View>
     )
 };
