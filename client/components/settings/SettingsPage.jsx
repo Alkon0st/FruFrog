@@ -167,83 +167,25 @@ const SettingsPage = ({
                     <Text style={styles.settingHeaderText}>Universal Settings</Text>
                 </View>
                 <View style={styles.viewStyle}>
-                    
-                    {/* Account Setting */}
+
+                    {/* Set Income */}
                     <TouchableOpacity 
                     style={styles.menuButton}
-                    onPress={() => setIsAccountVisible(prev => !prev)}>
+                    onPress={() => setIsSetIncomeVisible(prev => !prev)}>
                         <View style={styles.menuItem}>
                             <Image  
-                                source={require('../img/user.png')}
+                                source={require('../img/dollar.png')}
                                 resizeMode='contain'
                                 style={styles.img}/>
-                            <Text style={styles.menuText}> Account </Text>
+                            <Text style={styles.menuText}> Set Income </Text>
                         </View>
-                        {renderChevron(isAccountVisible)}
-                    </TouchableOpacity>
-
-
-                    {isAccountVisible && (
-                    <View>
-                        {/* Set Income */}
-                        <TouchableOpacity 
-                        style={styles.subMenuContainer}
-                        onPress={() => setIsSetIncomeVisible(prev => !prev)}>
-                            <View style={styles.subMenuItem}>
-                                <Image  
-                                    source={require('../img/dollar.png')}
-                                    resizeMode='contain'
-                                    style={styles.img}/>
-                                <Text style={styles.subMenuHeader}> Set Income </Text>
-                            </View>
-                            <View style={{marginTop: 5}}>
-                                {renderChevron(isSetIncomeVisible)}
-                            </View>
+                        {renderChevron(isSetIncomeVisible)}
+                            
                         </TouchableOpacity>
                         <IncomeForm 
                             visible={isSetIncomeVisible}
                             onClose={() => setIsSetIncomeVisible(false)} 
                             /> 
-                            
-                        {/* Connect to Bank */}
-                        <TouchableOpacity 
-                        style={styles.subMenuContainer}
-                        onPress={() => setIsBankVisible(prev => !prev)}>
-                            <View style={styles.subMenuItem}>
-                                <Image  
-                                    source={require('../img/card.png')}
-                                    resizeMode='contain'
-                                    style={styles.img}/>
-                                <Text style={styles.subMenuHeader}> Connect to Bank </Text>
-                            </View>
-                            <View style={{marginTop: 5}}>
-                                {renderChevron(isBankVisible)}
-                            </View>
-                        </TouchableOpacity>
-                        {/* 
-                            Space for da function
-                        
-                        */}
-                    </View>
-                    )}
-
-                    {/* Disconnect Bank */}
-                    <TouchableOpacity 
-                        style={styles.menuButton}
-                        onPress={() => setIsDisconnectVisible(prev => !prev)}>
-                            <View style={styles.menuItem}>
-                                <Image  
-                                    source={require('../img/caution.png')}
-                                    resizeMode='contain'
-                                    style={[styles.img, {tintColor: '#590000'}]}/>
-                                <Text style={[styles.menuText, {color: '#590000'}]}> Disconnect Bank Account </Text>
-                            </View>
-                    </TouchableOpacity>
-                    {/* 
-                    
-                    space for disconnect bank acc
-
-                    */}
 
                     {/* FAQ */}
                     <TouchableOpacity 
