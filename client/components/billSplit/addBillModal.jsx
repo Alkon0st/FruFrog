@@ -60,7 +60,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/bills', {
+      const response = await fetch('http://localhost:5001/frufrog-c042c/us-central1/api/bills', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bill),
