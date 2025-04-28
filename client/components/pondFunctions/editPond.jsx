@@ -39,7 +39,13 @@ export default function EditPond ({
     return (
         <View style={styles.dropDownContainer}>
             {/* Change Thumbnail */}
-            <Text style={styles.dropDownHeader}>Pond Thumbnail</Text>
+            <View style={styles.menuItem}>
+                <Image  
+                    source={require('../img/image.png')}
+                    resizeMode='contain'
+                    style={styles.imgSmall}/>
+                <Text style={styles.dropDownHeader}>Pond Thumbnail</Text>
+            </View>
             <View style={styles.dropDownItem}>
                 <ScrollView 
                     horizontal 
@@ -67,7 +73,13 @@ export default function EditPond ({
             </View>
 
             {/* Change Pond Name */}
-            <Text style={styles.dropDownHeader}>Pond Name</Text>
+            <View style={styles.menuItem}>
+                <Image  
+                    source={require('../img/signature.png')}
+                    resizeMode='contain'
+                    style={styles.imgSmall}/>
+                <Text style={styles.dropDownHeader}>Pond Name</Text>
+            </View>
             <View style={styles.dropDownItem}>
                 <TextInput
                     value={newPondName}

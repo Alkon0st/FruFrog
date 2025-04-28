@@ -6,6 +6,13 @@ const styles = StyleSheet.create({
         width: 40,
         tintColor: '#22470C',
     },
+    // For sub icons/img like Pond Thumbnail
+    imgSmall: {
+        height: 30,
+        width: 30,
+        tintColor: '#22470C',
+        marginRight: 10,
+    },
     settingHeader: {
         backgroundColor: '#F6F6F6',
         padding: 5,
