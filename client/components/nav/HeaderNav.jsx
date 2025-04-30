@@ -1,4 +1,10 @@
 import * as React from 'react';
+import { TouchableOpacity, View, Text, Modal, Image} from 'react-native';
+import { useState, useEffect } from 'react';
+import { getAuth } from 'firebase/auth';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
+
 
 // all the pages 
 import ProfilePage from '../profile/ProfilePage'
@@ -8,10 +14,8 @@ import CreatePage from '../pondFunctions/CreatePondFolder/CreatePage';
 import PondDisplay from '../pondFunctions/pondDisplay';
 
 import styles from './Nav.style';
-
-import { TouchableOpacity, View, Text, Modal, Image} from 'react-native';
-import { useState } from 'react';
 import ProfilePicture from '../profile/img/profilePicture';
+
 function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPondName}) {
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -68,6 +72,31 @@ export default function HeaderNav() {
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
     const [pondName, setPondName] = useState("Current Pond");
     const [thumbnail, setThumbnail] = useState(1);
+    const [profileId, setProfileId] = useState(1); //default 1 if no set
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            if(!user) return;
+
+            try {
+                const q = query(
+                    collection(db, "profiles"),
+                    where("members", "array-contains", user.uid)
+                );
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const profileData = querySnapshot.docs[0].data();
+                    setProfileId(profileData.profile_id || 1);
+                }
+            } catch (error) {
+                console.error('Failed to fetch profile id:', error);
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
 
     // UNIMPLEMENTED
     const admin = true;
@@ -106,7 +135,7 @@ export default function HeaderNav() {
                     style={{
                         marginLeft: '10px',
                         marginRight: '10px',}}>
-                    <ProfilePicture selection={1}/>
+                    <ProfilePicture selection={profileId}/>
                 </TouchableOpacity>
 
             </View>
