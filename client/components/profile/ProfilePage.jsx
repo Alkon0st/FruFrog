@@ -12,6 +12,7 @@ import { db } from '../../firebase/firebase'
 
 const ProfilePage = ({
     profile,
+    setProfile,
     visible,
     onClose,
     }) => {
@@ -136,6 +137,7 @@ const ProfilePage = ({
                                 });
 
                                 setSelectedProfile(newProfile); //just to update what is current selected
+                                setProfile(newProfile); //updates pfp in HeaderNav
                                 onClose(); //closes modal after updating profile
                             } catch (error) {
                                 console.error('Error updating profile picture:', error)

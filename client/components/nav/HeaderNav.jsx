@@ -143,9 +143,12 @@ export default function HeaderNav() {
             {/* Hidden Modals until called for profile and settings
                 */}
             <ProfilePage
+            profile={profileId}
+            setProfile={setProfileId}
             visible={isProfileModalVisible}
             onClose={() => setIsProfileModalVisible(false)} 
             />
+
             <SettingsPage
             visible={isSettingsModalVisible}
             onClose={() => setIsSettingsModalVisible(false)} 
