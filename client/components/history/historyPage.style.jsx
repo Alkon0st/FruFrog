@@ -10,6 +10,12 @@ const styles = StyleSheet.create({
     marginTop: 50,
     padding: 20,
   },
+  buttonTextStyle: {
+    color: '#808080',
+    fontSize: 10,
+    fontWeight: 'light',
+    textDecorationLine: 'underline',
+  },
   textStyle: {
     fontSize: 32,
     color: '#000',
@@ -17,7 +23,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 75,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
   searchBar: {
+    flex: 1,
     height: 40,
     borderColor: '#D9D9D9',
     borderWidth: 1,
@@ -32,6 +45,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginBottom: 10,
+    alighSelf: 'center',
   },
   title: {
     fontSize: 20,
@@ -80,55 +94,33 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  toggleContainer: {
+
+  filterContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 15,
-    borderTopWidth: 1,
-    borderTopColor: '#D9D9D9',
-    backgroundColor: '#F5F5F5',
-  },
-  toggleButton: {
-    padding: 10,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    marginBottom: 10,
-},
-filterContainer: {
-    flexDirection: 'column',
     flexWrap: 'wrap',
     marginLeft: 25,
-},
-filterButton: {
+  },
+  filterButton: {
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 15,
     backgroundColor: '#85BB65',
     marginRight: 5,
     marginBottom: 5,
-},
-filterButtonActive: {
+  },
+  filterButtonActive: {
     backgroundColor: '#4CAF50',
-},
-filterText: {
+  },
+  filterText: {
     color: '#333',
     fontSize: 12,
-},
-filterTextActive: {
+  },
+  filterTextActive: {
     color: '#fff',
-},
-buttonText: {
+  },
+  buttonText: {
     position: 'center',
-},
-buttonTextStyle: {
-    color: '#808080',
-    fontSize: 10,
-    fontWeight: 'light',
-    textDecorationLine: 'underline',
-},
+  },
 });
 
 export default styles;

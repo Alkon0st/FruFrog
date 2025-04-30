@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { set } from 'react-hook-form';
+
 
 const AddEventModal = ({ visible, onSubmit, onClose }) => {
     useEffect (() => {
@@ -42,7 +42,7 @@ const AddEventModal = ({ visible, onSubmit, onClose }) => {
         };
         
         try {
-            const response = await fetch('http://localhost:5000/api/events', {
+            const response = await fetch('http://localhost:5000/api/bills', {
                 method: 'POST',
                 headers: 
                 { 'Content-Type': 'application/json'  },
