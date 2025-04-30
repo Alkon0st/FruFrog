@@ -2,37 +2,109 @@ import { View, Text, TextInput, TouchableOpacity, FlatList } from "react-native"
 import styles from "./historyPage.style";
 import HeaderNav from '../nav/HeaderNav';
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import { getAuth } from "firebase/auth";
 
-const expenseData = [
-    { date: '01 - Wednesday', category: 'Food', icon: 'fastfood', name: "Domino's", amount: '$12.89' },
-    { date: '02 - Thursday', category: 'Entertainment', icon: 'receipt', name: 'Escape Room', amount: '$60 (Owe: $15)' },
-    { date: '02 - Thursday', category: 'Food', icon: 'fastfood', name: "Dave's Hot Chicken", amount: '$11.56' },
-    { date: '05 - Sunday', category: 'Food', icon: 'shopping-cart', name: "Trader Joe's", amount: '$39.77' },
-    { date: '05 - Sunday', category: 'Others', icon: 'local-gas-station', name: 'Chevron', amount: '$48.60' },
-    { date: '05 - Sunday', category: 'Others', icon: 'shopping-cart', name: 'Walmart', amount: '$10.51' },
-    { date: '15 - Wednesday', category: 'Rent', icon: 'your-mom-house', name: "my place", amount: '$1,599' },
-    { date: '17 - Friday', category: 'Utilities', icon: 'build', name: 'Oil Change', amount: '$50.67' },
-    { date: '17 - Friday', category: 'Food', icon: 'shopping-cart', name: "Farmer's Market", amount: '$33.72' },
-    { date: '17 - Friday', category: 'Food', icon: 'shopping-cart', name: 'Target', amount: '$3.15' },
-];
-
-function HistoryPage() {
+const HistoryData = () => {
+    const [expenseData, setExpenseData] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [editingId, setEditingId] = useState(null);
+    const [editAmount, setEditAmount] = useState("");
     const navigation = useNavigation();
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('All');
-    
-    const categories = ['All', 'Food', 'Entertainment', 'Rent', 'Others', 'Utilities'];
+
+    useEffect(() => {
+        const fetchExpenseData = async () => {
+            try {
+                const auth = getAuth();
+                const user = auth.currentUser;
+
+                // Firestore: Budgets
+                const q = query(collection(db, "budgets"), where("members", "array-contains", user.uid));
+                const response = await getDocs(q);
+                const firestoreData = response.docs.map(doc => ({
+                    id: doc.id,
+                    name: doc.data().name,
+                    category: doc.data().category,
+                    date: doc.data().date,
+                    amount: doc.data().amount,
+                    icon: doc.data().icon || "cash",
+                    source: "firestore",
+                }));
+
+                // API: Bills
+                const apiResponse = await fetch("http://localhost:5000/api/bills");
+                const apiDataRaw = await apiResponse.json();
+                const apiData = apiDataRaw.map(bill => ({
+                    id: bill.id || bill._id || Math.random().toString(),
+                    name: bill.title,
+                    category: bill.category,
+                    date: bill.date,
+                    amount: bill.total,
+                    icon: "file-document-outline",
+                    fullBill: bill,
+                    source: "api",
+                }));
+
+                const merged = [...firestoreData, ...apiData];
+                const allCategories = ["All", ...new Set(merged.map(item => item.category))];
+
+                setExpenseData(merged);
+                setCategories(allCategories);
+            } catch (error) {
+                console.error("Error fetching merged data:", error);
+            }
+        };
+
+        fetchExpenseData();
+    }, []);
+
+
 
     const filteredData = expenseData.filter(item => {
-        const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            item.category.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = 
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.category.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
         return matchesSearch && matchesCategory;
     });
+
+    const handleEdit = async (item) => {
+        try {
+            const updated = parseFloat(editAmount);
+            if (isNaN(updated)) return;
+
+            if (item.source === "api") {
+                await fetch(`http://localhost:5000/api/bills/${item.fullBill._id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(
+                        { ...item.fullBill, 
+                            total: updated }),
+                });
+            }
+
+            const newData = expenseData.map(expense => {
+                if (expense.id === item.id) {
+                    return { ...expense, amount: updated };
+                }
+                return expense;
+            });
+            setExpenseData(newData);
+            setEditingId(null);
+            setEditAmount("");
+        } catch (error) {
+            console.error("Error updating expense:", error);
+        }
+    };
+        
+
 
     const renderItem = ({ item }) => (
         <View style={styles.itemContainer}>
@@ -42,14 +114,31 @@ function HistoryPage() {
                 <View style={styles.expenseDetails}>
                     <Text style={styles.categoryText}>{item.category}</Text>
                     <Text style={styles.nameText}>{item.name}</Text>
+                    
                     <TouchableOpacity
                         style={styles.buttonText}
-                        onPress={() => navigation.navigate('Bill Split')}
+                        onPress={() => navigation.navigate('BillSplit', { bill: item.fullBill})}
                     >
                         <Text style={styles.buttonTextStyle}>View Bill</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.amountText}>{item.amount}</Text>
+                
+                {editingId === item.id ? (
+                    <TextInput
+                        style={{ width: 60, backgroundColor: 'white', borderColor: 'gray', borderWidth: 1, padding: 5 }}
+                        keyboardType="numeric"
+                        value={editAmount}
+                        onChangeText={setEditAmount}
+                        onBlur={() => handleEdit(item)}
+                    />
+                ) : (
+                    <TouchableOpacity onLongPress={() => {
+                        setEditingId(item.id);
+                        setEditAmount(item.amount.toString());
+                    }}>
+                        <Text style={styles.amountText}>${item.amount}</Text>
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     );
@@ -64,34 +153,39 @@ function HistoryPage() {
             <View style={styles.viewStyle}>
                 <Text style={styles.textStyle}>Expense Records</Text>
             </View>
+
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchBar}
                     placeholder="Search Keywords Here..."
-                    placeholderTextColor={"#A9A9A9"}
+                    placeholderTextColor="#A9A9A9"
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
-                <View style={styles.filterContainer}>
-                    {categories.map(category => (
-                        <TouchableOpacity
-                            key={category}
-                            style={[
-                                styles.filterButton,
-                                selectedCategory === category && styles.filterButtonActive
-                            ]}
-                            onPress={() => setSelectedCategory(category)}
-                        >
-                            <Text style={[
-                                styles.filterText,
-                                selectedCategory === category && styles.filterTextActive
-                            ]}>
-                                {category}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
             </View>
+
+            {/* Filter Buttons */}
+            <View style={styles.filterContainer}>
+                {categories.map(category => (
+                    <TouchableOpacity
+                        key={category}
+                        style={[
+                            styles.filterButton,
+                            selectedCategory === category && styles.filterButtonActive
+                        ]}
+                        onPress={() => setSelectedCategory(category)}
+                    >
+                        <Text style={[
+                            styles.filterText,
+                            selectedCategory === category && styles.filterTextActive
+                        ]}>
+                            {category}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+
+            {/* History List */}
             <ScrollView style={styles.scrollView}>
                 <View style={styles.formContainer}>
                     <Text style={styles.title}>January 2025</Text>
@@ -99,11 +193,12 @@ function HistoryPage() {
                 <FlatList
                     data={filteredData}
                     renderItem={renderItem}
+                    keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}
                     style={styles.flatList}
                 />
             </ScrollView>
         </LinearGradient>
     );
-}
-export default HistoryPage;
+};
+export default HistoryData;
