@@ -30,33 +30,9 @@ const HistoryData = () => {
                 const response = await getDocs(q);
                 const firestoreData = response.docs.map(doc => ({
                     id: doc.id,
-                    name: doc.data().name,
-                    category: doc.data().category,
-                    date: doc.data().date,
-                    amount: doc.data().amount,
-                    icon: doc.data().icon || "cash",
-                    source: "firestore",
+                    ...doc.data()
                 }));
-
-                // API: Bills
-                const apiResponse = await fetch("http://localhost:5000/api/bills");
-                const apiDataRaw = await apiResponse.json();
-                const apiData = apiDataRaw.map(bill => ({
-                    id: bill.id || bill._id || Math.random().toString(),
-                    name: bill.title,
-                    category: bill.category,
-                    date: bill.date,
-                    amount: bill.total,
-                    icon: "file-document-outline",
-                    fullBill: bill,
-                    source: "api",
-                }));
-
-                const merged = [...firestoreData, ...apiData];
-                const allCategories = ["All", ...new Set(merged.map(item => item.category))];
-
-                setExpenseData(merged);
-                setCategories(allCategories);
+                setExpenseData(firestoreData);
             } catch (error) {
                 console.error("Error fetching merged data:", error);
             }
