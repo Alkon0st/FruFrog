@@ -64,7 +64,10 @@ const ProfilePage = ({
                             <TouchableOpacity
                             key={value}
                             style={styles.editProfileButton}
-                            onPress={() => setNewProfile(value)}
+                            onPress={() => {
+                                setNewProfile(value) //stores value for submit button
+                                setSelectedProfile(value) //updates the image at the top
+                            }}
                             >
                                 <View style={styles.selectionContainer}>
                                     <ProfilePicture selection={value} optionalStyle={{width: 60, height: 60}}/>
