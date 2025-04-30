@@ -5,7 +5,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase"; // Make sure the path matches yours
 import PondThumbnail from "./img/pondThumbnail";
 
-const PondDisplay = ({ currentPond }) => {
+const PondDisplay = ({ currentPond, updateTrigger }) => {
     const [userPonds, setUserPonds] = useState([]);
 
     // Fetch ponds the user is in
@@ -35,7 +35,7 @@ const PondDisplay = ({ currentPond }) => {
 
     useEffect(() => {
         fetchUserPonds();
-    }, []);
+    }, [updateTrigger]);
 
     return (
         <SafeAreaView style={styles.mainView}>

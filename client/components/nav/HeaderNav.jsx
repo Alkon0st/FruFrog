@@ -12,7 +12,7 @@ import styles from './Nav.style';
 import { TouchableOpacity, View, Text, Modal, Image} from 'react-native';
 import { useState } from 'react';
 import ProfilePicture from '../profile/img/profilePicture';
-function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
+function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPondName}) {
     const [modalVisible, setModalVisible] = useState(false);
 
     return (
@@ -43,7 +43,7 @@ function PondPopupOptions ({triggerUpdate, pondName, setPondName}) {
                         pondName={pondName} 
                     />
                 </View>
-                <PondDisplay currentPond={pondName}/>
+                <PondDisplay currentPond={pondName} updateTrigger={triggerUpdateCount}/>
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
                     <CreatePage triggerUpdate={triggerUpdate} currentPond = {pondName} /> 
@@ -72,8 +72,8 @@ export default function HeaderNav() {
     // UNIMPLEMENTED
     const admin = true;
 
-    const [_, forceUpdate] = useState(0);
-    const triggerUpdate = () => forceUpdate(prev => prev + 1);
+    const [triggerUpdateCount, setTriggerUpdateCount] = useState(0);
+    const triggerUpdate = () => setTriggerUpdateCount(prev => prev + 1);    
 
     return (
         <View style={styles.mainView}>
@@ -96,7 +96,8 @@ export default function HeaderNav() {
                 </TouchableOpacity>
                 
                 <PondPopupOptions 
-                    triggerUpdate={triggerUpdate}             
+                    triggerUpdate={triggerUpdate}
+                    triggerUpdateCount={triggerUpdateCount}        
                     pondName={pondName} 
                     setPondName={setPondName}
                     />
