@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Modal, Text, Pressable, View, TouchableOpacity, TextInput } from 'react-native';
+import { Alert, Modal, Text, Pressable, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -48,7 +48,7 @@ function SignInFunction() {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.container}>
+                <ScrollView contentContainerStyle={styles.container}>
                     {/* Email Input */}
                     <Controller
                         control={control}
@@ -139,7 +139,7 @@ function SignInFunction() {
                             </View>
                         </View>
                     </Modal>
-                </View>
+                </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>
     );

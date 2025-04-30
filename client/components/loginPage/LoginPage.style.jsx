@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
         borderColor: '#D9D9D9',
         margin: 10,
         width: 300,
-        marginBottom: '5%',
     },
     subHeadingStyle: {
         fontSize: 18,
@@ -118,10 +117,9 @@ const styles = StyleSheet.create({
     pageBreak:{
         flexDirection: 'row', 
         alignItems: 'center', 
-        paddingBottom: '10%', 
+        paddingVertical: '5%', 
         width: '100%', 
-        paddingRight: '10%', 
-        paddingLeft: '10%'
+        paddingHorizontal: 60,
     },
     lineBreak:{
         flex: 1, 
@@ -134,14 +132,16 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
   LinearGradient: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+        flex: 1,
+        justifyContent: 'space-between',
   },
   viewStyle: {
-      alignItems: 'center',
+    marginVertical: 100,
+    alignItems: 'center',
   },
   footer: {
+  },
+  footerText: {
       fontSize: 12,
       color: '#888',
       marginTop: 10,

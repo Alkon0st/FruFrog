@@ -15,7 +15,7 @@ const Home = () => {
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
-                    <Stack.Screen name="CreateAccount" component={CreateAccount}/>
+                    <Stack.Screen name="CreateAccount" component={CreateAccount} options={{ headerShown: false }}/>
                     <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
                     <Stack.Screen name="Nav" component={Nav} options={{ headerShown: false }} />
                 </Stack.Navigator>

@@ -9,6 +9,13 @@ import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs, updateDoc, arrayRemove, arrayUnion, doc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase'
 
+const successMessage = () => {
+    return (
+        <Modal>
+
+        </Modal>
+    )
+}
 
 const ProfilePage = ({
     profile,
@@ -20,8 +27,8 @@ const ProfilePage = ({
     const navigation = useNavigation();
 
     const [ newProfile, setNewProfile ] = useState(profile);
-    const [ selectedProfile, setSelectedProfile ] = useState(profile)
-    let ProfileOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    const [ selectedProfile, setSelectedProfile ] = useState(profile);
+    let ProfileOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
     
     return (
         <Modal 
@@ -35,7 +42,8 @@ const ProfilePage = ({
         >
             {/* Header */}
             <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={onClose}>
+                <TouchableOpacity 
+                    onPress={onClose}>
                     <Text style={styles.buttonText}> ◀ </Text>
                 </TouchableOpacity>
                 

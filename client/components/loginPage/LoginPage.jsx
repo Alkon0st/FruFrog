@@ -18,31 +18,31 @@ function LoginPage() {
       colors = {['#FFFFFF', '#FEFFF5', '#E0FDD9']}
       style={styles.LinearGradient}>
       
-
       <View style={styles.viewStyle}>
-          <Image
-            source={require('./img/frufrog_icon.png')}
-            resizeMode='contain'
-            style={styles.img}
-            /> 
-      
+        <Image
+          source={require('./img/frufrog_icon.png')}
+          resizeMode='contain'
+          style={styles.img}
+          /> 
 
-          {/* Function call for Sign In button */}
-          <SignIn />
+        {/* Function call for Sign In button */}
+        <SignIn />
 
-          <View style={styles.pageBreak}>
-            <View style={styles.lineBreak} />
-            <Text style={{width: 50, textAlign: 'center', fontWeight:'bold'}}>OR</Text>
-            <View style={styles.lineBreak} />
-            </View>
+        <View style={styles.pageBreak}>
+          <View style={styles.lineBreak} />
+          <Text style={{width: 50, textAlign: 'center', fontWeight:'bold'}}>OR</Text>
+          <View style={styles.lineBreak} />
+          </View>
 
-          {/* Function call for Create Account button */}
-          <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}
-              style={[styles.button, {width: '70%'}]}
-          >
-              <Text style={styles.textButton}>Create Account</Text>
-          </TouchableOpacity>
-          <Text style={styles.footer}>© Pond Patrol. All rights reserved.</Text>
+        {/* Function call for Create Account button */}
+        <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}
+            style={[styles.button, {width: '70%'}]}
+        >
+            <Text style={styles.textButton}>Create Account</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>© Pond Patrol. All rights reserved.</Text>
       </View>
     </LinearGradient>
   );
