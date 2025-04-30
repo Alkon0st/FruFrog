@@ -5,6 +5,11 @@ import styles from './ProfilePage.style';
 import ProfilePicture from './img/profilePicture';
 import { useNavigation, CommonActions } from "@react-navigation/native";
 
+import { getAuth } from 'firebase/auth';
+import { collection, query, where, getDocs, updateDoc, arrayRemove, arrayUnion, doc } from 'firebase/firestore';
+import { db } from '../../firebase/firebase'
+
+
 const ProfilePage = ({
     profile,
     visible,
@@ -82,8 +87,57 @@ const ProfilePage = ({
                 {/* Confirm Change */}
                 <View>
                     <TouchableOpacity
-                        onPress={() => setNewProfile(value)}
                         style={styles.confirmButton}
+
+                        // Deletes instance of uid within the current profile document
+                            // then adds uid to new profile document
+                        onPress={async () => {
+                            const auth = getAuth()
+                            const user = auth.currentUser
+
+                            if (!user) return;
+
+                            try {
+                                //finds current profile doc w/ uid
+                                const q = query(collection(db, 'profiles'), where('members', 'array-contains', user.uid))
+                                const querySnapshot = await getDocs(q)
+
+                                if (querySnapshot.empty) {
+                                    console.error('No profile document found with this user.')
+                                    return;
+                                }
+
+                                const currentDoc = querySnapshot.docs[0]
+                                const currentDocRef = doc(db, 'profiles', currentDoc.id)
+
+                                //deletes uid from current profile doc
+                                await updateDoc(currentDocRef, {
+                                    members: arrayRemove(user.uid)
+                                });
+
+                                //find profile doc w/ respective profile_id
+                                const targetQuery = query(collection(db, 'profiles'), where('profile_id', '==', newProfile))
+                                const targetSnapshot = await getDocs(targetQuery)
+
+                                if (targetSnapshot.empty) {
+                                    console.error('No profile document found with selected profile_id.')
+                                    return;
+                                }
+
+                                const targetDoc = targetSnapshot.docs[0]
+                                const targetDocRef = doc(db, 'profiles', targetDoc.id)
+
+                                //add user's uid to the profile doc members array
+                                await updateDoc(targetDocRef, {
+                                    members: arrayUnion(user.uid)
+                                });
+
+                                setSelectedProfile(newProfile); //just to update what is current selected
+                                onClose(); //closes modal after updating profile
+                            } catch (error) {
+                                console.error('Error updating profile picture:', error)
+                            }
+                        }}
                     >
                         <Text style={styles.confirmText}> Change Profile Picture </Text>
                     </TouchableOpacity>
