@@ -3,12 +3,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import styles from './ProfilePage.style';
 import ProfilePicture from './img/profilePicture';
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 const ProfilePage = ({
     profile,
     visible,
     onClose,
     }) => {
+
+    const navigation = useNavigation();
 
     const [ newProfile, setNewProfile ] = useState(profile);
     const [ selectedProfile, setSelectedProfile ] = useState(profile)
@@ -92,6 +95,13 @@ const ProfilePage = ({
                 {/* LOGOUT BUTTON */}
                 <TouchableOpacity
                     style={styles.logOutButton}
+                    onPress={() => {navigation.dispatch(
+                        CommonActions.reset({
+                            index:0,
+                            routes: [{name:'Login'}],
+                        })
+                    );
+                }}
                 >
                     <View style={styles.logOutContent}>
                         <Image
