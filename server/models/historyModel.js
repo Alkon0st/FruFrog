@@ -14,7 +14,7 @@ async function getHistoryData() {
     const formattedBills = bills.map(bill => ({
       id: bill._id,
       name: bill.title,
-      category: bill.category || 'Bill',
+      category: bill.category,
       date: bill.date,
       amount: parseFloat(bill.total) || 0,
       icon: 'file-document-outline',
@@ -25,7 +25,7 @@ async function getHistoryData() {
     const formattedEvents = events.map(event => ({
       id: event._id,
       name: event.title,
-      category: event.category || 'Event',
+      category: event.category,
       date: event.date,
       amount: parseFloat(event.amount) || 0,
       icon: 'calendar-check-outline',
