@@ -29,6 +29,14 @@ const ProfilePage = ({
     const [ newProfile, setNewProfile ] = useState(profile);
     const [ selectedProfile, setSelectedProfile ] = useState(profile);
     let ProfileOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+
+    //So that the current pfp appears at the top upon booting this page
+    useEffect(() => {
+        if (visible) {
+            setSelectedProfile(profile);
+            setNewProfile(profile);
+        }
+    }, [visible, profile])
     
     return (
         <Modal 
