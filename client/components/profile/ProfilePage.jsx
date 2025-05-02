@@ -114,18 +114,18 @@ const ProfilePage = ({
                                 const q = query(collection(db, 'profiles'), where('members', 'array-contains', user.uid))
                                 const querySnapshot = await getDocs(q)
 
-                                if (querySnapshot.empty) {
-                                    console.error('No profile document found with this user.')
-                                    return;
-                                }
-
-                                const currentDoc = querySnapshot.docs[0]
-                                const currentDocRef = doc(db, 'profiles', currentDoc.id)
-
-                                //deletes uid from current profile doc
-                                await updateDoc(currentDocRef, {
+                                if (!querySnapshot.empty) {
+                                    const currentDoc = querySnapshot.docs[0]
+                                    const currentDocRef = doc(db, 'profiles', currentDoc.id)
+                                    
+                                    //deletes uid from current profile doc
+                                    await updateDoc(currentDocRef, {
                                     members: arrayRemove(user.uid)
                                 });
+                                }
+                                else (
+                                    console.warn('No profile document found with this user. [IGNORED]')
+                                )
 
                                 //find profile doc w/ respective profile_id
                                 const targetQuery = query(collection(db, 'profiles'), where('profile_id', '==', newProfile))

@@ -5,6 +5,8 @@ import { TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import { getFirestore, collection, query, where, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
 import { doCreateUserWithEmailAndPassword } from '../../firebase/auth'; // Ensure this is correctly implemented
 import styles from './LoginPage.style';
 
@@ -28,8 +30,28 @@ function CreateAccount() {
       const userCredential = await doCreateUserWithEmailAndPassword(data.email, data.password);
       const user = userCredential.user;
 
-      console.log('User registered successfully:', user);
+      // get firestone ref and query to set default profile = 1
+      const profilesRef = collection(db, 'profiles')
+      const q = query(profilesRef, where('profile_id', '==', 1))
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        console.error('Unable to find profile document for profile_id=1')
+        return
+      }
+
+      // updates profile (1) w/ user
+      const profileDoc = querySnapshot.docs[0]
+      const profileRef = profileDoc.ref
+
+      await updateDoc(profileRef, {
+        members: arrayUnion(user.uid)
+      });
+      
+
+      console.log('User registered successfully & profile set to 1:', user);
       navigation.navigate('Login'); // Navigate to the Login page after success
+
     } catch (error) {
       console.error('Error creating account:', error.message);
     }
