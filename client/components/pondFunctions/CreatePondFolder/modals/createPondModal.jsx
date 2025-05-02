@@ -18,7 +18,6 @@ const CreatePondModal = ({
     return (
         <Modal
             transparent={true}
-            animationType="slide"
             visible={visible}
             onRequestClose={onClose}
         >

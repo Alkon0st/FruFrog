@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   popupContent: {
     width: '100%',
     padding: 20,
+    paddingTop: 55,
     backgroundColor: 'white',
     borderRadius: 10,
   },
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   //For Modal
   labelContainer:{
     marginTop: 20,
-    width: 151,
+    width: 175,
     height: 48,
     backgroundColor: '#85BB65',
     alignItems: 'center',
@@ -180,6 +181,30 @@ const styles = StyleSheet.create({
   createText: {
     fontSize: 15,
     color: '#FFFFFF',
+  },
+
+  //Join button for join pond
+  joinInfo: {
+    marginTop: 10,
+    marginBottom: 15,
+    marginHorizontal: 5,
+    fontSize: 16,
+  },
+  joinButton: {
+    marginTop: 15,
+    borderWidth: 2,
+    borderRadius: 30,
+    borderColor: '#4F723A',
+    width: 50,
+    height: 50,
+    backgroundColor: '#85BB65',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imgCheckmark: {
+    width: 25,
+    height: 25,
+    tintColor: '#000000',
   },
 });
 

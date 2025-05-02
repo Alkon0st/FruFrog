@@ -17,12 +17,12 @@ export default function GenerateCode({ otp }) {
   
     return (
     <View style={styles.container}>
-        <View style={styles.codeHeader}> Generated Code </View>
+        <Text style={styles.codeHeader}> Generated Code </Text>
         <View style={styles.codeBox}>
             <generateOtp />
             <Text style={styles.codeText}> {otp} </Text>
         </View>
-        <View style={styles.disclaimerText}>This code will be active for 2 days or until used. </View>
+        <Text style={styles.disclaimerText}>This code will be active for 2 days or until used. </Text>
         
     </View>
     );
