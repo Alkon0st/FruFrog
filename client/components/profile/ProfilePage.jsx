@@ -1,6 +1,6 @@
 import {Text, View, TouchableOpacity, Modal, Image} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './ProfilePage.style';
 import ProfilePicture from './img/profilePicture';
 import { useNavigation, CommonActions } from "@react-navigation/native";
@@ -9,10 +9,22 @@ import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs, updateDoc, arrayRemove, arrayUnion, doc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase'
 
-const successMessage = () => {
+const SuccessMessage = ({visible}) => {
     return (
-        <Modal>
-
+        <Modal
+            visible={visible}
+            transparent={true}
+        >
+        <View style={styles.successContainer}>
+            <View style={styles.successView}>
+                <Text style={styles.successText}> Saved Successfully </Text>
+                <Image 
+                    source={require('../img/checkmark.png')}
+                    resizeMode='contain'
+                    style={styles.successCheckmark}
+                />
+            </View>
+        </View>
         </Modal>
     )
 }
@@ -25,6 +37,7 @@ const ProfilePage = ({
     }) => {
 
     const navigation = useNavigation();
+    const [successVisible, setSuccessVisible] = useState(false);
 
     const [ newProfile, setNewProfile ] = useState(profile);
     const [ selectedProfile, setSelectedProfile ] = useState(profile);
@@ -154,7 +167,12 @@ const ProfilePage = ({
 
                                 setSelectedProfile(newProfile); //just to update what is current selected
                                 setProfile(newProfile); //updates pfp in HeaderNav
-                                onClose(); //closes modal after updating profile
+                                //shows success msg then closes
+                                setSuccessVisible(true);
+                                setTimeout(() => {
+                                    setSuccessVisible(false);
+                                    onClose();
+                                }, 2000); // 2 seconds
                             } catch (error) {
                                 console.error('Error updating profile picture:', error)
                             }
@@ -190,6 +208,8 @@ const ProfilePage = ({
                 {/* FOOTER */}
                 <Text style={styles.footer}>© Pond Patrol. All rights reserved.</Text>
             </View>
+
+            <SuccessMessage visible={successVisible} />
             
         </LinearGradient>
         </Modal>

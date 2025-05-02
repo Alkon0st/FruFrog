@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
-    
   footer: {
     fontSize: 12,
     fontStyle: 'italic',
@@ -146,6 +145,35 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     textAlign: 'center',
     },  
+
+    //Success message
+
+    successContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    },
+    successView: {
+        backgroundColor: '#B2E196',
+        padding: 20,
+        borderRadius: 6,
+        width: 305,
+        height: 74,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    successText: {
+        fontSize: 24,
+        textAlign: 'center',
+        color: '#0000000'
+    },
+    successCheckmark:{
+        width: 30,
+        height: 30,
+        marginLeft: 10,
+    },
 });
 
 export default styles;
