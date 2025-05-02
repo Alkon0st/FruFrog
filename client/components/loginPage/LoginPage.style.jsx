@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
   },
   viewStyle: {
-    marginVertical: 100,
+    marginTop: 100,
     alignItems: 'center',
   },
   footer: {
