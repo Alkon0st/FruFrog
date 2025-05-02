@@ -5,6 +5,7 @@ import { collection, addDoc, doc, deleteDoc, query, where, getDocs } from 'fireb
 import { getAuth } from "firebase/auth";
 import CreatePondModal from './modals/createPondModal';
 import DeletePondModal from './modals/deletePondModal';
+import JoinPondModal from './modals/joinPondModal';
 
 
 import styles from './CreatePond.style';
@@ -14,7 +15,9 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
     const [newPond, setNewPond] = useState('');
     const [newThumbnail, setNewThumbnail] = useState('1');
 
-    const [isDeletePondModalVisible, setIsDeletePondModalVisible] = useState(false);
+    const [isJoinPondModalVisible, setIsJoinPondModalVisible] = useState(false);
+
+    // const [isDeletePondModalVisible, setIsDeletePondModalVisible] = useState(false);
     const [selectedPond, setSelectedPond] = useState('');
 
     const handleAddPond = async () => {
@@ -43,49 +46,50 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
         }
     };
 
-    const handleDeletePond = async () => {
-        const auth = getAuth();
-        const user = auth.currentUser;
+    // REMOVED FEATURE
+    // const handleDeletePond = async () => {
+    //     const auth = getAuth();
+    //     const user = auth.currentUser;
     
-        if (selectedPond === currentPond) {
-            alert("You can't delete the current pond. (For now).");
-            return;
-        }
+    //     if (selectedPond === currentPond) {
+    //         alert("You can't delete the current pond. (For now).");
+    //         return;
+    //     }
     
-        if (!user) {
-            alert("You must be logged in to delete a pond.");
-            return;
-        }
+    //     if (!user) {
+    //         alert("You must be logged in to delete a pond.");
+    //         return;
+    //     }
     
-        try {
-            // Find the pond by name
-            const q = query(collection(db, "ponds"), where("name", "==", selectedPond));
-            const querySnapshot = await getDocs(q);
+    //     try {
+    //         // Find the pond by name
+    //         const q = query(collection(db, "ponds"), where("name", "==", selectedPond));
+    //         const querySnapshot = await getDocs(q);
     
-            if (!querySnapshot.empty) {
-                const pondDoc = querySnapshot.docs[0];
-                const docRef = pondDoc.ref;
-                const pondData = pondDoc.data();
+    //         if (!querySnapshot.empty) {
+    //             const pondDoc = querySnapshot.docs[0];
+    //             const docRef = pondDoc.ref;
+    //             const pondData = pondDoc.data();
     
-                // Check ownership
-                if (pondData.owner !== user.uid) {
-                    alert("Only the owner can delete this pond.");
-                    return;
-                }
+    //             // Check ownership
+    //             if (pondData.owner !== user.uid) {
+    //                 alert("Only the owner can delete this pond.");
+    //                 return;
+    //             }
     
-                await deleteDoc(docRef);
+    //             await deleteDoc(docRef);
     
-                triggerUpdate();
-                setIsDeletePondModalVisible(false);
-                setSelectedPond('');
-            } else {
-                alert("Pond not found.");
-            }
-        } catch (error) {
-            console.error("Error deleting pond: ", error);
-            alert("Something went wrong while deleting the pond.");
-        }
-    };
+    //             triggerUpdate();
+    //             setIsDeletePondModalVisible(false);
+    //             setSelectedPond('');
+    //         } else {
+    //             alert("Pond not found.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error deleting pond: ", error);
+    //         alert("Something went wrong while deleting the pond.");
+    //     }
+    // };
 
     return (
         <SafeAreaView>
@@ -99,8 +103,8 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
                         <Text style={styles.textButton}>Create Pond</Text>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity onPress={() => setIsDeletePondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
-                        <Text style={styles.textButton}>Delete Pond</Text>
+                    <TouchableOpacity onPress={() => setIsJoinPondModalVisible(true)} style={[styles.button, styles.buttonOpen]}>
+                        <Text style={styles.textButton}>Join Pond</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -115,12 +119,17 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
                 handleAddPond={handleAddPond}
             />
 
-            <DeletePondModal 
+            <JoinPondModal
+                visible={isJoinPondModalVisible}
+                onClose={() => setIsJoinPondModalVisible(false)}
+            />
+
+            {/* <DeletePondModal 
                 visible={isDeletePondModalVisible}
                 onClose={() => setIsDeletePondModalVisible(false)}
                 selectedPond={selectedPond}
                 setSelectedPond={setSelectedPond}
-                handleDeletePond={handleDeletePond}/>
+                handleDeletePond={handleDeletePond}/> */}
         </SafeAreaView>
     );
 };
