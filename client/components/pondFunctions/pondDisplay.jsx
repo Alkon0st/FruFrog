@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { getAuth } from "firebase/auth";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/firebase"; // Make sure the path matches yours
 import PondThumbnail from "./img/pondThumbnail";
 
-const PondDisplay = ({ currentPond, updateTrigger }) => {
+const PondDisplay = ({ updateTrigger }) => {
     const [userPonds, setUserPonds] = useState([]);
+    const [currentPond, setCurrentPond] = useState(null);
 
     // Fetch ponds the user is in
     const fetchUserPonds = async () => {
@@ -28,6 +29,16 @@ const PondDisplay = ({ currentPond, updateTrigger }) => {
             }));
 
             setUserPonds(ponds);
+
+            // to find which pond the user is currently selecting
+            const selectedPond = ponds.find(p=>p.selected?.includes(user.uid))
+            if (selectedPond) {
+                setCurrentPond(selectedPond.id)
+            }
+            else {
+                setCurrentPond(null);
+            }
+
         } catch (error) {
             console.error("Error fetching user ponds:", error);
         }
@@ -37,30 +48,58 @@ const PondDisplay = ({ currentPond, updateTrigger }) => {
         fetchUserPonds();
     }, [updateTrigger]);
 
+    const handleSelectPond = async (selectedPond) => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (!user) return;
+
+        try {
+            const updatePromises = userPonds.map(async (pond) => {
+                if (pond.id !== selectedPond.id && pond.selected?.includes(user.uid)) {
+                    await updateDoc(doc(db, 'ponds', pond.id), {
+                        selected: arrayRemove(user.uid)
+                    })
+                }
+            })
+
+            await updateDoc(doc(db, 'ponds', selectedPond.id), {
+                selected: arrayUnion(user.uid)
+            })
+
+            await Promise.all(updatePromises)
+            setCurrentPond(selectedPond.id)
+            fetchUserPonds() //refreshes ui
+        } catch (error) {
+            console.error('Error updating pond selection: ', error)
+        }
+    }
+
     return (
         <SafeAreaView style={styles.mainView}>
             <ScrollView>
                 {userPonds.map((pond) => (
-                    <View 
+                    <TouchableOpacity 
                         key={pond.id} 
                         style={[
                             styles.pondView,
-                            pond.name === currentPond && styles.activePond
+                            pond.id === currentPond && styles.activePond
                         ]}
+                        onPress={() => handleSelectPond(pond)}
                     >
-                        {pond.name === currentPond && <View style={styles.marker}/>}
+                        {pond.id === currentPond && <View style={styles.marker}/>}
                         <View style={styles.nameRow}>
                             <PondThumbnail selection={parseInt(pond.thumbnail) || 0} />
                             <Text style={styles.pondName}>{pond.name}</Text>
                         </View>
-                        {pond.name === currentPond && (
+                        {pond.id === currentPond && (
                             <Image
                                 source={require('../nav/img/current_pond.png')}
                                 resizeMode='contain'
                                 style={styles.img}
                             />
                         )}
-                    </View>
+                    </TouchableOpacity>
                 ))}
             </ScrollView>
         </SafeAreaView>
@@ -74,7 +113,7 @@ const styles = StyleSheet.create({
     },
     pondView: {
         //backgroundColor: '#c3edab',
-        marginTop: 10,
+        paddingTop: 10,
         paddingRight: 10,
         paddingLeft: 25,
         paddingVertical: 10,

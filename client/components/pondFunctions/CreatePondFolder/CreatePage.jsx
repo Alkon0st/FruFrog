@@ -34,6 +34,7 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
                     budgets: [],
                     billList: [],
                     createdAt: new Date(),
+                    selected: [user.uid],
                 });
                 triggerUpdate();
                 setIsCreatePondModalVisible(false);

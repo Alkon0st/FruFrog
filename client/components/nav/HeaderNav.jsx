@@ -47,7 +47,7 @@ function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPond
                         pondName={pondName} 
                     />
                 </View>
-                <PondDisplay currentPond={pondName} updateTrigger={triggerUpdateCount}/>
+                <PondDisplay updateTrigger={triggerUpdateCount}/>
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
                     <CreatePage triggerUpdate={triggerUpdate} currentPond = {pondName} /> 
