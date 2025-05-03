@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TouchableOpacity, View, Text, Modal, Image} from 'react-native';
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 
 
@@ -40,14 +40,20 @@ function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPond
                     <TouchableOpacity
                         style={styles.currentPondButton}
                         onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.currentPondText}>{pondName} ▲</Text>
+                        <View style={styles.currentPondView}>
+                            <Text style={styles.currentPondText}>{pondName}</Text>
+                            <Text style={styles.currentPondText}>▲</Text>
+                        </View>
                     </TouchableOpacity>
                     {/* ADD USER FUNCTION */}
                     <AddUser 
                         pondName={pondName} 
                     />
                 </View>
-                <PondDisplay updateTrigger={triggerUpdateCount}/>
+                <PondDisplay 
+                    updateTrigger={triggerUpdateCount}
+                    setPondName = {setPondName}
+                />
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
                     <CreatePage triggerUpdate={triggerUpdate} currentPond = {pondName} /> 
@@ -60,7 +66,10 @@ function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPond
                 <TouchableOpacity
                     style={[styles.currentPondButton]}
                     onPress={() => setModalVisible(true)}>
-                    <Text style={styles.currentPondText}>{pondName} ▼</Text>
+                    <View style={styles.currentPondView}> 
+                        <Text style={styles.currentPondText}>{pondName}</Text>
+                        <Text style={styles.currentPondText}>▼</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         </View>
@@ -74,6 +83,7 @@ export default function HeaderNav() {
     const [thumbnail, setThumbnail] = useState(1);
     const [profileId, setProfileId] = useState(1); //default 1 if no set
 
+    // finds which profile the user currently has
     useEffect(() => {
         const fetchUserProfile = async () => {
             const auth = getAuth();
@@ -97,6 +107,34 @@ export default function HeaderNav() {
 
         fetchUserProfile();
     }, []);
+
+    // finds which pond user is currently selecting
+    useEffect(() => {
+        const fetchSelectedPond = async () => {
+            const auth = getAuth()
+            const user = auth.currentUser
+            if (!user) return;
+
+            try {
+                const q = query(
+                    collection(db, 'ponds'), 
+                    where('selected', 'array-contains', user.uid)
+                )
+                const querySnapshot = await getDocs(q)
+                if (!querySnapshot.empty) {
+                    const pondData = querySnapshot.docs[0].data()
+                    const name = pondData.name || "Unnamed Pond"
+                    setPondName(name)
+                } else {
+                    console.log('User not found in any selected array in Pond documents')
+                }
+            } catch (error) {
+                console.error('Failed to fetch current pond:', error)
+            }
+        }
+        
+        fetchSelectedPond()
+    }, [])
 
     // UNIMPLEMENTED
     const admin = true;

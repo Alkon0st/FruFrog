@@ -6,17 +6,24 @@ const styles = StyleSheet.create({
   currentPondButton: {
     margin: 5,
     marginTop: 10,
-    padding: 10,
-    elevation: 2,
-    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    alignItems: 'flex-start',
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
     borderColor: '#4F723A',
     borderWidth: '2px',
+    minWidth: 219,
+    minHeight: 44,
   }, 
+  currentPondView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   currentPondText: {
     fontWeight: 'bold',
-    fontSize: '18px',
+    fontSize: 20,
   },
   mainView: {
     display: 'flex',
