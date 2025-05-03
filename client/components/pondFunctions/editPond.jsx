@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, Image } from 'react-native';
 
 
@@ -15,6 +15,12 @@ export default function EditPond ({
     visible }) {
     const [ newPondName, setNewPondName ] = useState(pondName);
     const [ newThumbnail, setNewThumbnail ] = useState(thumbnail);
+
+    useEffect(() => {
+        if (visible) {
+            setNewThumbnail(thumbnail) // reset thumbnail when modal is open
+        }
+    }, [visible, thumbnail])
 
     //for thumbnail options
     let thumbnailOptions = [1,2,3,4,5,6,7,8]
@@ -60,10 +66,16 @@ export default function EditPond ({
                             style={styles.editThumbnailButton}
                             onPress={() => setNewThumbnail(value)}
                             >
-                                <View style={{ position: 'relative'}}>
+                                <View style={styles.thumbnailSelectionContainer}>
                                     <PondThumbnail selection={value} optionalStyle={{width: 60, height: 60}}/>
                                     {isSelected && (
+                                        <>
                                         <View style = {styles.selectedOverlay}/>
+                                        <Image
+                                            source={require('../img/checkmark.png')}
+                                            style = {styles.thumbnailCheckmark}
+                                        />
+                                        </>
                                     )}
                                 </View>
                             </TouchableOpacity>
@@ -85,6 +97,7 @@ export default function EditPond ({
                     value={newPondName}
                     onChangeText={setNewPondName}
                     style={styles.input}
+                    maxLength={15}
                 />
                 <Image 
                     source={require('../img/pencil.png')}

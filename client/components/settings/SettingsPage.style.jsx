@@ -191,6 +191,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    thumbnailSelectionContainer: {
+        position: 'relative',
+        width: 60,
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     selectedOverlay: {      
         position: 'absolute',
         top: 0,
@@ -199,6 +206,11 @@ const styles = StyleSheet.create({
         bottom: 0,
         borderRadius: 30,
         backgroundColor: '#D9D9D980',
+    },
+    thumbnailCheckmark: {
+        position: 'absolute',
+        width: 32,
+        height: 32,
     },
 
     //Content for FAQ

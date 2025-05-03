@@ -1,5 +1,8 @@
 import {Modal, Text, View, TouchableOpacity, ScrollView, Image} from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { db } from '../../firebase/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import styles from './SettingsPage.style';
 // import { usePlaidLink } from 'react-native-plaid-link-sdk';
 
@@ -69,6 +72,39 @@ const SettingsPage = ({
     //     };
     // }, []);
 
+    useEffect(() => {
+        const fetchThumbnail = async () => {
+            const auth = getAuth()
+            const user = auth.currentUser
+
+            if (!user) {return}
+
+            try {
+                const q = query(
+                    collection(db, 'ponds'),
+                    where('selected', 'array-contains', user.uid)
+                )
+                const querySnapshot = await getDocs(q)
+
+                if (querySnapshot.empty) {
+                    Alert.alert('Error', 'No pond found')
+                    return
+                }
+
+                const pondDoc = querySnapshot.docs[0]
+                const pondData = pondDoc.data()
+
+                setThumbnail(pondData.thumbnail)
+            } catch (error) {
+                console.error('Error fetching pond thumbnail:', error)
+                Alert.alert('Error', 'Failed to fetch pond thumbnail')
+            }
+        }
+        
+        if (visible) {
+            fetchThumbnail() //triggers fetch when modal opens
+        }
+    }, [visible, setThumbnail]) //trigger this effect when visible parameter changes
 
     const renderChevron = (isVisible) => (
         <Text style={styles.menuChevron}>
@@ -161,6 +197,7 @@ const SettingsPage = ({
                             visible={isDeleteVisible}
                             onClose={() => setIsDeleteVisible(false)}
                             onDeleted={onClose}
+                            setPondName={setPondName}
                         />
                     </View>
                     )}

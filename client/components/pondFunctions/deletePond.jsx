@@ -2,12 +2,13 @@ import { View, Text, Modal, TouchableOpacity, StyleSheet, Alert } from 'react-na
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
-import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, updateDoc, arrayUnion} from 'firebase/firestore';
 
 const DeletePond = ({ 
     visible,
     onClose,
     onDeleted,
+    setPondName,
     }) => {
 
         const handleDelete = async () => {
@@ -37,9 +38,41 @@ const DeletePond = ({
                     return
                 }
 
+                // deletes current pond
                 await deleteDoc(pondDoc.ref)
 
-                Alert.alert('Success', 'Pond deleted successfully.')
+                // finds another pond that user is a member
+                const otherPondQuery = query(
+                    collection(db, 'ponds'),
+                    where('members', 'array-contains', user.uid)
+                )
+                const otherPondSnapshot = await getDocs(otherPondQuery)
+
+                let reassigned = false
+                for (const docSnap of otherPondSnapshot.docs) {
+                    const otherPond = docSnap.data()
+
+                    //skip pond that was just deleted
+                    if (docSnap.id === pondDoc.id) continue;
+
+                    //add user to selected
+                    if (!otherPond.selected.includes(user.uid)) {
+                        await updateDoc(docSnap.ref,{
+                            selected: arrayUnion(user.uid)
+                        })
+                    }
+
+                    reassigned = true;
+
+                    setPondName(otherPond.name) //sets current pond name to reassigned
+                    break; // only reassigns to first match
+                }
+
+                if (!reassigned) {
+                    Alert.alert('Notice', 'Pond deleted, but no other pond found to reassign')
+                } else {
+                    Alert.alert('Success', 'Pond deleted and user reassigned')
+                }
                 
                 onClose()
                 onDeleted()
