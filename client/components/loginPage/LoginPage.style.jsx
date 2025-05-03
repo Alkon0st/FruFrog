@@ -139,8 +139,6 @@ const styles = StyleSheet.create({
     marginTop: 100,
     alignItems: 'center',
   },
-  footer: {
-  },
   footerText: {
       fontSize: 12,
       color: '#888',
@@ -169,6 +167,12 @@ const styles = StyleSheet.create({
   },
   signInText: {
     textAlign: 'center',
+  },
+
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingBottom: 40,
   },
 });
 
