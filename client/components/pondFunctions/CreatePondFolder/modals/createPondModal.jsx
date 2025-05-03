@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, Button, Modal, ScrollView, TouchableOpacity} from 'react-native';
+import { View, Text, TextInput, Button, Modal, ScrollView, TouchableOpacity, Image} from 'react-native';
 import styles from '../CreatePond.style';
 import PondThumbnail from '../../img/pondThumbnail';
 
@@ -38,6 +38,7 @@ const CreatePondModal = ({
                                 placeholderTextColor="#A0A0A0"
                                 value={newPond}
                                 onChangeText={setNewPond}
+                                maxLength={15}
                             />
                         </View>
                     </View>
@@ -60,10 +61,16 @@ const CreatePondModal = ({
                                     style={styles.editThumbnailButton}
                                     onPress={() => setNewThumbnail(value)}
                                     >
-                                        <View style={{ position: 'relative'}}>
+                                        <View style={styles.selectionContainer}>
                                             <PondThumbnail selection={value} optionalStyle={{width: 60, height: 60}}/>
                                             {isSelected && (
+                                                <>
                                                 <View style = {styles.selectedOverlay}/>
+                                                <Image
+                                                    source={require('../../../img/checkmark.png')}
+                                                    style = {styles.checkmark}
+                                                />
+                                                </>
                                             )}
                                         </View>
                                     </TouchableOpacity>

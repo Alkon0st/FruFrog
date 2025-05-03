@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderColor: '#4F723A',
     borderWidth: '2px',
-    minWidth: 219,
+    width: 219,
     minHeight: 44,
   }, 
   currentPondView: {
