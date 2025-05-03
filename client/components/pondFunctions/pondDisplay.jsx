@@ -5,7 +5,11 @@ import { collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, 
 import { db } from "../../firebase/firebase"; // Make sure the path matches yours
 import PondThumbnail from "./img/pondThumbnail";
 
-const PondDisplay = ({ updateTrigger, setPondName }) => {
+const PondDisplay = ({ 
+    updateTrigger, 
+    setPondName,
+    setModalVisible, 
+}) => {
     const [userPonds, setUserPonds] = useState([]);
     const [currentPond, setCurrentPond] = useState(null);
 
@@ -71,6 +75,7 @@ const PondDisplay = ({ updateTrigger, setPondName }) => {
             setCurrentPond(selectedPond.id)
             setPondName(selectedPond.name)
             fetchUserPonds() //refreshes ui
+            setModalVisible(false)
         } catch (error) {
             console.error('Error updating pond selection: ', error)
         }

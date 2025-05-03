@@ -16,9 +16,14 @@ import PondDisplay from '../pondFunctions/pondDisplay';
 import styles from './Nav.style';
 import ProfilePicture from '../profile/img/profilePicture';
 
-function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPondName}) {
-    const [modalVisible, setModalVisible] = useState(false);
-
+function PondPopupOptions ({
+    triggerUpdate, 
+    triggerUpdateCount, 
+    pondName, 
+    setPondName,
+    modalVisible,
+    setModalVisible
+}) {
     return (
         <View>
             {/*The popart part*/}
@@ -53,6 +58,7 @@ function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPond
                 <PondDisplay 
                     updateTrigger={triggerUpdateCount}
                     setPondName = {setPondName}
+                    setModalVisible={setModalVisible}
                 />
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
@@ -77,6 +83,7 @@ function PondPopupOptions ({triggerUpdate, triggerUpdateCount, pondName, setPond
 };
 
 export default function HeaderNav() {
+    const [modalVisible, setModalVisible] = useState(false);
     const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
     const [pondName, setPondName] = useState("Current Pond");
@@ -167,6 +174,8 @@ export default function HeaderNav() {
                     triggerUpdateCount={triggerUpdateCount}        
                     pondName={pondName} 
                     setPondName={setPondName}
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
                     />
 
                 <TouchableOpacity onPress={() => setIsProfileModalVisible(true)}

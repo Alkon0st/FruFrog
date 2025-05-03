@@ -32,6 +32,7 @@ const JoinPondModal = ({
                                 style = {styles.textInputStyle}
                                 placeholder="Code here..."
                                 placeholderTextColor="#A0A0A0"
+                                maxLength={6}
                             />
                         </View>
 
