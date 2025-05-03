@@ -6,6 +6,7 @@ import styles from './SettingsPage.style';
 import PondThumbnail from '../pondFunctions/img/pondThumbnail';
 import EditPond from '../pondFunctions/editPond';
 import MemberManage from '../pondFunctions/memberManage';
+import DeletePond from '../pondFunctions/deletePond';
 import LeavePond from '../pondFunctions/leavePond';
 import IncomeForm from './incomeSet';
 import FAQ from './FAQ';
@@ -23,6 +24,7 @@ const SettingsPage = ({
     const [isEditPondVisible, setIsEditPondVisible] = useState(false);
     const [isMemberVisible, setIsMemberVisible] = useState(false);
     const [isLeaveVisible, setIsLeaveVisible] = useState(false);
+    const [isDeleteVisible, setIsDeleteVisible] = useState(false);
     const [isAccountVisible, setIsAccountVisible] = useState(false);
     const [isSetIncomeVisible, setIsSetIncomeVisible] = useState(false);
     const [isBankVisible, setIsBankVisible] = useState(false);
@@ -141,6 +143,24 @@ const SettingsPage = ({
                         <MemberManage 
                             triggerUpdate={triggerUpdate} 
                             visible={isMemberVisible} 
+                        />
+
+                        {/* Delete Current Pond */}
+                        <TouchableOpacity 
+                            style={styles.menuButton}
+                            onPress={() => setIsDeleteVisible(prev => !prev)}>
+                                <View style={styles.menuItem}>
+                                    <Image  
+                                        source={require('../img/delete.png')}
+                                        resizeMode='contain'
+                                        style={[styles.img, {tintColor: '#590000'}]}/>
+                                    <Text style={[styles.menuText, {color: '#590000'}]}> Delete Pond </Text>
+                                </View>
+                        </TouchableOpacity>
+                        <DeletePond
+                            visible={isDeleteVisible}
+                            onClose={() => setIsDeleteVisible(false)}
+                            onDeleted={onClose}
                         />
                     </View>
                     )}

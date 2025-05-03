@@ -1,10 +1,53 @@
-import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getAuth } from 'firebase/auth';
+import { db } from '../../firebase/firebase';
+import { collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 
-const LeavePond = ({ 
+const DeletePond = ({ 
     visible,
-    onClose
+    onClose,
+    onDeleted,
     }) => {
+
+        const handleDelete = async () => {
+            const auth = getAuth()
+            const user = auth.currentUser
+
+            if (!user) {return}
+
+            try {
+                const q = query(
+                    collection(db, 'ponds'),
+                    where('selected', 'array-contains', user.uid)
+                )
+                const querySnapshot = await getDocs(q)
+
+                if (querySnapshot.empty) {
+                    Alert.alert('Error', 'No selected pond found.')
+                    return;
+                }
+
+                const pondDoc = querySnapshot.docs[0]
+                const pondData = pondDoc.data()
+
+                // safety measure just in case they bypass the admin
+                if (pondData.owner !== user.uid) {
+                    Alert.alert('Error', 'Only the pond owner can delete it.')
+                    return
+                }
+
+                await deleteDoc(pondDoc.ref)
+
+                Alert.alert('Success', 'Pond deleted successfully.')
+                
+                onClose()
+                onDeleted()
+            } catch (error) {
+                console.error("Error deleting pond:", error)
+                Alert.alert('Error', 'Failed to delete pond')
+            }
+        }
 
     return (
         <Modal 
@@ -21,7 +64,7 @@ const LeavePond = ({
             >
                 <View style={styles.modalView}>
                     <Text style={styles.header}> Are you sure? </Text>
-                    <Text style={styles.text}>You can not rejoin this Pond unless you are given another invite.</Text>
+                    <Text style={styles.text}>You will lose <Text style={{textDecorationLine:'underline'}}>all</Text> data associated with this Pond.</Text>
                     <View style={styles.buttonRow}>
                         <TouchableOpacity 
                         style={[styles.button, styles.buttonCancel]}
@@ -29,9 +72,10 @@ const LeavePond = ({
                             <Text style={styles.buttonText}> No, take me back! </Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                        style={[styles.button, styles.buttonConfirm]}
+                            style={[styles.button, styles.buttonConfirm]}
+                            onPress={handleDelete}
                         >
-                            <Text style={styles.buttonText}> Yes, I am sure. </Text>
+                            <Text style={styles.buttonText}> Delete Pond </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -108,4 +152,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LeavePond;
+export default DeletePond;

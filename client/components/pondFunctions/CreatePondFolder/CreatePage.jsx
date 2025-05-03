@@ -4,7 +4,6 @@ import {db}  from '../../../firebase/firebase';
 import { collection, addDoc, doc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
 import CreatePondModal from './modals/createPondModal';
-import DeletePondModal from './modals/deletePondModal';
 import JoinPondModal from './modals/joinPondModal';
 
 
