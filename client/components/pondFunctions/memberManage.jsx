@@ -128,6 +128,7 @@ export default function MemberManage ({
             })
 
             Alert.alert('Success', 'Member has been kicked.')
+            await fetchMembers()
             triggerUpdate()
             setModalVisible(false)
             setSelectedToKick(null)

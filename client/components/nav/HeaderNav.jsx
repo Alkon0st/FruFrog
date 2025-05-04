@@ -85,7 +85,7 @@ export default function HeaderNav() {
     const [modalVisible, setModalVisible] = useState(false);
     const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
-    const [pondName, setPondName] = useState("");
+    const [pondName, setPondName] = useState('');
     const [thumbnail, setThumbnail] = useState(1);
     const [profileId, setProfileId] = useState(1); //default 1 if no set
 
@@ -132,6 +132,8 @@ export default function HeaderNav() {
                     const name = pondData.name || "Unnamed Pond"
                     setPondName(name)
                 } else {
+                    //if no pond found, set pondName = ''
+                    setPondName('')
                     console.log('User not found in any selected array in Pond documents')
                 }
             } catch (error) {

@@ -62,6 +62,7 @@ const ConfirmJoin = ({visible, onCancel, onConfirm, pondName, thumbnail}) => {
 const JoinPondModal = ({
     visible,
     onClose,
+    triggerUpdate,
 }) => {
     const [codeInput, setCodeInput] = useState('');
     const [errorText, setErrorText] = useState('');
@@ -114,6 +115,7 @@ const JoinPondModal = ({
             setConfirmVisible(false)
             onClose()
             setCodeInput('')
+            triggerUpdate?.()
         } catch (error) {
             console.error('Failed to join the pond', error)
         }

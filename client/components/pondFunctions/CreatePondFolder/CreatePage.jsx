@@ -122,6 +122,7 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
             <JoinPondModal
                 visible={isJoinPondModalVisible}
                 onClose={() => setIsJoinPondModalVisible(false)}
+                triggerUpdate={triggerUpdate}
             />
 
             {/* <DeletePondModal 

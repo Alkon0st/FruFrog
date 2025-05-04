@@ -154,8 +154,10 @@ const SettingsPage = ({
 
         {/* ===== Main portion of settings ===== */}
 
-            {/* Pond Settings */}
+            {/* Pond Settings IF there is a pond*/}
             <ScrollView style={{marginTop: 10}}>
+            {pondName !== '' && (
+            <>
                 <View style={styles.settingHeader}> 
                     <Text style={styles.settingHeaderText}>{pondName} Settings</Text>
                 </View>
@@ -259,6 +261,28 @@ const SettingsPage = ({
                         }}
                     />
                 </View>
+            </>
+            )}
+                {/* Only shows up if user has no ponds */}
+                {pondName === '' && (
+                <>
+                    <View style={styles.settingHeader}> 
+                        <Text style={styles.settingHeaderText}>No Pond Detected</Text>
+                    </View>
+                    <View style={styles.viewStyle}>
+                    {/* If there's no pond Info */}
+                    <View style={styles.menuButton}>
+                        <View style={styles.menuItem}>
+                            <Image  
+                                source={require('../img/caution.png')}
+                                resizeMode='contain'
+                                style={styles.img}/>
+                            <Text style={styles.menuText}> Create or Join Pond to Start </Text>
+                        </View>
+                    </View>
+                    </View>
+                </>
+                )}
             {/* Universal Settings */}
                 <View style={styles.settingHeader}> 
                     <Text style={styles.settingHeaderText}>Universal Settings</Text>
