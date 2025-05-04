@@ -61,7 +61,11 @@ function PondPopupOptions ({
                 />
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
-                    <CreatePage triggerUpdate={triggerUpdate} currentPond = {pondName} /> 
+                    <CreatePage 
+                        triggerUpdate={triggerUpdate} 
+                        currentPond = {pondName} 
+                        setPondName={setPondName}
+                    /> 
                 </View>
                 </View>
             </View>
@@ -88,6 +92,9 @@ export default function HeaderNav() {
     const [pondName, setPondName] = useState('');
     const [thumbnail, setThumbnail] = useState(1);
     const [profileId, setProfileId] = useState(1); //default 1 if no set
+
+    const [triggerUpdateCount, setTriggerUpdateCount] = useState(0);
+    const triggerUpdate = () => setTriggerUpdateCount(prev => prev + 1);   
 
     // finds which profile the user currently has
     useEffect(() => {
@@ -142,10 +149,7 @@ export default function HeaderNav() {
         }
         
         fetchSelectedPond()
-    }, [])
-
-    const [triggerUpdateCount, setTriggerUpdateCount] = useState(0);
-    const triggerUpdate = () => setTriggerUpdateCount(prev => prev + 1);    
+    }, [triggerUpdateCount]) 
 
     return (
         <View style={styles.mainView}>

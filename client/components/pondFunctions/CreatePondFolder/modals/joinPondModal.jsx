@@ -63,6 +63,7 @@ const JoinPondModal = ({
     visible,
     onClose,
     triggerUpdate,
+    setPondName,
 }) => {
     const [codeInput, setCodeInput] = useState('');
     const [errorText, setErrorText] = useState('');
@@ -112,6 +113,7 @@ const JoinPondModal = ({
                 join_code: {} //deletes the current join code after use
             })
             
+            setPondName(targetPond.data.name)
             setConfirmVisible(false)
             onClose()
             setCodeInput('')

@@ -118,6 +118,32 @@ const SettingsPage = ({
     }, [visible, setThumbnail]) //trigger this effect when visible parameter changes
 
     useEffect(() => {
+        const fetchOwnerName = async () => {
+            if (!ownerId) return;
+
+            try {
+                const q = query(
+                    collection(db, 'users'),
+                    where('user_uid', '==', ownerId)
+                )
+                const querySnapshot = await getDocs(q)
+
+                if (!querySnapshot.empty) {
+                    const userData = querySnapshot.docs[0].data()
+                    setOwnerName(userData.username)
+                } else {
+                    console.warn('Owner user document not found')
+                    setOwnerName('Unnamed User')
+                }
+            } catch (error) {
+                console.error('Error fetching owner username:', error)
+            }
+        }
+
+        fetchOwnerName()
+    }, [ownerId])
+
+    useEffect(() => {
         if (!visible) {
             setIsEditPondVisible(false)
             setIsMemberVisible(false)
