@@ -85,7 +85,7 @@ export default function HeaderNav() {
     const [modalVisible, setModalVisible] = useState(false);
     const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
-    const [pondName, setPondName] = useState("Current Pond");
+    const [pondName, setPondName] = useState("");
     const [thumbnail, setThumbnail] = useState(1);
     const [profileId, setProfileId] = useState(1); //default 1 if no set
 
@@ -141,9 +141,6 @@ export default function HeaderNav() {
         
         fetchSelectedPond()
     }, [])
-
-    // UNIMPLEMENTED
-    const admin = true;
 
     const [triggerUpdateCount, setTriggerUpdateCount] = useState(0);
     const triggerUpdate = () => setTriggerUpdateCount(prev => prev + 1);    
@@ -203,7 +200,6 @@ export default function HeaderNav() {
             thumbnail={thumbnail}
             setThumbnail={setThumbnail}
             triggerUpdate={triggerUpdate}
-            admin={admin}
             />
         </View>
     );

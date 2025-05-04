@@ -196,6 +196,28 @@ const styles = StyleSheet.create({
   },
 
   //Join button for join pond
+  joinModal: {
+    flex: 1,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  },
+  joinModalBackground:{
+    minWidth: 336,
+    minHeight: 354,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
   joinInfo: {
     marginTop: 10,
     marginBottom: 15,
@@ -203,8 +225,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   joinButton: {
+    marginHorizontal: 15,
     marginTop: 15,
-    borderWidth: 2,
+    borderWidth: 3,
     borderRadius: 30,
     borderColor: '#4F723A',
     width: 50,
@@ -213,10 +236,56 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  joinCancelButton: {
+    borderColor: '#590000',
+    backgroundColor: '#FF6060',
+  },
   imgCheckmark: {
     width: 25,
     height: 25,
     tintColor: '#000000',
+  },
+  joinHeader: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    textAlign: 'center',
+    marginBottom: 15,
+    textDecorationLine: 'underline',
+  },
+  joinInnerWrapper:{
+    backgroundColor: '#FFFFFF',
+    borderRadius: 6,
+    minWidth: 297,
+    minHeight: 212,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10
+  },
+  joinPondName: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  joinButtonRow: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    paddingRight: '20px',
+    paddingLeft: '20px',
+    paddingTop: '10px',
+  },
+  joinErrorText: {
+    color: '#CF0000',
+    fontSize: 15,
+    marginTop: 8,
   },
 });
 

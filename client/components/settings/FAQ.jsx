@@ -33,6 +33,7 @@ export default function FAQ ({
                         { key: 'Question icons created by Freepik' },
                         { key: 'Pencil icons created by Anggara' },
                         { key: 'Delete icons created by Ilham Fitrotul Hayat' },
+                        { key: 'Close icons created by Pixel perfect' },
                     ]}
                     renderItem={({ item }) => {
                         return(

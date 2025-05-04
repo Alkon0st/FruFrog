@@ -22,7 +22,6 @@ const SettingsPage = ({
     thumbnail,
     setThumbnail,
     triggerUpdate,
-    admin
 }) => {
     const [isEditPondVisible, setIsEditPondVisible] = useState(false);
     const [isMemberVisible, setIsMemberVisible] = useState(false);
@@ -33,6 +32,8 @@ const SettingsPage = ({
     const [isBankVisible, setIsBankVisible] = useState(false);
     const [isDisconnectVisible, setIsDisconnectVisible] = useState(false);
     const [isFaqVisible, setIsFaqVisible] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [ownerName, setOwnerName] = useState('');
 
     // const { open, ready } = usePlaidLink({
     //     tokenConfig: async () => {
@@ -73,36 +74,42 @@ const SettingsPage = ({
     // }, []);
 
     useEffect(() => {
-        const fetchThumbnail = async () => {
+        const fetchPondInfo = async () => {
             const auth = getAuth()
             const user = auth.currentUser
 
-            if (!user) {return}
+            if(!user)return
 
-            try {
+            try{
                 const q = query(
                     collection(db, 'ponds'),
                     where('selected', 'array-contains', user.uid)
                 )
                 const querySnapshot = await getDocs(q)
 
-                if (querySnapshot.empty) {
-                    Alert.alert('Error', 'No pond found')
+                if(querySnapshot.empty) {
+                    console.error('Error: no pond found')
                     return
                 }
 
                 const pondDoc = querySnapshot.docs[0]
                 const pondData = pondDoc.data()
 
-                setThumbnail(pondData.thumbnail)
+                setThumbnail(pondData.thumbnail) //sets thumbnail
+
+                //set isAdmin based on ownership
+                if (pondData.owner === user.uid) {
+                    setIsAdmin(true)
+                } else {
+                    setIsAdmin(false)
+                }
             } catch (error) {
-                console.error('Error fetching pond thumbnail:', error)
-                Alert.alert('Error', 'Failed to fetch pond thumbnail')
+                console.error('Error fetching pond info:', error)
             }
         }
-        
+
         if (visible) {
-            fetchThumbnail() //triggers fetch when modal opens
+            fetchPondInfo() //triggers fetch when modal opens
         }
     }, [visible, setThumbnail]) //trigger this effect when visible parameter changes
 
@@ -151,7 +158,7 @@ const SettingsPage = ({
                 <View style={styles.viewStyle}>
 
                 {/* Only shows up IF admin is TRUE */}
-                    {admin && (
+                    {isAdmin && (
                     <View>
                         {/* Edit Pond (Name & Thumbnail) */}
                         <TouchableOpacity 
@@ -209,6 +216,19 @@ const SettingsPage = ({
                             setPondName={setPondName}
                         />
                     </View>
+                    )}
+
+                    {/* Only shows up IF admin is FALSE */}
+                    {!isAdmin && (
+                    <>
+                        {/* Owner Info */}
+                        <View style={styles.menuButton}>
+                            <View style={styles.menuItem}>
+                                <PondThumbnail selection={thumbnail} />
+                                <Text style={styles.menuText}> Pond Owned by {ownerName} </Text>
+                            </View>
+                        </View>
+                    </>
                     )}
 
                     {/* Leave Pond */}
