@@ -13,7 +13,7 @@ import {
 } from './budgetHandler';
 import CategoryModal from './modals/CategoryModal';
 import SubcategoryModal from './modals/SubcategoryModal';
-import EditSubcategoryModal from './modals/EditSubcategoryModal';
+import EditSubcategoryModal from './modals/editSubcategoryModal';
 import HeaderNav from '../nav/HeaderNav';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
