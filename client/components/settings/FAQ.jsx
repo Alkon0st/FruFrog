@@ -18,6 +18,8 @@ export default function FAQ ({
                     padding: 10,
                 }
             ]}>
+                <Text style={{fontWeight: 'bold'}}>Image Artist:</Text>
+                <Text style={[styles.listItemText, {paddingBottom: 10}]}> Sophia Nguyen</Text>
                 <Text style={{fontWeight: 'bold'}}>Most Icons were Provided by Flaticon</Text>
                 <FlatList 
                     data={[
@@ -30,6 +32,7 @@ export default function FAQ ({
                         { key: 'Logout icons created by Afian Rochmah Afif' },
                         { key: 'Question icons created by Freepik' },
                         { key: 'Pencil icons created by Anggara' },
+                        { key: 'Delete icons created by Ilham Fitrotul Hayat' },
                     ]}
                     renderItem={({ item }) => {
                         return(

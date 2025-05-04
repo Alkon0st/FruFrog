@@ -106,6 +106,15 @@ const SettingsPage = ({
         }
     }, [visible, setThumbnail]) //trigger this effect when visible parameter changes
 
+    useEffect(() => {
+        if (!visible) {
+            setIsEditPondVisible(false)
+            setIsMemberVisible(false)
+            setIsSetIncomeVisible(false)
+            setIsFaqVisible(false)
+        }
+    }, [visible])
+
     const renderChevron = (isVisible) => (
         <Text style={styles.menuChevron}>
             {isVisible ? '▲' : '▼'}
