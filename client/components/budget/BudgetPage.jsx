@@ -15,6 +15,8 @@ import CategoryModal from './modals/CategoryModal';
 import SubcategoryModal from './modals/SubcategoryModal';
 import EditSubcategoryModal from './modals/EditSubcategoryModal';
 import HeaderNav from '../nav/HeaderNav';
+import { PieChart } from 'react-native-chart-kit';
+import { Dimensions } from 'react-native';
 
 const BudgetPage = () => {
     const [visible, setVisible] = useState({});
@@ -42,6 +44,27 @@ const BudgetPage = () => {
     const toggleModal = (key, value) => {
         setModalState((prev) => ({ ...prev, [key]: value }));
     };
+    const getCategoryTotalsForPie = () => {
+        return Object.entries(budgetCategories).map(([category, subcategories]) => {
+            const total = subcategories.reduce((sum, sub) => sum + sub.amount, 0);
+            return {
+                name: category,
+                population: total,
+                color: getColorForCategory(category),
+                legendFontColor: "#7F7F7F",
+                legendFontSize: 14
+            };
+        });
+    };
+    
+    const getColorForCategory = (category) => {
+        const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
+        const index = Object.keys(budgetCategories).indexOf(category) % colors.length;
+        return colors[index];
+    };
+    
+    const screenWidth = Dimensions.get('window').width;
+    
 
     useEffect(() => {
         const user = getAuth().currentUser;
@@ -136,6 +159,20 @@ const BudgetPage = () => {
                     <Text style={styles.h1}>Budget Page</Text>
                     <Text style={styles.h2}>Spending Power</Text>
                     <Text style={styles.h2}>Graph</Text>
+                    {Object.keys(budgetCategories).length > 0 && (
+                        <PieChart
+                            data={getCategoryTotalsForPie()}
+                            width={screenWidth - 20}
+                            height={220}
+                            accessor="population"
+                            backgroundColor="transparent"
+                            paddingLeft="15"
+                            absolute
+                            chartConfig={{
+                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                            }}
+                        />
+                    )}
 
                     <View style={styles.categoryContainer}>
                         <Text style={styles.h2}>Categories</Text>
