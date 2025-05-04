@@ -241,6 +241,73 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
 
+    //For memberManage
+    kickModalBackground: {
+        backgroundColor: 'rgba(179, 228, 183, 0.5)',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    kickModalView: {
+        height: 228,
+        width: 369,
+        paddingHorizontal: 20,
+        borderRadius: 6,
+        borderColor: '#AEAEAE',
+        borderWidth: 2,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    kickHeader: {
+        fontWeight: 'bold',
+        fontSize: 32,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    kickText: {
+        fontSize: 20,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    kickButtonRow: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        alignItems: 'center',
+        paddingRight: '20px',
+        paddingLeft: '20px',
+        paddingTop: '10px',
+    },
+    kickButton: {
+        margin: 5,
+        padding: 10,
+        width: 152,
+        height: 40,
+        borderWidth: 2,
+        borderRadius: 10,
+        justifyContent: 'center',
+    },
+    kickButtonText: {
+        color: '#FFFFFF',
+        fontSize: 15,
+        textAlign: 'center', 
+    },
+    kickButtonCancel: {
+        backgroundColor: '#85BB65',
+        borderColor: '#4F723A',
+    },
+    kickButtonConfirm:{
+        backgroundColor: '#FF6060',
+        borderColor: '#590000',
+    },
+
+
     //Content for FAQ
     listItem: {
         margin: 3,
