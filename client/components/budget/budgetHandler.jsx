@@ -8,7 +8,7 @@ export const handleAddCategory = async (pondId, categoryName, setIsCategoryModal
             const categorySnapshot = await getDoc(categoryRef);
 
             if (!categorySnapshot.exists()) {
-                await setDoc(categoryRef, { items: [] }); // Initialize with an empty items array
+                await setDoc(categoryRef, { subcategories: [] }); // Initialize with an empty items array
                 console.log(`Category "${categoryName}" added to Firestore under pond "${pondId}".`);
             } else {
                 console.log(`Category "${categoryName}" already exists under pond "${pondId}".`);
@@ -24,45 +24,46 @@ export const handleAddCategory = async (pondId, categoryName, setIsCategoryModal
     }
 };
 
-export const handleAddSubCategory = async (categoryName, subCategoryName, subCategoryAmount, setIsModalVisible, setNewSubCategory, setNewSubCategoryAmount) => {
-    if (subCategoryName && categoryName && subCategoryAmount) {
+export const handleAddSubCategory = async (pondId,categoryName,subCategoryName,subCategoryAmount) => {
+    if (pondId && categoryName && subCategoryName && subCategoryAmount) {
         try {
-            const categoryRef = doc(db, "budgets", categoryName);
+            const categoryRef = doc(db, "ponds", pondId, "budgetCategories", categoryName);
             const categorySnapshot = await getDoc(categoryRef);
 
             if (categorySnapshot.exists()) {
                 const categoryData = categorySnapshot.data();
-                const subcategories = categoryData.subcategories || [];
+                const subcategories = categoryData.items || [];
 
-                // Check if the subcategory already exists
+                // Check if subcategory already exists
                 if (!subcategories.find(sub => sub.name === subCategoryName)) {
                     const updatedSubcategories = [
                         ...subcategories,
-                        { name: subCategoryName, amount: parseFloat(subCategoryAmount) }
+                        {
+                            name: subCategoryName,
+                            amount: parseFloat(subCategoryAmount)
+                        }
                     ];
 
-                    await updateDoc(categoryRef, { subcategories: updatedSubcategories });
+                    await updateDoc(categoryRef, { items: updatedSubcategories });
                     console.log(`Subcategory "${subCategoryName}" added to category "${categoryName}".`);
                 } else {
-                    console.log(`Subcategory "${subCategoryName}" already exists in category "${categoryName}".`);
+                    console.log(`Subcategory "${subCategoryName}" already exists.`);
                 }
             } else {
                 console.error(`Category "${categoryName}" does not exist.`);
             }
-
-            setIsModalVisible(false);
-            setNewSubCategory('');
-            setNewSubCategoryAmount('');
         } catch (error) {
             console.error("Error adding subcategory:", error);
         }
+    } else {
+        console.error("Missing pond ID, category name, or subcategory details.");
     }
 };
 
 export const handleUpdateSubCategory = async (categoryName, selectedSubcategory, updatedSubCategoryName, updatedSubCategoryAmount, setIsEditModalVisible, setUpdatedSubCategoryName, setUpdatedSubCategoryAmount) => {
     if (categoryName && selectedSubcategory && updatedSubCategoryName && updatedSubCategoryAmount) {
         try {
-            const categoryRef = doc(db, "budgets", categoryName);
+            const categoryRef = doc(db, "budgetCategories", categoryName);
             const categorySnapshot = await getDoc(categoryRef);
 
             if (categorySnapshot.exists()) {
@@ -99,23 +100,4 @@ export const toggleCategoryVisibility = (category, setVisible) => {
         ...prevState,
         [category]: !prevState[category],
     }));
-};
-
-export const getTotalAmount = async (categoryName) => {
-    try {
-        const categoryRef = doc(db, "budgets", categoryName);
-        const categorySnapshot = await getDoc(categoryRef);
-
-        if (categorySnapshot.exists()) {
-            const categoryData = categorySnapshot.data();
-            const subcategories = categoryData.subcategories || [];
-            return subcategories.reduce((total, subCategory) => total + subCategory.amount, 0);
-        } else {
-            console.error(`Category "${categoryName}" does not exist.`);
-            return 0;
-        }
-    } catch (error) {
-        console.error("Error calculating total amount:", error);
-        return 0;
-    }
 };

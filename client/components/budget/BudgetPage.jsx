@@ -7,7 +7,6 @@ import { db } from '../../firebase/firebase';
 import styles from "./budgetPage.style";
 import {
     toggleCategoryVisibility,
-    getTotalAmount,
     handleAddCategory,
     handleAddSubCategory,
     handleUpdateSubCategory,
