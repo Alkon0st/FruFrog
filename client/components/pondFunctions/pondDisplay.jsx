@@ -8,7 +8,6 @@ import PondThumbnail from "./img/pondThumbnail";
 const PondDisplay = ({ 
     updateTrigger, 
     setPondName,
-    setModalVisible, 
 }) => {
     const [userPonds, setUserPonds] = useState([]);
     const [currentPond, setCurrentPond] = useState(null);
@@ -75,7 +74,6 @@ const PondDisplay = ({
             setCurrentPond(selectedPond.id)
             setPondName(selectedPond.name)
             fetchUserPonds() //refreshes ui
-            setModalVisible(false)
         } catch (error) {
             console.error('Error updating pond selection: ', error)
         }

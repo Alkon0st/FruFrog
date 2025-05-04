@@ -43,6 +43,7 @@ const AddUser = ( {pondName} ) => {
             expiresAt
           }
         })
+        console.log('Successfully added code to database.')
       } catch (error) {
         console.error('Failed to update join code in Firestore:', error)
       }
@@ -81,13 +82,19 @@ const AddUser = ( {pondName} ) => {
           setOtp(joinCodeData.code)
           setIsGenerated(true)
         } else {
-          await generateOtp();
+          setOtp(null)
         }
       }
     } catch (error) {
       console.error('Error finding selected pond: ', error)
     }
   }
+
+  useEffect(() => {
+    if (pondId && otp === null) {
+      generateOtp()
+    }
+  }, [pondId, otp])
 
   return (
     <SafeAreaProvider>

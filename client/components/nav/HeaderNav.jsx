@@ -58,7 +58,6 @@ function PondPopupOptions ({
                 <PondDisplay 
                     updateTrigger={triggerUpdateCount}
                     setPondName = {setPondName}
-                    setModalVisible={setModalVisible}
                 />
                 <View style={styles.buttonRow}>
                     {/* Function to call for create pond */}
