@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Alert, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, Modal, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
@@ -155,11 +155,23 @@ export default function MemberManage ({
                             style = {styles.editThumbnailButton}
                             onPress={() => setSelectedToKick(uid)}
                         >
+                        <View style={styles.thumbnailSelectionContainer}>
                             <ProfilePicture 
                                 selection={profileId}
                                 optionalStyle={{ width: 60, height: 60}}
                             />
+                            {/* special styling if clicked */}
+                            {selectedToKick === uid && (
+                                <>
+                                <View style={[styles.selectedOverlay, {transform: [{translateY: -10}]}]} />
+                                <Image
+                                    source={require('../img/close.png')}
+                                    style={[styles.thumbnailCheckmark, {transform: [{translateY: -10}]}]}
+                                />
+                                </>
+                            )}
                             <Text style={styles.kickUsername}>{username}</Text>
+                        </View>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>

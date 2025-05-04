@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
 
     //Current Profile Display (at the top of ProfilePage)
     currentProfileContainer: {
-        alignSelf: 'center',
+        alignItems: 'center',
         marginTop: 20,
     },
     currentUsername: {
