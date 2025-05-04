@@ -1,4 +1,4 @@
-import {Modal, Text, View, TouchableOpacity, ScrollView, Image} from 'react-native';
+import {Modal, Text, View, TouchableOpacity, ScrollView, Image, Alert} from 'react-native';
 import { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
@@ -226,6 +226,11 @@ const SettingsPage = ({
                     <LeavePond
                         visible={isLeaveVisible}
                         onClose={() => setIsLeaveVisible(false)}
+                        setPondName={setPondName}
+                        onLeft={() => {
+                            setIsLeaveVisible(false)
+                            onClose() //closes settings page
+                        }}
                     />
                 </View>
             {/* Universal Settings */}
