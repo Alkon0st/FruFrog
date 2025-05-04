@@ -1,42 +1,107 @@
 import { useEffect, useState } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, Image } from 'react-native';
-
+import { View, Text, TextInput, ScrollView, TouchableOpacity, Image, Alert, Modal } from 'react-native';
+import { getAuth } from 'firebase/auth';
+import { db } from '../../firebase/firebase';
+import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 
 import styles from '../settings/SettingsPage.style';
 import PondThumbnail from './img/pondThumbnail';
 
-// change current pond name
+const SuccessMessage = ({visible}) => {
+    return (
+        <Modal
+            visible={visible}
+            transparent={true}
+        >
+        <View style={styles.successContainer}>
+            <View style={styles.successView}>
+                <Text style={styles.successText}> Saved Successfully </Text>
+                <Image 
+                    source={require('../img/checkmark.png')}
+                    resizeMode='contain'
+                    style={styles.successCheckmark}
+                />
+            </View>
+        </View>
+        </Modal>
+    )
+}
+
 export default function EditPond ({ 
     pondName, 
     setPondName, 
     thumbnail,
     setThumbnail,
     triggerUpdate, 
-    visible }) {
+    visible 
+}) {
     const [ newPondName, setNewPondName ] = useState(pondName);
     const [ newThumbnail, setNewThumbnail ] = useState(thumbnail);
+    const [successVisible, setSuccessVisible] = useState(false);
 
     useEffect(() => {
         if (visible) {
             setNewThumbnail(thumbnail) // reset thumbnail when modal is open
+            setNewPondName(pondName)
         }
-    }, [visible, thumbnail])
+    }, [visible, thumbnail, pondName])
 
     //for thumbnail options
     let thumbnailOptions = [1,2,3,4,5,6,7,8]
     
-    const handleEditPond = () => {
-        if ((newPondName && newPondName !== pondName) || newThumbnail !== thumbnail) {
+    const handleEditPond = async () => {
+        const auth = getAuth()
+        const user = auth.currentUser
 
+        if (!user) return
+
+        try {
+            const q = query (
+                collection(db, 'ponds'),
+                where('selected', 'array-contains', user.uid)
+            )
+            const querySnapshot = await getDocs(q)
+
+            if (querySnapshot.empty) {
+                Alert.alert('Error', 'No selected pond found.')
+                return
+            }
+
+            const pondDoc = querySnapshot.docs[0]
+            const pondData = pondDoc.data()
+
+            // just in case user somehow passes through the admin check in settings
+            if (pondData.owner !== user.uid) {
+                Alert.alert('Error', 'Only the pond owner can edit it.')
+                return
+            }
+
+            const updates = {}
             if (newPondName && newPondName !== pondName) {
-                setPondName(newPondName);
+                updates.name = newPondName
+                setPondName(newPondName)
             }
-            
             if (newThumbnail !== thumbnail) {
-                setThumbnail(newThumbnail);
+                updates.thumbnail = newThumbnail
+                setThumbnail(newThumbnail)
             }
 
-            triggerUpdate()
+            if (Object.keys(updates).length > 0){
+                await updateDoc(pondDoc.ref, updates)
+                
+                //shows success message for 2 seconds
+                setSuccessVisible(true);
+                setTimeout(() => {
+                    setSuccessVisible(false);
+                }, 2000);
+                
+                triggerUpdate()
+            } else {
+                Alert.alert('Notice', 'No changes to update')
+            }
+        } catch (error) {
+            console.error('Error updating pond:', error)
+            Alert.alert('Error', 'Failed to update pond.')
         }
     };
 
@@ -111,6 +176,8 @@ export default function EditPond ({
             style={styles.confirmButton}> 
                 <Text style={styles.confirmText}> Confirm All Changes </Text> 
             </TouchableOpacity>
-        </View>    
+
+            <SuccessMessage visible={successVisible} />
+        </View>
     );
 }
