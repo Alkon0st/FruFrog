@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 20,
     },
+    currentUsername: {
+        fontWeight: 'bold',
+        fontSize: 30,
+        textAlign: 'center',
+        color: '#22470C',
+    },
 
     // Profile Styling  
     selectionContainer: {

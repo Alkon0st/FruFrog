@@ -38,6 +38,7 @@ const ProfilePage = ({
 
     const navigation = useNavigation();
     const [successVisible, setSuccessVisible] = useState(false);
+    const [username, setUsername] = useState('');
 
     const [ newProfile, setNewProfile ] = useState(profile);
     const [ selectedProfile, setSelectedProfile ] = useState(profile);
@@ -50,6 +51,33 @@ const ProfilePage = ({
             setNewProfile(profile);
         }
     }, [visible, profile])
+
+    useEffect(() => {
+        const fetchUsername = async () => {
+            const auth = getAuth()
+            const user = auth.currentUser
+            if(!user) return
+
+            try {
+                const usersRef = collection(db, 'users')
+                const q = query(usersRef, where('user_uid', '==', user.uid))
+                const querySnapshot = await getDocs(q)
+
+                if (!querySnapshot.empty) {
+                    const userData = querySnapshot.docs[0].data()
+                    setUsername(userData.username)
+                } else {
+                    console.warn('User not found in users collection.')
+                }
+            } catch (error) {
+                console.error('Error fetching username:', error)
+            }
+        }
+
+        if (visible) {
+            fetchUsername()
+        }
+    }, [visible])
     
     return (
         <Modal 
@@ -76,9 +104,8 @@ const ProfilePage = ({
                 <View style={{ width: 50 }} /> 
             </View>
 
+            {/* Main portion of profile */}
             <View style={styles.container}>
-                {/* Main portion of profile */}
-
                 {/* Top Part that shows Selected Profile */}
                 <View style={styles.currentProfileContainer}> 
                     <ProfilePicture 
@@ -86,6 +113,7 @@ const ProfilePage = ({
                         optionalStyle={{width: 100, height: 100}}
                         optionalOutlineStyle={{width: 101, height: 101}} 
                     />
+                    <Text style={styles.currentUsername}>{username}</Text>
                 </View>
                 <View style={styles.contentContainer}>
                     {ProfileOptions.map((value) => {
@@ -209,7 +237,7 @@ const ProfilePage = ({
                 <Text style={styles.footer}>© Pond Patrol. All rights reserved.</Text>
             </View>
 
-            <SuccessMessage visible={successVisible} />
+            <SuccessMessage visible={successVisible}/>
             
         </LinearGradient>
         </Modal>

@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
-import { collection, query, where, getDocs, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, arrayRemove, getDoc, arrayUnion, doc } from 'firebase/firestore';
 import ProfilePicture from '../profile/img/profilePicture';
 import styles from '../settings/SettingsPage.style';
 
@@ -71,22 +71,39 @@ export default function MemberManage ({
             const filteredMembers = pondData.members.filter(uid => uid !== ownerId); // exclude owner
 
             const profilesSnapshot = await getDocs(collection(db, 'profiles'));
-            const membersWithIds = [];
+            const membersWithDetails = [];
 
             for (const memberUid of filteredMembers) {
+                let profileId = null
+                
+                // finds profile pic id for member
                 for (const profileDoc of profilesSnapshot.docs) {
                     const profileData = profileDoc.data();
                     if (profileData.members?.includes(memberUid)) {
-                        membersWithIds.push({
-                            uid: memberUid,
-                            profileId: profileData.profile_id
-                        })
+                        profileId = profileData.profile_id
                         break // found the profile, move to next member
                     }
                 }
+
+                //fetch username from 'users' collection
+                const usersQuery = query(
+                    collection(db, 'users'),
+                    where('user_uid', '==', memberUid)
+                )
+                const usersSnapshot = await getDocs(usersQuery)
+                const username = usersSnapshot.docs.length > 0
+                    ? usersSnapshot.docs[0].data().username
+                    : 'Unknown';
+                
+                //push with data
+                membersWithDetails.push({
+                    uid: memberUid,
+                    profileId,
+                    username
+                })
             }
 
-            setMembers(membersWithIds);
+            setMembers(membersWithDetails);
         } catch (error) {
             console.error('Error fetching members and profiles:', error);
         }
@@ -132,7 +149,7 @@ export default function MemberManage ({
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.editThumbnailScrollContent}
                 >
-                    {members.map(({uid, profileId}) => (
+                    {members.map(({uid, profileId, username}) => (
                         <TouchableOpacity
                             key = {uid}
                             style = {styles.editThumbnailButton}
@@ -142,6 +159,7 @@ export default function MemberManage ({
                                 selection={profileId}
                                 optionalStyle={{ width: 60, height: 60}}
                             />
+                            <Text style={styles.kickUsername}>{username}</Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>

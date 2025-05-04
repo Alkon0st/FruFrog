@@ -34,6 +34,8 @@ const SettingsPage = ({
     const [isFaqVisible, setIsFaqVisible] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [ownerName, setOwnerName] = useState('');
+    const [ownerId, setOwnerId] = useState('');
+    const [pondId, setPondId] = useState('');
 
     // const { open, ready } = usePlaidLink({
     //     tokenConfig: async () => {
@@ -96,6 +98,8 @@ const SettingsPage = ({
                 const pondData = pondDoc.data()
 
                 setThumbnail(pondData.thumbnail) //sets thumbnail
+                setPondId(pondDoc.id) //stores pond id
+                setOwnerId(pondData.owner) //stores owner uid
 
                 //set isAdmin based on ownership
                 if (pondData.owner === user.uid) {
@@ -195,6 +199,8 @@ const SettingsPage = ({
                         <MemberManage 
                             triggerUpdate={triggerUpdate} 
                             visible={isMemberVisible} 
+                            pondId={pondId}
+                            ownerId={ownerId}
                         />
 
                         {/* Delete Current Pond */}

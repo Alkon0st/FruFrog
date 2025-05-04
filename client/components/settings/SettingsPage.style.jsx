@@ -276,6 +276,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
     },
+    kickUsername: {
+        textAlign: 'center',
+        fontSize: 15,
+        color: '#22470C',
+        fontWeight: 'bold',
+    },
     kickButtonRow: {
         flexDirection: 'row',
         alignSelf: 'center',
