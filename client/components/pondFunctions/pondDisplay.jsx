@@ -39,6 +39,7 @@ const PondDisplay = ({
                 setCurrentPond(selectedPond.id)
             }
             else {
+                setPondName('');
                 setCurrentPond(null);
             }
 
