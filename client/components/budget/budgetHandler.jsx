@@ -1,18 +1,17 @@
-import budgetCategories, { addCategory, addSubCategory, updateSubCategoryAmount } from './budgetCategories';
 import { db } from "../../firebase/firebase"; // Adjust the path to your Firebase config
 import { collection, doc, setDoc, updateDoc, getDoc, arrayUnion } from "firebase/firestore";
 
-export const handleAddCategory = async (categoryName, setIsCategoryModalVisible, setNewCategory) => {
-    if (categoryName) {
+export const handleAddCategory = async (pondId, categoryName, setIsCategoryModalVisible, setNewCategory) => {
+    if (pondId && categoryName) {
         try {
-            const categoryRef = doc(db, "budgets", categoryName);
+            const categoryRef = doc(db, "ponds", pondId, "budgetCategories", categoryName);
             const categorySnapshot = await getDoc(categoryRef);
 
             if (!categorySnapshot.exists()) {
-                await setDoc(categoryRef, { subcategories: [] }); // Initialize with an empty subcategories array
-                console.log(`Category "${categoryName}" added to Firestore.`);
+                await setDoc(categoryRef, { items: [] }); // Initialize with an empty items array
+                console.log(`Category "${categoryName}" added to Firestore under pond "${pondId}".`);
             } else {
-                console.log(`Category "${categoryName}" already exists.`);
+                console.log(`Category "${categoryName}" already exists under pond "${pondId}".`);
             }
 
             setIsCategoryModalVisible(false);
@@ -20,8 +19,11 @@ export const handleAddCategory = async (categoryName, setIsCategoryModalVisible,
         } catch (error) {
             console.error("Error adding category:", error);
         }
+    } else {
+        console.error("Pond ID or category name is missing.");
     }
 };
+
 export const handleAddSubCategory = async (categoryName, subCategoryName, subCategoryAmount, setIsModalVisible, setNewSubCategory, setNewSubCategoryAmount) => {
     if (subCategoryName && categoryName && subCategoryAmount) {
         try {

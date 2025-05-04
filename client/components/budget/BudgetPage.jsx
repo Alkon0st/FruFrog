@@ -12,189 +12,186 @@ import {
     handleAddSubCategory,
     handleUpdateSubCategory,
 } from './budgetHandler';
-import AddSubcategoryModal from './modals/addSubcategoryModal';
-import AddCategoryModal from './modals/addCategoryModal';
-import EditSubcategoryModal from './modals/editSubcategoryModal';
+import CategoryModal from './modals/CategoryModal';
+import SubcategoryModal from './modals/SubcategoryModal';
+import EditSubcategoryModal from './modals/EditSubcategoryModal';
 import HeaderNav from '../nav/HeaderNav';
 
 const BudgetPage = () => {
     const [visible, setVisible] = useState({});
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
-    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-
     const [budgetCategories, setBudgetCategories] = useState({});
-    const [newCategory, setNewCategory] = useState('');
-    const [newSubCategory, setNewSubCategory] = useState('');
-    const [newSubCategoryAmount, setNewSubCategoryAmount] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-    const [updatedSubCategoryName, setUpdatedSubCategoryName] = useState('');
-    const [updatedSubCategoryAmount, setUpdatedSubCategoryAmount] = useState('');
+    const [pondId, setPondId] = useState(null);
 
-    const renderChevron = (category) => (
-        <Text style={styles.chevron}>
-            {visible[category] ? 'v' : '>'}
-        </Text>
+    // Modal state
+    const [modalState, setModalState] = useState({
+        showCategoryModal: false,
+        showSubcategoryModal: false,
+        showEditModal: false,
+    });
+
+    // Category/Subcategory details
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+    const [form, setForm] = useState({
+        newCategory: '',
+        subName: '',
+        subAmount: '',
+        updatedName: '',
+        updatedAmount: '',
+    });
+
+    const toggleModal = (key, value) => {
+        setModalState((prev) => ({ ...prev, [key]: value }));
+    };
+
+    useEffect(() => {
+        const user = getAuth().currentUser;
+        if (!user) return;
+        // Fetch ponds for the current user i.e. changes applied to all of the ponds the user is a member of 
+        // remember this and also change the add handler toooo
+        const pondsQuery = query(
+            collection(db, 'ponds'),
+            where('members', 'array-contains', user.uid)
+        );
+
+        const unsubscribePonds = onSnapshot(pondsQuery, (pondsSnapshot) => {
+            pondsSnapshot.forEach((pondDoc) => {
+                const id = pondDoc.id;
+                setPondId(id);
+                const categoriesRef = collection(db, "ponds", id, "budgetCategories");
+
+                const unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
+                    const data = {};
+                    snapshot.forEach(doc => {
+                        data[doc.id] = doc.data().items;
+                    });
+                    setBudgetCategories(data);
+                });
+
+                // Return inner unsubscribe
+                return () => unsubscribeCategories();
+            });
+        });
+
+        return () => unsubscribePonds();
+    }, []);
+
+    const renderCategory = (category) => (
+        <View key={category}>
+            <TouchableOpacity
+                onPress={() => toggleCategoryVisibility(category, setVisible)}
+                style={styles.categoryContainer}
+            >
+                <Text style={[styles.category, styles.h3]}>
+                    {category}: ${getTotal(category)}
+                </Text>
+                <Text style={styles.chevron}>
+                    {visible[category] ? 'v' : '>'}
+                </Text>
+            </TouchableOpacity>
+
+            {visible[category] && (
+                <View>
+                    {budgetCategories[category].map((subCategory) => (
+                        <TouchableOpacity
+                            key={subCategory.name}
+                            style={styles.subCategoryContainer}
+                            onPress={() => {
+                                setSelectedCategory(category);
+                                setSelectedSubcategory(subCategory);
+                                setForm({
+                                    ...form,
+                                    updatedName: subCategory.name,
+                                    updatedAmount: subCategory.amount.toString()
+                                });
+                                toggleModal("showEditModal", true);
+                            }}
+                        >
+                            <Text style={styles.subCategory}>
+                                {subCategory.name}: ${subCategory.amount}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                    <TouchableOpacity
+                        style={styles.addButton}
+                        onPress={() => {
+                            setSelectedCategory(category);
+                            toggleModal("showSubcategoryModal", true);
+                        }}
+                    >
+                        <Text style={styles.addButtonText}>Add</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+        </View>
     );
 
-    // Fetch budget categories in real-time
-    useEffect(() => {
-        const auth = getAuth();
-        const user = auth.currentUser;
-
-        if (user) {
-            const fetchBudgetCategories = async () => {
-                try {
-                    const pondsQuery = query(
-                        collection(db, 'ponds'),
-                        where('members', 'array-contains', user.uid)
-                    );
-
-                    const unsubscribePonds = onSnapshot(pondsQuery, (pondsSnapshot) => {
-                        pondsSnapshot.forEach((pondDoc) => {
-                            const pondId = pondDoc.id;
-
-                            const categoriesRef = collection(db, "ponds", pondId, "budgetCategories");
-                            const unsubscribeCategories = onSnapshot(categoriesRef, (categoriesSnapshot) => {
-                                const data = {};
-                                categoriesSnapshot.forEach((doc) => {
-                                    data[doc.id] = doc.data().items;
-                                });
-                                setBudgetCategories(data);
-                            });
-
-                            // Cleanup listener for categories
-                            return () => unsubscribeCategories();
-                        });
-                    });
-
-                    // Cleanup listener for ponds
-                    return () => unsubscribePonds();
-                } catch (err) {
-                    console.error("Failed to fetch budget categories: ", err);
-                }
-            };
-
-            fetchBudgetCategories();
-        }
-    }, []);
+    const getTotal = (category) =>
+        budgetCategories[category]?.reduce((total, sub) => total + sub.amount, 0);
 
     return (
         <SafeAreaView style={styles.container}>
-            <LinearGradient
-                colors={['#F1FEFE', '#B2F0EF']}
-                style={styles.page}
-            >
+            <LinearGradient colors={['#F1FEFE', '#B2F0EF']} style={styles.page}>
                 <ScrollView>
                     <HeaderNav />
                     <Text style={styles.h1}>Budget Page</Text>
-
                     <Text style={styles.h2}>Spending Power</Text>
-
                     <Text style={styles.h2}>Graph</Text>
+
                     <View style={styles.categoryContainer}>
                         <Text style={styles.h2}>Categories</Text>
-                        <TouchableOpacity onPress={() => setIsCategoryModalVisible(true)} style={styles.addButtonCategory}>
+                        <TouchableOpacity
+                            onPress={() => toggleModal("showCategoryModal", true)}
+                            style={styles.addButtonCategory}
+                        >
                             <Text style={styles.addButtonText}>+</Text>
                         </TouchableOpacity>
                     </View>
-                    {Object.keys(budgetCategories).map((category) => (
-                        <View key={category}>
-                            <TouchableOpacity
-                                onPress={() => toggleCategoryVisibility(category, setVisible)}
-                                style={styles.categoryContainer}
-                            >
-                                <Text style={[styles.category, styles.h3]}>
-                                    {category}: ${getTotalAmount(category, budgetCategories)}
-                                </Text>
-                                {renderChevron(category)}
-                            </TouchableOpacity>
 
-                            {visible[category] && (
-                                <View>
-                                    {budgetCategories[category].map((subCategory) => (
-                                        <View key={subCategory.name} style={[styles.subCategoryContainer, styles.p]}>
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    setSelectedCategory(category);
-                                                    setSelectedSubcategory(subCategory);
-                                                    setUpdatedSubCategoryName(subCategory.name);
-                                                    setUpdatedSubCategoryAmount(subCategory.amount.toString());
-                                                    setIsEditModalVisible(true);
-                                                }}
-                                            >
-                                                <Text style={styles.subCategory}>
-                                                    {subCategory.name}: ${subCategory.amount}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    ))}
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setSelectedCategory(category);
-                                            setIsModalVisible(true);
-                                        }}
-                                        style={styles.addButton}
-                                    >
-                                        <Text style={styles.addButtonText}>Add</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                        </View>
-                    ))}
+                    {Object.keys(budgetCategories).map(renderCategory)}
                 </ScrollView>
             </LinearGradient>
 
-            <AddCategoryModal
-                visible={isCategoryModalVisible}
-                onClose={() => setIsCategoryModalVisible(false)}
-                newCategory={newCategory}
-                setNewCategory={setNewCategory}
-                handleAddNewCategory={() =>
-                    handleAddCategory(newCategory, setIsCategoryModalVisible, setNewCategory)
-                }
+            {/* Modals */}
+            <CategoryModal
+                visible={modalState.showCategoryModal}
+                onClose={() => toggleModal("showCategoryModal", false)}
+                value={form.newCategory}
+                onChange={(text) => setForm({ ...form, newCategory: text })}
+                onSubmit={() => {
+                    handleAddCategory(pondId, form.newCategory, toggleModal, setForm);
+                    toggleModal("showCategoryModal", false);
+                    setForm({ ...form, newCategory: '' });
+                }}
             />
 
-            <AddSubcategoryModal
-                visible={isModalVisible}
-                onClose={() => setIsModalVisible(false)}
-                selectedCategory={selectedCategory}
-                newSubCategory={newSubCategory}
-                setNewSubCategory={setNewSubCategory}
-                newSubCategoryAmount={newSubCategoryAmount}
-                setNewSubCategoryAmount={setNewSubCategoryAmount}
-                handleAddNewSubCategory={() =>
-                    handleAddSubCategory(
-                        selectedCategory,
-                        newSubCategory,
-                        newSubCategoryAmount,
-                        setIsModalVisible,
-                        setNewSubCategory,
-                        setNewSubCategoryAmount
-                    )
-                }
+            <SubcategoryModal
+                visible={modalState.showSubcategoryModal}
+                onClose={() => toggleModal("showSubcategoryModal", false)}
+                category={selectedCategory}
+                name={form.subName}
+                amount={form.subAmount}
+                onChangeName={(text) => setForm({ ...form, subName: text })}
+                onChangeAmount={(text) => setForm({ ...form, subAmount: text })}
+                onSubmit={() => {
+                    handleAddSubCategory(pondId, selectedCategory, form.subName, parseFloat(form.subAmount));
+                    toggleModal("showSubcategoryModal", false);
+                    setForm({ ...form, subName: '', subAmount: '' });
+                }}
             />
 
             <EditSubcategoryModal
-                visible={isEditModalVisible}
-                onClose={() => setIsEditModalVisible(false)}
-                selectedSubcategory={selectedSubcategory}
-                updatedSubCategoryName={updatedSubCategoryName}
-                setUpdatedSubCategoryName={setUpdatedSubCategoryName}
-                updatedSubCategoryAmount={updatedSubCategoryAmount}
-                setUpdatedSubCategoryAmount={setUpdatedSubCategoryAmount}
-                handleUpdateSubCategory={() =>
-                    handleUpdateSubCategory(
-                        selectedCategory,
-                        selectedSubcategory,
-                        updatedSubCategoryName,
-                        updatedSubCategoryAmount,
-                        setIsEditModalVisible,
-                        setUpdatedSubCategoryName,
-                        setUpdatedSubCategoryAmount
-                    )
-                }
+                visible={modalState.showEditModal}
+                onClose={() => toggleModal("showEditModal", false)}
+                name={form.updatedName}
+                amount={form.updatedAmount}
+                onChangeName={(text) => setForm({ ...form, updatedName: text })}
+                onChangeAmount={(text) => setForm({ ...form, updatedAmount: text })}
+                onSubmit={() => {
+                    handleUpdateSubCategory(pondId, selectedCategory, selectedSubcategory.name, form.updatedName, parseFloat(form.updatedAmount));
+                    toggleModal("showEditModal", false);
+                    setForm({ ...form, updatedName: '', updatedAmount: '' });
+                }}
             />
         </SafeAreaView>
     );

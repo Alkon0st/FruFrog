@@ -2,11 +2,11 @@ import React from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import styles from './modalStyles';
 
-const EditSubcategoryModal = ({ visible, onClose, name, amount, onChangeName, onChangeAmount, onSubmit }) => (
+const SubcategoryModal = ({ visible, onClose, category, name, amount, onChangeName, onChangeAmount, onSubmit }) => (
   <Modal visible={visible} animationType="slide" transparent>
     <View style={styles.modalOverlay}>
       <View style={styles.modalContainer}>
-        <Text style={styles.modalTitle}>Edit Subcategory</Text>
+        <Text style={styles.modalTitle}>Add to {category}</Text>
         <TextInput
           placeholder="Subcategory Name"
           value={name}
@@ -25,7 +25,7 @@ const EditSubcategoryModal = ({ visible, onClose, name, amount, onChangeName, on
             <Text style={styles.buttonText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onSubmit} style={styles.submitButton}>
-            <Text style={styles.buttonText}>Update</Text>
+            <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -33,4 +33,4 @@ const EditSubcategoryModal = ({ visible, onClose, name, amount, onChangeName, on
   </Modal>
 );
 
-export default EditSubcategoryModal;
+export default SubcategoryModal;
