@@ -60,7 +60,7 @@ export const handleAddSubCategory = async (pondId,categoryName,subCategoryName,s
     }
 };
 
-export const handleUpdateSubCategory = async (categoryName, selectedSubcategory, updatedSubCategoryName, updatedSubCategoryAmount, setIsEditModalVisible, setUpdatedSubCategoryName, setUpdatedSubCategoryAmount) => {
+export const handleUpdateSubCategory = async (pondId, categoryName, selectedSubcategory, updatedSubCategoryName, updatedSubCategoryAmount, setIsEditModalVisible, setUpdatedSubCategoryName, setUpdatedSubCategoryAmount) => {
     if (pondId && categoryName && selectedSubcategory && updatedSubCategoryName && updatedSubCategoryAmount) {
         try {
             const categoryRef = doc(db, "ponds", pondId, "budgetCategories", categoryName);
