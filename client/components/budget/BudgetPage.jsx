@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, getDoc, doc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
 import styles from "./budgetPage.style";
@@ -49,10 +49,11 @@ const BudgetPage = () => {
             const total = subcategories.reduce((sum, sub) => sum + sub.amount, 0);
             return {
                 name: category,
-                population: total,
+                total: total,
                 color: getColorForCategory(category),
                 legendFontColor: "#7F7F7F",
-                legendFontSize: 14
+                legendFontSize: 14,
+                
             };
         });
     };
@@ -69,33 +70,40 @@ const BudgetPage = () => {
     useEffect(() => {
         const user = getAuth().currentUser;
         if (!user) return;
-        // Fetch ponds for the current user i.e. changes applied to all of the ponds the user is a member of 
-        // remember this and also change the add handler toooo
-        const pondsQuery = query(
-            collection(db, 'ponds'),
-            where('members', 'array-contains', user.uid)
-        );
-
-        const unsubscribePonds = onSnapshot(pondsQuery, (pondsSnapshot) => {
-            pondsSnapshot.forEach((pondDoc) => {
-                const id = pondDoc.id;
-                setPondId(id);
-                const categoriesRef = collection(db, "ponds", id, "budgetCategories");
-
-                const unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
-                    const data = {};
-                    snapshot.forEach(doc => {
-                        data[doc.id] = doc.data().items;
-                    });
-                    setBudgetCategories(data);
+    
+        const userDocRef = doc(db, "users", user.uid);
+    
+        // Listen to the user's document for changes (e.g., currentPondId updates)
+        const unsubscribeUser = onSnapshot(userDocRef, (userSnapshot) => {
+            const userData = userSnapshot.data();
+            const currentPondId = userData?.currentPondId;
+    
+            if (!currentPondId) {
+                console.warn("No currentPondId found for user.");
+                setPondId(null);
+                setBudgetCategories({});
+                return;
+            }
+    
+            setPondId(currentPondId);
+    
+            // Reference the selected pond's budgetCategories
+            const categoriesRef = collection(db, "ponds", currentPondId, "budgetCategories");
+    
+            // Set up a real-time listener for categories
+            const unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
+                const data = {};
+                snapshot.forEach(doc => {
+                    data[doc.id] = doc.data().items;
                 });
-
-                // Return inner unsubscribe
-                return () => unsubscribeCategories();
+                setBudgetCategories(data);
             });
+    
+            // Clean up the categories listener when pond changes
+            return () => unsubscribeCategories();
         });
-
-        return () => unsubscribePonds();
+    
+        return () => unsubscribeUser();
     }, []);
 
     const renderCategory = (category) => (
@@ -104,12 +112,14 @@ const BudgetPage = () => {
                 onPress={() => toggleCategoryVisibility(category, setVisible)}
                 style={styles.category}
             >
-                <Text style={[styles.categoryText, styles.h3]}>
-                    {category}                                              ${getTotal(category)}
-                </Text>
-                <Text style={styles.chevron}>
-                    {visible[category] ? '▼' : '⯈'}
-                </Text>
+                <Text style={styles.h3}>{category}</Text>
+                <View style={styles.categoryText}>
+                    <Text style={styles.h3}>${getTotal(category)}</Text>
+                    <Text style={styles.chevron}>
+                        {visible[category] ? '▼' : '⯈'}
+                    </Text>
+                </View>
+                
             </TouchableOpacity>
 
             {visible[category] && (
@@ -168,7 +178,7 @@ const BudgetPage = () => {
                                     data={getCategoryTotalsForPie()}
                                     width={screenWidth - 20}
                                     height={220}
-                                    accessor="population"
+                                    accessor="total"
                                     backgroundColor="transparent"
                                     paddingLeft="15"
                                     absolute

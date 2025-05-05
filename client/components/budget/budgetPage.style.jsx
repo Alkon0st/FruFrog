@@ -61,16 +61,18 @@ const styles = StyleSheet.create({
     category: {
         paddingLeft: 10,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#F1FEFE',
         border:"1px solid #85BB65",
     },
     categoryText: {
-        padding: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
         justifyContent: 'space-between',
         alignItems: 'space-between',
         flexDirection: 'row',
+        
     },
     subCategoryContainer: {
         backgroundColor: '#FAFFD9',

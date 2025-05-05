@@ -30,7 +30,6 @@ const CreatePage = ({ triggerUpdate, currentPond, setPondName }) => {
                     thumbnail: newThumbnail,
                     owner: user.uid,
                     members: [user.uid],
-                    budgets: [],
                     billList: [],
                     createdAt: new Date(),
                     selected: [user.uid],

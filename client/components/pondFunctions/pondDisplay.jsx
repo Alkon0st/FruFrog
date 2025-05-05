@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { getAuth } from "firebase/auth";
-import { collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase"; // Make sure the path matches yours
 import PondThumbnail from "./img/pondThumbnail";
 
@@ -16,33 +16,42 @@ const PondDisplay = ({
     const fetchUserPonds = async () => {
         const auth = getAuth();
         const user = auth.currentUser;
-
+    
         if (!user) return;
-
+    
         try {
+            // Get user document to read currentPondId
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+            const currentPondId = userDoc.exists() ? userDoc.data().currentPondId : null;
+    
             const q = query(
                 collection(db, "ponds"),
                 where("members", "array-contains", user.uid)
             );
-
+    
             const querySnapshot = await getDocs(q);
             const ponds = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
-
+    
             setUserPonds(ponds);
-
-            // to find which pond the user is currently selecting
-            const selectedPond = ponds.find(p=>p.selected?.includes(user.uid))
-            if (selectedPond) {
-                setCurrentPond(selectedPond.id)
-            }
-            else {
-                setPondName('');
+    
+            if (currentPondId) {
+                const selectedPond = ponds.find(p => p.id === currentPondId);
+                if (selectedPond) {
+                    setCurrentPond(currentPondId);
+                    setPondName(selectedPond.name);
+                } else {
+                    setCurrentPond(null);
+                    setPondName('');
+                }
+            } else {
                 setCurrentPond(null);
+                setPondName('');
             }
-
+    
         } catch (error) {
             console.error("Error fetching user ponds:", error);
         }
@@ -55,30 +64,23 @@ const PondDisplay = ({
     const handleSelectPond = async (selectedPond) => {
         const auth = getAuth();
         const user = auth.currentUser;
-
+    
         if (!user) return;
-
+    
         try {
-            const updatePromises = userPonds.map(async (pond) => {
-                if (pond.id !== selectedPond.id && pond.selected?.includes(user.uid)) {
-                    await updateDoc(doc(db, 'ponds', pond.id), {
-                        selected: arrayRemove(user.uid)
-                    })
-                }
-            })
-
-            await updateDoc(doc(db, 'ponds', selectedPond.id), {
-                selected: arrayUnion(user.uid)
-            })
-
-            await Promise.all(updatePromises)
-            setCurrentPond(selectedPond.id)
-            setPondName(selectedPond.name)
-            fetchUserPonds() //refreshes ui
+            // Update the user's currentPondId in their user document
+            const userRef = doc(db, "users", user.uid);
+            await updateDoc(userRef, {
+                currentPondId: selectedPond.id,
+            });
+    
+            setCurrentPond(selectedPond.id);
+            setPondName(selectedPond.name);
+    
         } catch (error) {
-            console.error('Error updating pond selection: ', error)
+            console.error('Error setting current pond on user document:', error);
         }
-    }
+    };
 
     return (
         <SafeAreaView style={styles.mainView}>

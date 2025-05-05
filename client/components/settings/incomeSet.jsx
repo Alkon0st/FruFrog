@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Picker} from 'react-native';
+import { db } from '../../firebase/firebase';
+import { getAuth } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 const IncomeForm = ({
   visible, 
@@ -20,9 +23,20 @@ const IncomeForm = ({
     CAD: 'C$'
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     setShowSuccessMessage(true);
-    setTimeout(() => setShowSuccessMessage(false), 3000);
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      await setDoc(userRef, { income: incomeData }, { merge: true });
+  
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+    } catch (error) {
+      console.error("Error updating income:", error);
+    }
   };
 
   

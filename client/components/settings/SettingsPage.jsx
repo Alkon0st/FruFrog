@@ -37,43 +37,6 @@ const SettingsPage = ({
     const [ownerId, setOwnerId] = useState('');
     const [pondId, setPondId] = useState('');
 
-    // const { open, ready } = usePlaidLink({
-    //     tokenConfig: async () => {
-    //         const response = await fetch('http://localhost:3000/create_link_token', {
-    //             method: 'POST',
-    //         });
-    //         const { link_token } = await response.json();
-    //         return link_token;
-    //     },
-    //     onSuccess: (publicToken, metadata) => {
-    //         fetch('http://localhost:3000/exchange_public_token', {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify({ public_token: publicToken }),
-    //         })
-    //             .then((response) => response.json())
-    //             .then((data) => {
-    //                 Alert.alert('Success', 'Bank account connected successfully!');
-    //             })
-    //             .catch((error) => {
-    //                 console.error('Error exchanging public token:', error);
-    //                 Alert.alert('Error', 'Failed to connect bank account.');
-    //             });
-    //     },
-    //     onExit: (error, metadata) => {
-    //         if (error) {
-    //             console.error('Error during Plaid Link:', error);
-    //             Alert.alert('Error', 'Failed to connect bank account.');
-    //         }
-    //     },
-    // });
-
-    // useEffect(() => {
-    //     let isMounted = true;
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, []);
 
     useEffect(() => {
         const fetchPondInfo = async () => {
