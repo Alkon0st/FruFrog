@@ -5,6 +5,8 @@ import AddBillModal from './addBillModal';
 import React, { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import HeaderNav from '../nav/HeaderNav';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
 
 // Main Bill Split Page
 const BillSplitPage = () => {
@@ -12,17 +14,29 @@ const BillSplitPage = () => {
     const [modalVisible, setModalVisible] = useState(false);
   
     useEffect(() => {
-      fetch('http://localhost:5000/api/bills')
-        .then(res => res.json())
-        .then(data => setBills(data.reverse()))
-        .catch(err => console.error('Failed to fetch bills:', err));
+      const fetchBills = async () => {
+        try {
+          const q = query(collection(db, 'bills'), orderBy('createdAt', 'desc'))
+          const snapshot = await getDocs(q)
+          const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+          setBills(billsData)
+        } catch (err) {
+          console.error('Failed to fetch bills:', err)
+        }
+      }
+    
+      fetchBills()
     }, []);
-  
+
     const addBill = () => {
-      fetch('http://localhost:5000/api/bills')
-        .then(res => res.json())
-        .then(data => setBills(data.reverse()));
-      setModalVisible(false);
+      const q = query(collection(db, 'bills'), orderBy('createdAt', 'desc'))
+      getDocs(q)
+        .then(snapshot => {
+          const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+          setBills(billsData)
+        })
+        .catch(err => console.error('Failed to refresh bills:', err))
+      setModalVisible(false)
     };
 
     console.log(bills)

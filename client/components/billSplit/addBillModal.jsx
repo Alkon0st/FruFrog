@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Switch, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { db } from '../../firebase/firebase';
+import { addDoc, collection } from 'firebase/firestore'
+
 
 // Bill Modal Component
 const AddBillModal = ({ visible, onSubmit, onClose }) => {
@@ -21,64 +24,46 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
   const [category, setCategory] = useState('Rent');
   const [billTitle, setBillTitle] = React.useState('');
   const [billAmount, setBillAmount] = React.useState('');
-  const [billTax, setBillTax] = useState('');
-
-  // Tax split switch
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((prev) => !prev);
 
   // Reset fields after create bill
   const resetFields = () => {
     setBillTitle('');
     setBillAmount('');
-    setBillTax('');
     setCategory('Rent');
-    setIsEnabled(false);
   };
 
   // Even split and create bill
-  const handleEvenSplit = async () => {
-    const amount = parseFloat(billAmount) || 0;
-    const tax = parseFloat(billTax) || 0;
-    const members = 2;
+  const handleAddBill = async () => {
+    const amount = parseFloat(billAmount) || 0
+    const members = 2
   
-    const total = isEnabled ? amount + tax : amount;
-    const splitAmount = total / members;
-    const percentPaid = amount / total;
+    const total = amount
+    const splitAmount = total / members
+    const percentPaid = amount / total
   
     const bill = {
       title: billTitle,
       date: billDate,
       category,
       amount,
-      tax,
-      splitTax: isEnabled,
       members,
       paid: splitAmount.toFixed(2),
       percentPaid: percentPaid.toFixed(2),
       total: total.toFixed(2),
-    };
-
+      createdAt: new Date()
+    }
+  
     try {
-      const response = await fetch('http://localhost:5001/frufrog-c042c/us-central1/api/bills', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bill),
-      });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        onSubmit && onSubmit(data.bill);
-        resetFields();
-        onClose();
-      } else {
-        console.error(data.message);
-      }
-    } catch (err) {
-      console.error(err);
+      await addDoc(collection(db, 'bills'), bill)
+      onSubmit && onSubmit(bill)
+      resetFields()
+      onClose()
+    } catch (error) {
+      console.error('Error adding bill:', error)
+      alert('Failed to add bill.')
     }
   };
+  
 
   return (
     <Modal
@@ -130,35 +115,12 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
           </View>
           {/* Buttons */}
           <View style={styles.buttonRow}>
-            <TouchableOpacity onPress={onClose} style={styles.button}>
-            <Text style={styles.buttonText}>Custom Split</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleEvenSplit} style={styles.button}>
-            <Text style={styles.buttonText}>Even Split</Text>
+            <TouchableOpacity onPress={handleAddBill} style={styles.button}>
+            <Text style={styles.buttonText}>Add Bill</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* TODO: Implement tax section /*}
-        {/* Tax Section */}
-        <View style={styles.taxContainer}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{color: 'white'}}>$</Text>
-          <TextInput
-            style={styles.taxInput}
-            value={billTax}
-            onChangeText={setBillTax}
-            keyboardType="numeric"
-          />
-          </View>
-          <Text style={styles.taxText}>Split Tax</Text>
-          <Switch
-            trackColor={{ false: '#ffffff', true: '#ffffff' }}
-            thumbColor={isEnabled ? '#4f723a' : '#4f723a'}
-            value={isEnabled}
-            onValueChange={toggleSwitch}
-          />
-        </View>
         {/* Close Button */}
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{color: 'white'}}>✖</Text>
@@ -242,14 +204,6 @@ const styles = StyleSheet.create({
     padding: 1,
   },
   buttonText: {
-    color: 'white',
-  },
-  taxContainer: {
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  taxText: {
     color: 'white',
   },
   closeButton: {
