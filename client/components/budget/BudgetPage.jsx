@@ -13,7 +13,7 @@ import {
 } from './budgetHandler';
 import CategoryModal from './modals/CategoryModal';
 import SubcategoryModal from './modals/SubcategoryModal';
-import EditSubcategoryModal from './modals/editSubcategoryModal';
+import EditSubcategoryModal from './modals/EditSubcategoryModal';
 import HeaderNav from '../nav/HeaderNav';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
@@ -102,13 +102,13 @@ const BudgetPage = () => {
         <View key={category}>
             <TouchableOpacity
                 onPress={() => toggleCategoryVisibility(category, setVisible)}
-                style={styles.categoryContainer}
+                style={styles.category}
             >
-                <Text style={[styles.category, styles.h3]}>
-                    {category}: ${getTotal(category)}
+                <Text style={[styles.categoryText, styles.h3]}>
+                    {category}                                              ${getTotal(category)}
                 </Text>
                 <Text style={styles.chevron}>
-                    {visible[category] ? 'v' : '>'}
+                    {visible[category] ? '▼' : '⯈'}
                 </Text>
             </TouchableOpacity>
 
@@ -128,10 +128,11 @@ const BudgetPage = () => {
                                 });
                                 toggleModal("showEditModal", true);
                             }}
-                        >
-                            <Text style={styles.subCategory}>
-                                {subCategory.name}: ${subCategory.amount}
-                            </Text>
+                        >   <View style={styles.subCategoryText}>
+                                <Text>{subCategory.name}</Text>
+                                <Text>${subCategory.amount}</Text>
+                            </View>
+                            
                         </TouchableOpacity>
                     ))}
                     <TouchableOpacity
@@ -156,35 +157,43 @@ const BudgetPage = () => {
             <LinearGradient colors={['#F1FEFE', '#B2F0EF']} style={styles.page}>
                 <ScrollView>
                     <HeaderNav />
-                    <Text style={styles.h1}>Budget Page</Text>
-                    <Text style={styles.h2}>Spending Power</Text>
-                    <Text style={styles.h2}>Graph</Text>
-                    {Object.keys(budgetCategories).length > 0 && (
-                        <PieChart
-                            data={getCategoryTotalsForPie()}
-                            width={screenWidth - 20}
-                            height={220}
-                            accessor="population"
-                            backgroundColor="transparent"
-                            paddingLeft="15"
-                            absolute
-                            chartConfig={{
-                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            }}
-                        />
-                    )}
-
-                    <View style={styles.categoryContainer}>
-                        <Text style={styles.h2}>Categories</Text>
-                        <TouchableOpacity
-                            onPress={() => toggleModal("showCategoryModal", true)}
-                            style={styles.addButtonCategory}
-                        >
-                            <Text style={styles.addButtonText}>+</Text>
-                        </TouchableOpacity>
+                    <View style={styles.spendingContainer}>
+                        <Text style={styles.h2}>Spending Power</Text>
                     </View>
 
-                    {Object.keys(budgetCategories).map(renderCategory)}
+                    <View style={styles.graphContainer}>
+                        <Text style={styles.h2}>Chart</Text>
+                            {Object.keys(budgetCategories).length > 0 && (
+                                <PieChart 
+                                    data={getCategoryTotalsForPie()}
+                                    width={screenWidth - 20}
+                                    height={220}
+                                    accessor="population"
+                                    backgroundColor="transparent"
+                                    paddingLeft="15"
+                                    absolute
+                                    chartConfig={{
+                                        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                    }}
+                                />
+                            )}
+                    </View>
+                    
+                    <View style={styles.categoryContainer}>
+                        <View style={styles.categoryTitle}>
+                            <Text style={styles.h2}>Categories</Text>
+                            <TouchableOpacity
+                                onPress={() => toggleModal("showCategoryModal", true)}
+                                style={styles.addButtonCategory}
+                            >
+                                <Text style={styles.addButtonText}>+</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {Object.keys(budgetCategories).map(renderCategory)}
+                    </View>
+                    
+
+                    
                 </ScrollView>
             </LinearGradient>
 
