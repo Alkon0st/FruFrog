@@ -26,7 +26,7 @@ const HistoryData = () => {
                 const user = auth.currentUser;
 
                 // Firestore: Budgets
-                const q = query(collection(db, "budgets"), where("members", "array-contains", user.uid));
+                const q = query(collection(db, "events"), where("user_uid", '==', user.uid));
                 const response = await getDocs(q);
                 const firestoreData = response.docs.map(doc => ({
                     id: doc.id,
@@ -145,7 +145,7 @@ const HistoryData = () => {
             <View style={styles.filterContainer}>
                 {categories.map(category => (
                     <TouchableOpacity
-                        key={category}
+                        key={category.id}
                         style={[
                             styles.filterButton,
                             selectedCategory === category && styles.filterButtonActive
