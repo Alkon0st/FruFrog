@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TouchableOpacity, View, Text, Modal, Image} from 'react-native';
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
-import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, getDocs, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 
 
@@ -92,11 +92,13 @@ export default function HeaderNav() {
     const [pondName, setPondName] = useState('');
     const [thumbnail, setThumbnail] = useState(1);
     const [profileId, setProfileId] = useState(1); //default 1 if no set
+    const [currentPond, setCurrentPond] = useState(null);
 
     const [triggerUpdateCount, setTriggerUpdateCount] = useState(0);
     const triggerUpdate = () => setTriggerUpdateCount(prev => prev + 1);   
 
     // finds which profile the user currently has
+
     useEffect(() => {
         const fetchUserProfile = async () => {
             const auth = getAuth();
@@ -126,6 +128,9 @@ export default function HeaderNav() {
         const fetchSelectedPond = async () => {
             const auth = getAuth()
             const user = auth.currentUser
+            const userDocRef = doc(db, 'users', user.uid)
+            const userDoc = await getDoc(userDocRef)
+            const currentPondId = userDoc.exists() ? userDoc.data().currentPondId : null;
             if (!user) return;
 
             try {
@@ -133,15 +138,29 @@ export default function HeaderNav() {
                     collection(db, 'ponds'), 
                     where('selected', 'array-contains', user.uid)
                 )
-                const querySnapshot = await getDocs(q)
-                if (!querySnapshot.empty) {
-                    const pondData = querySnapshot.docs[0].data()
-                    const name = pondData.name || "Unnamed Pond"
-                    setPondName(name)
+                // const querySnapshot = await getDocs(q)
+                // if (!querySnapshot.empty) {
+                //     const pondData = querySnapshot.docs[0].data()
+                    
+                //     const name = pondData.name || "Unnamed Pond"
+                //     setPondName(name)
+                // } else {
+                //     //if no pond found, set pondName = ''
+                //     setPondName('')
+                //     console.log('User not found in any selected array in Pond documents')
+                // }
+                if (currentPondId) {
+                    const selectedPond = ponds.find(p => p.id === currentPondId);
+                    if (selectedPond) {
+                        setCurrentPond(currentPondId);
+                        setPondName(selectedPond.name);
+                    } else {
+                        setCurrentPond(null);
+                        setPondName('');
+                    }
                 } else {
-                    //if no pond found, set pondName = ''
-                    setPondName('')
-                    console.log('User not found in any selected array in Pond documents')
+                    setCurrentPond(null);
+                    setPondName('');
                 }
             } catch (error) {
                 console.error('Failed to fetch current pond:', error)
@@ -174,8 +193,8 @@ export default function HeaderNav() {
                 <PondPopupOptions 
                     triggerUpdate={triggerUpdate}
                     triggerUpdateCount={triggerUpdateCount}        
-                    pondName={pondName} 
-                    setPondName={setPondName}
+                    pondName={currentPond} 
+                    setPondName={setCurrentPond}
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
                     />
