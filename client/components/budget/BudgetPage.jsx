@@ -18,6 +18,7 @@ import HeaderNav from '../nav/HeaderNav';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 
+
 const BudgetPage = () => {
     const [visible, setVisible] = useState({});
     const [budgetCategories, setBudgetCategories] = useState({});
@@ -172,6 +173,12 @@ const BudgetPage = () => {
 
     const getTotal = (category) =>
         budgetCategories[category]?.reduce((total, sub) => total + sub.amount, 0);
+    
+    const totalAmount = Object.values(budgetCategories).reduce((sum, category) => {
+        return sum + category.reduce((subSum, sub) => subSum + sub.amount, 0);
+    }, 0);
+
+    const progress = totalAmount / incomeAmount;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -180,7 +187,29 @@ const BudgetPage = () => {
                     <HeaderNav />
                     <View style={styles.spendingContainer}>
                         <Text style={styles.h2}>Spending Power</Text>
-                        <Text style={styles.h3}>${incomeAmount}</Text>
+                        <View style={styles.progressBarContainer}>
+                        <LinearGradient
+                                colors={['#00BFFF', '#1E90FF']}
+                                style={{
+                                    height: 20,
+                                    width: '100%',
+                                    borderRadius: 10,
+                                    overflow: 'hidden',
+                                    marginVertical: 10,
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        height: '100%',
+                                        width: `${Math.min(progress * 100, 100)}%`,
+                                        backgroundColor: '#FF6347', // color of the bar
+                                    }}
+                                />
+                            </LinearGradient>
+                            <Text style={styles.h3}>
+                                ${totalAmount} / ${incomeAmount} 
+                            </Text>
+                        </View>
                     </View>
 
                     <View style={styles.graphContainer}>
