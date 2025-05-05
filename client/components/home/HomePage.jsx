@@ -1,12 +1,37 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect } from 'react';
 import {Modal, StyleSheet, Text, View, Button, Dimensions, ScrollView, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from '@react-native-vector-icons/ant-design';
+import { getSelectedPond } from '../billSplit/getSelectedPond';
+import { getAuth } from 'firebase/auth';
+import Bill from '../billSplit/bill';
+import { db } from '../../firebase/firebase';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 
 import HeaderNav from '../nav/HeaderNav';
 
 function HomePage() {
+    const [bills, setBills] = useState([]);
+
+    useEffect(() => {
+        const fetchBills = async () => {
+            try {
+            const user = getAuth().currentUser;
+            if (!user) return;
+            const pond = await getSelectedPond(user.uid);
+            if (!pond) return;
+            const q = query(collection(db, `ponds/${pond.id}/bills`), orderBy('createdAt', 'desc'));
+            const snapshot = await getDocs(q)
+            const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+            setBills(billsData)
+            } catch (err) {
+            console.error('Failed to fetch bills:', err)
+            }
+        }
+        
+        fetchBills()
+    }, []);
 
     return (
         <SafeAreaProvider>
@@ -18,7 +43,14 @@ function HomePage() {
             <ScrollView>
                 <HeaderNav />
                 <Text style ={styles.headingStyle}>Home Page</Text>
-                <Text style ={styles.textStyle}>This is the placeholder for the home page </Text>                 
+                <Text style ={styles.textStyle}>This is the placeholder for the home page </Text>
+
+                {/* Bill Listing */}
+                <View style={styles.billList}>
+                    {bills.map((bill, index) => (
+                    <Bill key={index} {...bill} />
+                    ))}
+                </View>
             </ScrollView>
 
         </LinearGradient>
@@ -54,6 +86,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent:'flex-end',
         backgroundColor: 'white',
+    },
+    billList: {
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 
