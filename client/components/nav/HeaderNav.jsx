@@ -138,17 +138,17 @@ export default function HeaderNav() {
                     collection(db, 'ponds'), 
                     where('selected', 'array-contains', user.uid)
                 )
-                // const querySnapshot = await getDocs(q)
-                // if (!querySnapshot.empty) {
-                //     const pondData = querySnapshot.docs[0].data()
+                const querySnapshot = await getDocs(q)
+                if (!querySnapshot.empty) {
+                    const pondData = querySnapshot.docs[0].data()
                     
-                //     const name = pondData.name || "Unnamed Pond"
-                //     setPondName(name)
-                // } else {
-                //     //if no pond found, set pondName = ''
-                //     setPondName('')
-                //     console.log('User not found in any selected array in Pond documents')
-                // }
+                    const name = pondData.name || "Unnamed Pond"
+                    setPondName(name)
+                } else {
+                    //if no pond found, set pondName = ''
+                    setPondName('')
+                    console.log('User not found in any selected array in Pond documents')
+                }
                 if (currentPondId) {
                     const selectedPond = ponds.find(p => p.id === currentPondId);
                     if (selectedPond) {
