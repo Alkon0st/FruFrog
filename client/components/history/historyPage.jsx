@@ -22,10 +22,8 @@ const HistoryData = () => {
     useEffect(() => {
         const fetchExpenseData = async () => {
             try {
-                const auth = getAuth();
-                const user = auth.currentUser;
-
-                // Firestore: Budgets
+                const user = getAuth().currentUser;
+                if (!user) return;
                 const q = query(collection(db, "events"), where("user_uid", '==', user.uid));
                 const response = await getDocs(q);
                 const firestoreData = response.docs.map(doc => ({
