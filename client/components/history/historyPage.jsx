@@ -6,11 +6,11 @@ import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { getAuth } from "firebase/auth";
 
-const HistoryData = () => {
+function HistoryData() {
     const [expenseData, setExpenseData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -24,9 +24,12 @@ const HistoryData = () => {
             try {
                 const user = getAuth().currentUser;
                 if (!user) return;
-                const q = query(collection(db, "events"), where("user_uid", '==', user.uid));
-                const response = await getDocs(q);
-                const firestoreData = response.docs.map(doc => ({
+                const pondId = await getSelectedPond(user.uid);
+                if (!pondId) return;
+                const billsRef = collection(db, `ponds/${pondId}/bills`);
+                const q = query(billsRef, where("user_uid", '==', user.uid));
+                const snapshot = await getDocs(q);
+                const firestoreData = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
