@@ -3,6 +3,8 @@ import { View, Text, TextInput, Modal, StyleSheet, TouchableOpacity } from 'reac
 import { Picker } from '@react-native-picker/picker';
 import { db } from '../../firebase/firebase';
 import { addDoc, collection } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth';
+import { getSelectedPond } from './getSelectedPond';
 
 
 // Bill Modal Component
@@ -54,7 +56,11 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     }
   
     try {
-      await addDoc(collection(db, 'bills'), bill)
+      const user = getAuth().currentUser;
+      if (!user) return;
+      const pond = await getSelectedPond(user.uid);
+      if (!pond) return;
+      await addDoc(collection(db, `ponds/${pond.id}/bills`), bill);
       onSubmit && onSubmit(bill)
       resetFields()
       onClose()

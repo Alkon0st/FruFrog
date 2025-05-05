@@ -7,6 +7,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import HeaderNav from '../nav/HeaderNav';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
+import { getSelectedPond } from './getSelectedPond';
+import { getAuth } from 'firebase/auth';
 
 // Main Bill Split Page
 const BillSplitPage = () => {
@@ -16,7 +18,11 @@ const BillSplitPage = () => {
     useEffect(() => {
       const fetchBills = async () => {
         try {
-          const q = query(collection(db, 'bills'), orderBy('createdAt', 'desc'))
+          const user = getAuth().currentUser;
+          if (!user) return;
+          const pond = await getSelectedPond(user.uid);
+          if (!pond) return;
+          const q = query(collection(db, `ponds/${pond.id}/bills`), orderBy('createdAt', 'desc'));
           const snapshot = await getDocs(q)
           const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
           setBills(billsData)
@@ -28,15 +34,21 @@ const BillSplitPage = () => {
       fetchBills()
     }, []);
 
-    const addBill = () => {
-      const q = query(collection(db, 'bills'), orderBy('createdAt', 'desc'))
-      getDocs(q)
-        .then(snapshot => {
-          const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-          setBills(billsData)
-        })
-        .catch(err => console.error('Failed to refresh bills:', err))
-      setModalVisible(false)
+    const addBill = async () => {
+      try {
+        const user = getAuth().currentUser;
+        if (!user) return;
+        const pond = await getSelectedPond(user.uid);
+        if (!pond) return;
+    
+        const q = query(collection(db, `ponds/${pond.id}/bills`), orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(q);
+        const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setBills(billsData);
+      } catch (err) {
+        console.error('Failed to refresh bills after add:', err);
+      }
+      setModalVisible(false);
     };
 
     console.log(bills)
