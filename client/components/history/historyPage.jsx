@@ -74,7 +74,6 @@ const HistoryData = () => {
                 return expense;
             });
             setExpenseData(newData);
-            setEditingId(null);
             setEditAmount("");
         } catch (error) {
             console.error("Error updating expense:", error);
