@@ -1,13 +1,33 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, Image, Alert, } from 'react-native';
+import { Text, View, TouchableOpacity, Image, Alert, Modal, TextInput } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, CommonActions } from '@react-navigation/native';
-import { getFirestore, collection, query, where, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, updateDoc, arrayUnion, addDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import { doCreateUserWithEmailAndPassword } from '../../firebase/auth'; // Ensure this is correctly implemented
 import styles from './LoginPage.style';
+
+const SuccessMessage = ({visible}) => {
+    return (
+        <Modal
+            visible={visible}
+            transparent={true}
+        >
+        <View style={styles.successContainer}>
+            <View style={styles.successView}>
+                <Text style={styles.successText}> Account created! </Text>
+                <Image 
+                    source={require('../img/checkmark.png')}
+                    resizeMode='contain'
+                    style={styles.successCheckmark}
+                />
+            </View>
+        </View>
+        </Modal>
+    )
+}
 
 function CreateAccount() {
   const navigation = useNavigation();
@@ -17,39 +37,40 @@ function CreateAccount() {
       email: '',
       password: '',
       confirmPassword: ''
-    }
-  });
+    },
+    mode: 'onBlur'
+  })
+  const [successVisible, setSuccessVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const password = watch('password') || '';
 
   const onsubmit = async (data) => {
+    console.log('Form data:', data); //testing
+    console.log('typeof username:', typeof data.username)
+    console.log('username value:', data.username)
+
+    // testing username input
+    if (!data.username) {
+      console.error("Username is missing!");
+      return;
+    }
+
     try {
-      // Use Firebase Authentication to create a new user
-      const userCredential = await doCreateUserWithEmailAndPassword(data.email, data.password);
+      // Use Firebase Authentication to create a new user (and add to users collection)
+      const userCredential = await doCreateUserWithEmailAndPassword(data.username, data.email, data.password);
       const user = userCredential.user;
-
-      // get firestone ref and query to set default profile = 1
-      const profilesRef = collection(db, 'profiles')
-      const q = query(profilesRef, where('profile_id', '==', 1))
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        console.error('Unable to find profile document for profile_id=1')
-        return
-      }
-
-      // updates profile (1) w/ user
-      const profileDoc = querySnapshot.docs[0]
-      const profileRef = profileDoc.ref
-
-      await updateDoc(profileRef, {
-        members: arrayUnion(user.uid)
-      });
       
-
       console.log('User registered successfully & profile set to 1:', user);
-      navigation.navigate('Login'); // Navigate to the Login page after success
+      
+      //show success msg
+      setSuccessVisible(true)
+
+      // Navigate to the Login page after success message dissapears
+      setTimeout(() => {
+        setSuccessVisible(false)
+        navigation.navigate('Login')
+      }, 2000) //2 seconds
 
     } catch (error) {
       console.error('Error creating account:', error.message);
@@ -105,6 +126,7 @@ function CreateAccount() {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
+                    minLength={1}
                   />
                   {errors.username && <Text style={styles.errorText}>{errors.username.message}</Text>}
                 </>
@@ -220,7 +242,11 @@ function CreateAccount() {
           <Text style={styles.footerText}>© Pond Patrol. All rights reserved.</Text>
         </View>
     </ScrollView>
+
+      <SuccessMessage visible={successVisible} />
+      
     </LinearGradient>
+
   );
 }
 
