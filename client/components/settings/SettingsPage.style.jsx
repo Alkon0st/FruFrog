@@ -321,6 +321,25 @@ const styles = StyleSheet.create({
     listItemText: {
         fontSize: 15,
     },
+    questionContainer: {
+        backgroundColor: '#B2E196',
+        borderRadius: 6,
+        minHeight: 52,
+        alignItems: 'flex-start', 
+        justifyContent: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 10,
+    },
+    answer: {
+        fontWeight: 'bold',
+    },
+    subanswer: {
+        fontSize: 15,
+        paddingTop: 5,
+        paddingBottom: 10,
+        lineHeight: 25,
+    },
 
 });
 

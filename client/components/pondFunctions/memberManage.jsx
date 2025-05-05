@@ -141,7 +141,7 @@ export default function MemberManage ({
 
     return (
         <View style={styles.dropDownContainer}>        
-        <View style={styles.dropDownItem}>
+        <View style={[styles.dropDownItem, {paddingVertical: 10}]}>
             {members.length === 0 ? (
                 <Text>No other members</Text>
             ) : (

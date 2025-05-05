@@ -144,7 +144,7 @@ const JoinPondModal = ({
                     </View>
 
                     <View style={styles.itemContainer}>
-                        <Text style={styles.joinInfo}>Ask the Pond Admin for the Invite Code</Text>
+                        <Text style={styles.joinInfo}>Ask the Pond member(s) for the Invite Code.</Text>
                         <View style={styles.innerContainer}> 
                             <TextInput
                                 style = {styles.textInputStyle}
