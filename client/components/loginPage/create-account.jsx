@@ -43,6 +43,7 @@ function CreateAccount() {
   const [successVisible, setSuccessVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const password = watch('password') || '';
 
   const onsubmit = async (data) => {
@@ -74,6 +75,13 @@ function CreateAccount() {
 
     } catch (error) {
       console.error('Error creating account:', error.message);
+
+      //handle specific error of alreayd have account
+      if (error.code === 'auth/email-already-in-use') {
+        setErrorMessage('This email is already in use. Sign in or use a different email.')
+      } else {
+        setErrorMessage('An error occurred while creating the account.');
+      }
     }
   };
 
@@ -229,6 +237,9 @@ function CreateAccount() {
             >
               <Text style={styles.textButton}>Sign Up</Text>
             </TouchableOpacity>
+
+            {/* Shows if email is alreayd in use error */}
+            {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
           </View>
 
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
