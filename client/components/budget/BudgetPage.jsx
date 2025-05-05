@@ -29,6 +29,9 @@ const BudgetPage = () => {
         showSubcategoryModal: false,
         showEditModal: false,
     });
+    
+    //income detail
+    const [incomeAmount, setIncomeAmount] = useState(0);
 
     // Category/Subcategory details
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -86,6 +89,14 @@ const BudgetPage = () => {
             }
     
             setPondId(currentPondId);
+
+            //income amount
+            if (userData?.income?.amount && typeof userData.income.amount === 'number') {
+                setIncomeAmount(userData.income.amount);
+            } else {
+                console.warn("Income amount missing or invalid:", userData.income);
+                setIncomeAmount(0);
+            }
     
             // Reference the selected pond's budgetCategories
             const categoriesRef = collection(db, "ponds", currentPondId, "budgetCategories");
@@ -169,6 +180,7 @@ const BudgetPage = () => {
                     <HeaderNav />
                     <View style={styles.spendingContainer}>
                         <Text style={styles.h2}>Spending Power</Text>
+                        <Text style={styles.h3}>${incomeAmount}</Text>
                     </View>
 
                     <View style={styles.graphContainer}>
