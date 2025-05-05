@@ -8,7 +8,7 @@ export const handleAddCategory = async (pondId, categoryName, setIsCategoryModal
             const categorySnapshot = await getDoc(categoryRef);
 
             if (!categorySnapshot.exists()) {
-                await setDoc(categoryRef, { subcategories: [] }); // Initialize with an empty items array
+                await setDoc(categoryRef, { items: [] }); // Initialize with an empty items array
                 console.log(`Category "${categoryName}" added to Firestore under pond "${pondId}".`);
             } else {
                 console.log(`Category "${categoryName}" already exists under pond "${pondId}".`);
@@ -61,37 +61,50 @@ export const handleAddSubCategory = async (pondId,categoryName,subCategoryName,s
 };
 
 export const handleUpdateSubCategory = async (categoryName, selectedSubcategory, updatedSubCategoryName, updatedSubCategoryAmount, setIsEditModalVisible, setUpdatedSubCategoryName, setUpdatedSubCategoryAmount) => {
-    if (categoryName && selectedSubcategory && updatedSubCategoryName && updatedSubCategoryAmount) {
+    if (pondId && categoryName && selectedSubcategory && updatedSubCategoryName && updatedSubCategoryAmount) {
         try {
-            const categoryRef = doc(db, "budgetCategories", categoryName);
+            const categoryRef = doc(db, "ponds", pondId, "budgetCategories", categoryName);
             const categorySnapshot = await getDoc(categoryRef);
 
             if (categorySnapshot.exists()) {
                 const categoryData = categorySnapshot.data();
-                const subcategories = categoryData.subcategories || [];
+                const subcategories = categoryData.items || [];
 
-                const subcategoryIndex = subcategories.findIndex(sub => sub.name === selectedSubcategory.name);
+                // Find the index of the subcategory to update
+                const subcategoryIndex = subcategories.findIndex(
+                    (sub) => sub.name === selectedSubcategory.name
+                );
+
                 if (subcategoryIndex !== -1) {
+                    // Update the subcategory
                     subcategories[subcategoryIndex] = {
                         name: updatedSubCategoryName,
                         amount: parseFloat(updatedSubCategoryAmount),
                     };
 
-                    await updateDoc(categoryRef, { subcategories });
-                    console.log(`Subcategory "${selectedSubcategory.name}" updated in category "${categoryName}".`);
+                    // Update Firestore
+                    await updateDoc(categoryRef, { items: subcategories });
+                    console.log(
+                        `Subcategory "${selectedSubcategory.name}" updated in category "${categoryName}".`
+                    );
                 } else {
-                    console.error(`Subcategory "${selectedSubcategory.name}" not found in category "${categoryName}".`);
+                    console.error(
+                        `Subcategory "${selectedSubcategory.name}" not found in category "${categoryName}".`
+                    );
                 }
             } else {
                 console.error(`Category "${categoryName}" does not exist.`);
             }
 
+            // Reset modal and form state
             setIsEditModalVisible(false);
             setUpdatedSubCategoryName('');
             setUpdatedSubCategoryAmount('');
         } catch (error) {
             console.error("Error updating subcategory:", error);
         }
+    } else {
+        console.error("Missing pond ID, category name, or subcategory details.");
     }
 };
 

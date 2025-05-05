@@ -1,21 +1,43 @@
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { collection, doc, setDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, updateDoc, deleteDoc, query, where, arrayUnion } from "firebase/firestore";
 import {auth, db } from "./firebase";
 
-export const doCreateUserWithEmailAndPassword = async (email, password, username) => {
+export const doCreateUserWithEmailAndPassword = async (username, email, password) => {
   try {
     // 1. Create user in Firebase Authentication
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+
+    // extract user from userCredential
+    const user = userCredential.user
 
     // 2. Create user document in Firestore
     const userRef = doc(db, "users", user.uid); // Use the user's UID as the document ID
     const userData = {
+      user_uid: user.uid,
       username: username,
       email: email,
       createdAt: new Date(),
     };
     await setDoc(userRef, userData);
+
+    //sets user for profile
+    // get firestone ref and query to set default profile = 1
+    const profilesRef = collection(db, 'profiles')
+    const q = query(profilesRef, where('profile_id', '==', 1))
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.error('Unable to find profile document for profile_id=1')
+      return
+    }
+
+    // updates profile (1) w/ user
+    const profileDoc = querySnapshot.docs[0]
+    const profileRef = profileDoc.ref
+
+    await updateDoc(profileRef, {
+      members: arrayUnion(user.uid)
+    });
 
     return user; // Return the user object for further processing
   } catch (error) {

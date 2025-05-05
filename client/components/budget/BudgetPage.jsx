@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, getDoc, doc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
 import styles from "./budgetPage.style";
@@ -13,10 +13,11 @@ import {
 } from './budgetHandler';
 import CategoryModal from './modals/CategoryModal';
 import SubcategoryModal from './modals/SubcategoryModal';
-import EditSubcategoryModal from './modals/editSubcategoryModal';
+import EditSubcategoryModal from './modals/EditSubcategoryModal';
 import HeaderNav from '../nav/HeaderNav';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+
 
 const BudgetPage = () => {
     const [visible, setVisible] = useState({});
@@ -29,6 +30,9 @@ const BudgetPage = () => {
         showSubcategoryModal: false,
         showEditModal: false,
     });
+    
+    //income detail
+    const [incomeAmount, setIncomeAmount] = useState(0);
 
     // Category/Subcategory details
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -49,10 +53,11 @@ const BudgetPage = () => {
             const total = subcategories.reduce((sum, sub) => sum + sub.amount, 0);
             return {
                 name: category,
-                population: total,
+                total: total,
                 color: getColorForCategory(category),
                 legendFontColor: "#7F7F7F",
-                legendFontSize: 14
+                legendFontSize: 14,
+                
             };
         });
     };
@@ -69,47 +74,64 @@ const BudgetPage = () => {
     useEffect(() => {
         const user = getAuth().currentUser;
         if (!user) return;
-        // Fetch ponds for the current user i.e. changes applied to all of the ponds the user is a member of 
-        // remember this and also change the add handler toooo
-        const pondsQuery = query(
-            collection(db, 'ponds'),
-            where('members', 'array-contains', user.uid)
-        );
+    
+        const userDocRef = doc(db, "users", user.uid);
+    
+        // Listen to the user's document for changes (e.g., currentPondId updates)
+        const unsubscribeUser = onSnapshot(userDocRef, (userSnapshot) => {
+            const userData = userSnapshot.data();
+            const currentPondId = userData?.currentPondId;
+    
+            if (!currentPondId) {
+                console.warn("No currentPondId found for user.");
+                setPondId(null);
+                setBudgetCategories({});
+                return;
+            }
+    
+            setPondId(currentPondId);
 
-        const unsubscribePonds = onSnapshot(pondsQuery, (pondsSnapshot) => {
-            pondsSnapshot.forEach((pondDoc) => {
-                const id = pondDoc.id;
-                setPondId(id);
-                const categoriesRef = collection(db, "ponds", id, "budgetCategories");
-
-                const unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
-                    const data = {};
-                    snapshot.forEach(doc => {
-                        data[doc.id] = doc.data().items;
-                    });
-                    setBudgetCategories(data);
+            //income amount
+            if (userData?.income?.amount && typeof userData.income.amount === 'number') {
+                setIncomeAmount(userData.income.amount);
+            } else {
+                console.warn("Income amount missing or invalid:", userData.income);
+                setIncomeAmount(0);
+            }
+    
+            // Reference the selected pond's budgetCategories
+            const categoriesRef = collection(db, "ponds", currentPondId, "budgetCategories");
+    
+            // Set up a real-time listener for categories
+            const unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
+                const data = {};
+                snapshot.forEach(doc => {
+                    data[doc.id] = doc.data().items;
                 });
-
-                // Return inner unsubscribe
-                return () => unsubscribeCategories();
+                setBudgetCategories(data);
             });
+    
+            // Clean up the categories listener when pond changes
+            return () => unsubscribeCategories();
         });
-
-        return () => unsubscribePonds();
+    
+        return () => unsubscribeUser();
     }, []);
 
     const renderCategory = (category) => (
         <View key={category}>
             <TouchableOpacity
                 onPress={() => toggleCategoryVisibility(category, setVisible)}
-                style={styles.categoryContainer}
+                style={styles.category}
             >
-                <Text style={[styles.category, styles.h3]}>
-                    {category}: ${getTotal(category)}
-                </Text>
-                <Text style={styles.chevron}>
-                    {visible[category] ? 'v' : '>'}
-                </Text>
+                <Text style={styles.h3}>{category}</Text>
+                <View style={styles.categoryText}>
+                    <Text style={styles.h3}>${getTotal(category)}</Text>
+                    <Text style={styles.chevron}>
+                        {visible[category] ? '▼' : '⯈'}
+                    </Text>
+                </View>
+                
             </TouchableOpacity>
 
             {visible[category] && (
@@ -128,10 +150,11 @@ const BudgetPage = () => {
                                 });
                                 toggleModal("showEditModal", true);
                             }}
-                        >
-                            <Text style={styles.subCategory}>
-                                {subCategory.name}: ${subCategory.amount}
-                            </Text>
+                        >   <View style={styles.subCategoryText}>
+                                <Text>{subCategory.name}</Text>
+                                <Text>${subCategory.amount}</Text>
+                            </View>
+                            
                         </TouchableOpacity>
                     ))}
                     <TouchableOpacity
@@ -150,41 +173,78 @@ const BudgetPage = () => {
 
     const getTotal = (category) =>
         budgetCategories[category]?.reduce((total, sub) => total + sub.amount, 0);
+    
+    const totalAmount = Object.values(budgetCategories).reduce((sum, category) => {
+        return sum + category.reduce((subSum, sub) => subSum + sub.amount, 0);
+    }, 0);
+
+    const progress = totalAmount / incomeAmount;
 
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#F1FEFE', '#B2F0EF']} style={styles.page}>
                 <ScrollView>
                     <HeaderNav />
-                    <Text style={styles.h1}>Budget Page</Text>
-                    <Text style={styles.h2}>Spending Power</Text>
-                    <Text style={styles.h2}>Graph</Text>
-                    {Object.keys(budgetCategories).length > 0 && (
-                        <PieChart
-                            data={getCategoryTotalsForPie()}
-                            width={screenWidth - 20}
-                            height={220}
-                            accessor="population"
-                            backgroundColor="transparent"
-                            paddingLeft="15"
-                            absolute
-                            chartConfig={{
-                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            }}
-                        />
-                    )}
-
-                    <View style={styles.categoryContainer}>
-                        <Text style={styles.h2}>Categories</Text>
-                        <TouchableOpacity
-                            onPress={() => toggleModal("showCategoryModal", true)}
-                            style={styles.addButtonCategory}
-                        >
-                            <Text style={styles.addButtonText}>+</Text>
-                        </TouchableOpacity>
+                    <View style={styles.spendingContainer}>
+                        <Text style={styles.h2}>Spending Power</Text>
+                        <View style={styles.progressBarContainer}>
+                        <LinearGradient
+                                colors={['#00BFFF', '#1E90FF']}
+                                style={{
+                                    height: 20,
+                                    width: '100%',
+                                    borderRadius: 10,
+                                    overflow: 'hidden',
+                                    marginVertical: 10,
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        height: '100%',
+                                        width: `${Math.min(progress * 100, 100)}%`,
+                                        backgroundColor: '#FF6347', // color of the bar
+                                    }}
+                                />
+                            </LinearGradient>
+                            <Text style={styles.h3}>
+                                ${totalAmount} / ${incomeAmount} 
+                            </Text>
+                        </View>
                     </View>
 
-                    {Object.keys(budgetCategories).map(renderCategory)}
+                    <View style={styles.graphContainer}>
+                        <Text style={styles.h2}>Chart</Text>
+                            {Object.keys(budgetCategories).length > 0 && (
+                                <PieChart 
+                                    data={getCategoryTotalsForPie()}
+                                    width={screenWidth - 20}
+                                    height={220}
+                                    accessor="total"
+                                    backgroundColor="transparent"
+                                    paddingLeft="15"
+                                    absolute
+                                    chartConfig={{
+                                        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                    }}
+                                />
+                            )}
+                    </View>
+                    
+                    <View style={styles.categoryContainer}>
+                        <View style={styles.categoryTitle}>
+                            <Text style={styles.h2}>Categories</Text>
+                            <TouchableOpacity
+                                onPress={() => toggleModal("showCategoryModal", true)}
+                                style={styles.addButtonCategory}
+                            >
+                                <Text style={styles.addButtonText}>+</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {Object.keys(budgetCategories).map(renderCategory)}
+                    </View>
+                    
+
+                    
                 </ScrollView>
             </LinearGradient>
 

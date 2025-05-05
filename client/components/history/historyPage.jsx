@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { getAuth } from "firebase/auth";
-import { set } from "react-hook-form";
 
 const HistoryData = () => {
     const [expenseData, setExpenseData] = useState([]);

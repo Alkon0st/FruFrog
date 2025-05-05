@@ -38,7 +38,7 @@ function SignInFunction() {
                 navigation.navigate("Nav"); // Navigate to the main page
             } catch (error) {
                 console.error("Error signing in:", error.message);
-                setErrorMessage(error.message);
+                setErrorMessage('Invalid email or password.');
                 setShowError(true);
                 setIsSigningIn(false);
             }

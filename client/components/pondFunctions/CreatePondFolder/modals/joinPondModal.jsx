@@ -63,6 +63,7 @@ const JoinPondModal = ({
     visible,
     onClose,
     triggerUpdate,
+    setPondName,
 }) => {
     const [codeInput, setCodeInput] = useState('');
     const [errorText, setErrorText] = useState('');
@@ -112,6 +113,7 @@ const JoinPondModal = ({
                 join_code: {} //deletes the current join code after use
             })
             
+            setPondName(targetPond.data.name)
             setConfirmVisible(false)
             onClose()
             setCodeInput('')
@@ -142,7 +144,7 @@ const JoinPondModal = ({
                     </View>
 
                     <View style={styles.itemContainer}>
-                        <Text style={styles.joinInfo}>Ask the Pond Admin for the Invite Code</Text>
+                        <Text style={styles.joinInfo}>Ask the Pond member(s) for the Invite Code.</Text>
                         <View style={styles.innerContainer}> 
                             <TextInput
                                 style = {styles.textInputStyle}

@@ -42,8 +42,21 @@ function HomePage() {
         >
             <ScrollView>
                 <HeaderNav />
-                <Text style ={styles.headingStyle}>Home Page</Text>
-                <Text style ={styles.textStyle}>This is the placeholder for the home page </Text>
+                <Text style ={styles.headingStyle}>Hello, (user)</Text>
+                <View>
+                <View style={{flexDirection: 'column', justifyContent: 'space-between', padding: '20'}}> 
+                    <Text style ={styles.textStyle}>Budget Overview</Text>
+                    <Text style ={styles.textStyle}>Planned Expenses</Text>
+                    <Text style ={styles.textStyle}>$$$$$$$$</Text>
+                    <Text style ={styles.textStyle}>$$$$$$Left to budget</Text>
+                    </View>
+                    <View>
+                        <Text style ={styles.textStyle}>Category Cards</Text>
+                    </View>
+                    <View>
+                        <Text style ={styles.textStyle}>PieChart</Text>
+                    </View>
+                </View>
 
                 {/* Bill Listing */}
                 <View style={styles.billList}>
@@ -51,6 +64,7 @@ function HomePage() {
                     <Bill key={index} {...bill} />
                     ))}
                 </View>
+                
             </ScrollView>
 
         </LinearGradient>
@@ -81,8 +95,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
-    page: { 
-        flexDirection: 'column', 
+    page: {  
         flex: 1,
         justifyContent:'flex-end',
         backgroundColor: 'white',

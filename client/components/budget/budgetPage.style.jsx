@@ -14,21 +14,77 @@ const styles = StyleSheet.create({
         padding: 24,
         width: "100%",
     },
+    spendingContainer: {
+        backgroundColor: '#EAFFCB',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+        marginTop: 1,
+        border:"1px solid #85BB65",
+    },
+    graphContainer: {
+        backgroundColor: '#EAFFCB',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+        marginTop: 1,
+        border:"1px solid #85BB65",
+    },
+    pieChartContainer:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+        marginTop: 1,
+    },
     categoryContainer: {
+        backgroundColor: '#EAFFCB',
+        borderRadius: 10,
+        margin: 10,
+        padding: 10,
+        marginTop: 1,
+        border:"1px solid #85BB65",
+    },
+    categoryTitle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 10,
+        padding: 1,
+        marginTop: 1,
     },
     categoryButton:{
         flexDirection: 'row',
         justifyContent: 'space-between',
+        
     },
     category: {
         paddingLeft: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#F1FEFE',
+        border:"1px solid #85BB65",
     },
-    subCategory: {
-        left: 20,
+    categoryText: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        justifyContent: 'space-between',
+        alignItems: 'space-between',
+        flexDirection: 'row',
+        
+    },
+    subCategoryContainer: {
+        backgroundColor: '#FAFFD9',
+        border:"1px solid gray",
+        padding: 10,
+    },
+    subCategoryText: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        justifyContent: 'space-between',
+        alignItems: 'space-between',
+        flexDirection: 'row',
     },
     h1: {
         fontSize: 32,
@@ -50,6 +106,7 @@ const styles = StyleSheet.create({
     },
     chevron: {
         fontSize: 18,
+        paddingRight: 10,
     },
     input: {
         borderWidth: 1,
@@ -59,12 +116,10 @@ const styles = StyleSheet.create({
         width: 150,
     },
     addButton: {
-        backgroundColor: '#007BFF',
+        backgroundColor: '#85BB65',
         padding: 10,
-        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 10,
     },
     editButton: {
         backgroundColor: '#FFA500',
@@ -74,7 +129,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     addButtonText: {
-        color: 'white',
+        color: '#3F5830',
         fontWeight: 'bold',
         fontSize: 18,
     },
@@ -87,7 +142,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#007AFF',
+        backgroundColor: '#B2E196',
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',

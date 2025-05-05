@@ -9,7 +9,7 @@ import JoinPondModal from './modals/joinPondModal';
 
 import styles from './CreatePond.style';
 
-const CreatePage = ({ triggerUpdate, currentPond }) => {
+const CreatePage = ({ triggerUpdate, currentPond, setPondName }) => {
     const [isCreatePondModalVisible, setIsCreatePondModalVisible] = useState(false);
     const [newPond, setNewPond] = useState('');
     const [newThumbnail, setNewThumbnail] = useState('1');
@@ -30,7 +30,6 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
                     thumbnail: newThumbnail,
                     owner: user.uid,
                     members: [user.uid],
-                    budgets: [],
                     billList: [],
                     createdAt: new Date(),
                     selected: [user.uid],
@@ -123,6 +122,7 @@ const CreatePage = ({ triggerUpdate, currentPond }) => {
                 visible={isJoinPondModalVisible}
                 onClose={() => setIsJoinPondModalVisible(false)}
                 triggerUpdate={triggerUpdate}
+                setPondName={setPondName}
             />
 
             {/* <DeletePondModal 
