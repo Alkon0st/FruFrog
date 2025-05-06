@@ -6,11 +6,12 @@ import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { collection, query, where, getDocs} from "firebase/firestore";
+import { collection, query, where, getDocs, collectionGroup} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { getAuth } from "firebase/auth";
 
 function HistoryData() {
+    const [userBills, setUserBills] = useState([]);
     const [expenseData, setExpenseData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -24,17 +25,20 @@ function HistoryData() {
             try {
                 const user = getAuth().currentUser;
                 if (!user) return;
-                const pondId = await getSelectedPond(user.uid);
-                if (!pondId) return;
-                const billsRef = collection(db, `ponds/${pondId}/bills`);
-                const q = query(billsRef, where("user_uid", '==', user.uid));
-                const snapshot = await getDocs(q);
-                const firestoreData = snapshot.docs.map(doc => ({
+                
+                const billsRef = await getDocs(collectionGroup(db, "bills"));
+                //const allBills = query(billsRef, where("user_uid", '==', user.uid));
+
+                const allBills = billsRef.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
-                setExpenseData(firestoreData);
-                setCategories(firestoreData.map(item => item.category).filter((value, index, self) => self.indexOf(value) === index));
+                const userRelatedBills = allBills.filter(bill => {
+                    const inCustom = bill.customSplit?.some(m => m.uid === user.uid);
+                    const inEven = bill.customSplit?.includes(user.uid);
+                    return inCustom || inEven;
+                });
+                setUserBills(userRelatedBills);
             } catch (error) {
                 console.error("Error fetching merged data:", error);
             }
@@ -45,80 +49,7 @@ function HistoryData() {
 
 
 
-    const filteredData = expenseData.filter(item => {
-        const matchesSearch = 
-            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.category.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-        return matchesSearch && matchesCategory;
-    });
-
-    const handleEdit = async (item) => {
-        try {
-            const updated = parseFloat(editAmount);
-            if (isNaN(updated)) return;
-
-            if (item.source === "api") {
-                await fetch(`http://localhost:5000/api/bills/${item.fullBill._id}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(
-                        { ...item.fullBill, 
-                            total: updated }),
-                });
-            }
-
-            const newData = expenseData.map(expense => {
-                if (expense.id === item.id) {
-                    return { ...expense, amount: updated };
-                }
-                return expense;
-            });
-            setExpenseData(newData);
-            setEditAmount("");
-        } catch (error) {
-            console.error("Error updating expense:", error);
-        }
-    };
-        
-
-
-    const renderItem = ({ item }) => (
-        <View style={styles.itemContainer}>
-            <Text style={styles.dateText}>{item.date}</Text>
-            <View style={styles.expenseRow}>
-                <Icon name={item.icon} size={20} color="#008000" style={styles.icon} />
-                <View style={styles.expenseDetails}>
-                    <Text style={styles.categoryText}>{item.category}</Text>
-                    <Text style={styles.nameText}>{item.name}</Text>
-                    
-                    <TouchableOpacity
-                        style={styles.buttonText}
-                        onPress={() => navigation.navigate('BillSplit', { bill: item.fullBill})}
-                    >
-                        <Text style={styles.buttonTextStyle}>View Bill</Text>
-                    </TouchableOpacity>
-                </View>
-                
-                {editingId === item.id ? (
-                    <TextInput
-                        style={{ width: 60, backgroundColor: 'white', borderColor: 'gray', borderWidth: 1, padding: 5 }}
-                        keyboardType="numeric"
-                        value={editAmount}
-                        onChangeText={setEditAmount}
-                        onBlur={() => handleEdit(item)}
-                    />
-                ) : (
-                    <TouchableOpacity onLongPress={() => {
-                        setEditingId(item.id);
-                        setEditAmount(item.amount.toString());
-                    }}>
-                        <Text style={styles.amountText}>${item.amount}</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
-        </View>
-    );
+    
 
     return (
         <LinearGradient
@@ -163,17 +94,15 @@ function HistoryData() {
             </View>
 
             {/* History List */}
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.formContainer}>
-                    <Text style={styles.title}>January 2025</Text>
-                </View>
-                <FlatList
-                    data={filteredData}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                    showsVerticalScrollIndicator={false}
-                    style={styles.flatList}
-                />
+            <ScrollView style={{padding:20}}>
+                <Text style={{fontSize: 24, marginBottom: 10}}>Bill History</Text>
+                {userBills.length > 0 ? (
+                    userBills.map(bill=> (
+                        <Bill key={bill.id} {...bill} />
+                    ))
+                ) : (
+                    <Text>No bills found</Text>
+                )}
             </ScrollView>
         </LinearGradient>
     );
