@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { TouchableOpacity, View, Text, Modal, Image} from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
@@ -95,10 +96,9 @@ export default function HeaderNav() {
     const [currentPond, setCurrentPond] = useState(null);
 
     const [triggerUpdateCount, setTriggerUpdateCount] = useState(0);
-    const triggerUpdate = () => setTriggerUpdateCount(prev => prev + 1);   
+    const triggerUpdate = () => setTriggerUpdateCount(prev => prev + 1);
 
     // finds which profile the user currently has
-
     useEffect(() => {
         const fetchUserProfile = async () => {
             const auth = getAuth();
@@ -124,51 +124,56 @@ export default function HeaderNav() {
     }, []);
 
     // finds which pond user is currently selecting
-    useEffect(() => {
-        const fetchSelectedPond = async () => {
-            const auth = getAuth()
-            const user = auth.currentUser
-            const userDocRef = doc(db, 'users', user.uid)
-            const userDoc = await getDoc(userDocRef)
-            const currentPondId = userDoc.exists() ? userDoc.data().currentPondId : null;
-            if (!user) return;
+    useFocusEffect(
+        useCallback(() => {
+            const fetchSelectedPond = async () => {
+                const auth = getAuth()
+                const user = auth.currentUser
+                if (!user) return;
 
-            try {
-                const q = query(
-                    collection(db, 'ponds'), 
-                    where('selected', 'array-contains', user.uid)
-                )
-                const querySnapshot = await getDocs(q)
-                if (!querySnapshot.empty) {
-                    const pondData = querySnapshot.docs[0].data()
-                    
-                    const name = pondData.name || "Unnamed Pond"
-                    setPondName(name)
-                } else {
-                    //if no pond found, set pondName = ''
-                    setPondName('')
-                    console.log('User not found in any selected array in Pond documents')
-                }
-                if (currentPondId) {
-                    const selectedPond = ponds.find(p => p.id === currentPondId);
-                    if (selectedPond) {
-                        setCurrentPond(currentPondId);
-                        setPondName(selectedPond.name);
-                    } else {
-                        setCurrentPond(null);
-                        setPondName('');
+                try {
+                    //fetch user doc
+                    const userDocRef = doc(db, 'users', user.uid)
+                    const userDoc = await getDoc(userDocRef)
+
+                    if (!userDoc.exists()) {
+                        console.log('User document not found.')
+                        setCurrentPond(null) //no current pond
+                        setPondName('')
+                        return
                     }
-                } else {
-                    setCurrentPond(null);
-                    setPondName('');
+
+                    const currentPondId = userDoc.data().currentPondId
+                    if (!currentPondId) {
+                        console.log('No current pond selected.')
+                        setCurrentPond(null)
+                        setPondName('')
+                    }
+
+                    //fetch pond doc w/ ID
+                    const pondDocRef = doc(db, 'ponds', currentPondId)
+                    const pondDoc = await getDoc(pondDocRef)
+
+                    if (pondDoc.exists()){
+                        const pondData = pondDoc.data()
+                        setCurrentPond(currentPondId)
+                        setPondName(pondData.name || 'Unnamed Pond')
+                    } 
+                    else {
+                        console.log('Pond not found')
+                        setCurrentPond(null)
+                        setPondName('')
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch current pond:', error)
+                    setCurrentPond(null)
+                    setPondName('')
                 }
-            } catch (error) {
-                console.error('Failed to fetch current pond:', error)
             }
-        }
-        
-        fetchSelectedPond()
-    }, [triggerUpdateCount]) 
+
+            fetchSelectedPond()
+        }, [triggerUpdateCount])
+    ) 
 
     return (
         <View style={styles.mainView}>
@@ -193,8 +198,8 @@ export default function HeaderNav() {
                 <PondPopupOptions 
                     triggerUpdate={triggerUpdate}
                     triggerUpdateCount={triggerUpdateCount}        
-                    pondName={currentPond} 
-                    setPondName={setCurrentPond}
+                    pondName={pondName} 
+                    setPondName={setPondName}
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
                     />

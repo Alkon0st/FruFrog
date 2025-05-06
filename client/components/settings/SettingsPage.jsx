@@ -2,7 +2,7 @@ import {Modal, Text, View, TouchableOpacity, ScrollView, Image, Alert} from 'rea
 import { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import styles from './SettingsPage.style';
 // import { usePlaidLink } from 'react-native-plaid-link-sdk';
 
@@ -37,48 +37,63 @@ const SettingsPage = ({
     const [ownerId, setOwnerId] = useState('');
     const [pondId, setPondId] = useState('');
 
-
     useEffect(() => {
-        const fetchPondInfo = async () => {
-            const auth = getAuth()
-            const user = auth.currentUser
-
-            if(!user)return
-
-            try{
-                const q = query(
-                    collection(db, 'ponds'),
-                    where('selected', 'array-contains', user.uid)
-                )
-                const querySnapshot = await getDocs(q)
-
-                if(querySnapshot.empty) {
-                    console.error('Error: no pond found')
-                    return
-                }
-
-                const pondDoc = querySnapshot.docs[0]
-                const pondData = pondDoc.data()
-
-                setThumbnail(pondData.thumbnail) //sets thumbnail
-                setPondId(pondDoc.id) //stores pond id
-                setOwnerId(pondData.owner) //stores owner uid
-
-                //set isAdmin based on ownership
-                if (pondData.owner === user.uid) {
-                    setIsAdmin(true)
-                } else {
-                    setIsAdmin(false)
-                }
-            } catch (error) {
-                console.error('Error fetching pond info:', error)
-            }
-        }
-
         if (visible) {
-            fetchPondInfo() //triggers fetch when modal opens
+            fetchPondInfo();
         }
-    }, [visible, setThumbnail]) //trigger this effect when visible parameter changes
+    }, [visible]);
+    
+    const fetchPondInfo = async () => {
+        const auth = getAuth()
+        const user = auth.currentUser
+
+        if(!user)return
+
+        try{
+            //get current pond
+            const userDocRef = doc(db, 'users', user.uid)
+            const userDoc = await getDoc(userDocRef)
+            if (!userDoc.exists()) {
+                console.log('User document not found')
+                setPondName('')
+                return
+            }
+
+            const currentPondId = userDoc.data().currentPondId
+            if(!currentPondId) {
+                console.log('No current pond selected')
+                setPondName('')
+                return
+            }
+
+            //get pond document
+            const pondDocRef = doc(db, 'ponds', currentPondId)
+            const pondDoc = await getDoc(pondDocRef)
+
+            if (!pondDoc.exists()) {
+                console.log('Pond document not found.')
+                setPondName('')
+                return
+            }
+
+            const pondData = pondDoc.data()
+
+            //update them states
+            setPondId(currentPondId)
+            setPondName(pondData.name || 'Unnamed Pond')
+            setThumbnail(pondData.thumbnail)
+            setOwnerId(pondData.owner)
+
+            if (pondData.owner === user.uid) {
+                setIsAdmin(true)
+            }
+            else {
+                setIsAdmin(false)
+            }
+        } catch (error) {
+            console.error('Error fetching pond info:', error)
+        }
+    }
 
     useEffect(() => {
         const fetchOwnerName = async () => {
