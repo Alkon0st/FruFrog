@@ -60,53 +60,44 @@ export const handleAddSubCategory = async (pondId,categoryName,subCategoryName,s
     }
 };
 
-export const handleUpdateSubCategory = async (pondId, categoryName, selectedSubcategory, updatedSubCategoryName, updatedSubCategoryAmount, setIsEditModalVisible, setUpdatedSubCategoryName, setUpdatedSubCategoryAmount) => {
-    if (pondId && categoryName && selectedSubcategory && updatedSubCategoryName && updatedSubCategoryAmount) {
-        try {
-            const categoryRef = doc(db, "ponds", pondId, "budgetCategories", categoryName);
-            const categorySnapshot = await getDoc(categoryRef);
-
-            if (categorySnapshot.exists()) {
-                const categoryData = categorySnapshot.data();
-                const subcategories = categoryData.items || [];
-
-                // Find the index of the subcategory to update
-                const subcategoryIndex = subcategories.findIndex(
-                    (sub) => sub.name === selectedSubcategory.name
-                );
-
-                if (subcategoryIndex !== -1) {
-                    // Update the subcategory
-                    subcategories[subcategoryIndex] = {
-                        name: updatedSubCategoryName,
-                        amount: parseFloat(updatedSubCategoryAmount),
-                    };
-
-                    // Update Firestore
-                    await updateDoc(categoryRef, { items: subcategories });
-                    console.log(
-                        `Subcategory "${selectedSubcategory.name}" updated in category "${categoryName}".`
-                    );
-                } else {
-                    console.error(
-                        `Subcategory "${selectedSubcategory.name}" not found in category "${categoryName}".`
-                    );
-                }
-            } else {
-                console.error(`Category "${categoryName}" does not exist.`);
-            }
-
-            // Reset modal and form state
-            setIsEditModalVisible(false);
-            setUpdatedSubCategoryName('');
-            setUpdatedSubCategoryAmount('');
-        } catch (error) {
-            console.error("Error updating subcategory:", error);
-        }
-    } else {
-        console.error("Missing pond ID, category name, or subcategory details.");
+export const handleUpdateSubCategory = async (pondId, categoryId, originalSubcategoryName, updatedName, updatedAmount) => {
+    if (!pondId || !categoryId || !originalSubcategoryName || !updatedName || isNaN(updatedAmount)) {
+      console.error("Missing or invalid inputs for subcategory update.");
+      return;
     }
-};
+  
+    try {
+      const categoryRef = doc(db, "ponds", pondId, "budgetCategories", categoryId);
+      const categorySnap = await getDoc(categoryRef);
+  
+      if (!categorySnap.exists()) {
+        console.error(`Category "${categoryId}" not found.`);
+        return;
+      }
+  
+      const data = categorySnap.data();
+      const items = Array.isArray(data?.items) ? data.items : [];
+  
+      const index = items.findIndex((sub) => sub.name === originalSubcategoryName);
+      if (index === -1) {
+        console.error(`Subcategory "${originalSubcategoryName}" not found in category "${categoryId}".`);
+        return;
+      }
+  
+      const updatedItems = [...items];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        name: updatedName.trim(),
+        amount: updatedAmount,
+      };
+  
+      await updateDoc(categoryRef, { items: updatedItems });
+  
+      console.log(`Updated subcategory "${originalSubcategoryName}" to "${updatedName}".`);
+    } catch (err) {
+      console.error("Error updating subcategory:", err);
+    }
+  };
 
 export const toggleCategoryVisibility = (category, setVisible) => {
     setVisible((prevState) => ({
