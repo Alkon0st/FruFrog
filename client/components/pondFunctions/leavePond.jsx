@@ -2,7 +2,7 @@ import { View, Text, Modal, TouchableOpacity, StyleSheet, Alert } from 'react-na
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
-import { collection, query, where, getDocs, updateDoc, deleteDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, deleteDoc, arrayRemove, arrayUnion, doc, getDoc } from 'firebase/firestore';
 import { useState, useRef } from 'react';
 
 const DeleteWarning = ({visible, onCancel, onConfirm}) => {
@@ -59,66 +59,75 @@ const LeavePond = ({
         if (!user) return
         
         try {
-            const q = query(
-                collection(db, 'ponds'),
-                where('selected', 'array-contains', user.uid)
-            )
-            const querySnapshot = await getDocs(q)
+            // get user's current pond id
+            const userDocRef = doc(db, 'users', user.uid)
+            const userDoc = await getDoc(userDocRef)
 
-            if (querySnapshot.empty) {
-                Alert.alert('Error', 'No selected pond found.')
+            if (!userDoc.exists()) {
+                console.error('User document not found')
+                return 
+            }
+
+            const currentPondId = userDoc.data().currentPondId
+
+            if (!currentPondId) {
+                console.error('No current pond selected')
                 return
             }
 
-            const pondDoc = querySnapshot.docs[0]
+            const pondDocRef = doc(db, 'ponds', currentPondId)
+            const pondDoc = await getDoc(pondDocRef)
+
+            if (!pondDoc.exists()) {
+                console.error('Pond not found.')
+                return
+            }
+
             const pondData = pondDoc.data()
+            const updatedMembers = pondData.members.filter(uid => uid !== user.uid)
 
-            // check if user is the admin & if there other members
-            let updatedData = {...pondData}
-            updatedData.members = updatedData.members.filter(uid => uid !== user.uid)
-
-            // IF user was admin, delete the pond if no other users or reassign owner
+            //IF user is the owner: if only member shows warning that it will delete the pond, otherwise reassign ownership
             if (pondData.owner === user.uid) {
-                if (updatedData.members.length === 0) {
-                    cachedPondRef.current = pondDoc.ref
+                if (updatedMembers.length === 0) {
+                    cachedPondRef.current = pondDocRef
                     setShowDeleteWarning(true)
                     return
-                } 
+                }
                 else {
-                    // assigns the next person in list as owner
-                    const newOwner = updatedData.members[0]
-                    await updateDoc(pondDoc.ref, {owner: newOwner})
+                    const newOwner = updatedMembers[0]
+                    await updateDoc(pondDocRef, {owner: newOwner})
                 }
             }
-            
 
-            //remove user from members and selected after confirming after warning
-            await updateDoc(pondDoc.ref, {
-                members: arrayRemove(user.uid),
-                selected: arrayRemove(user.uid)
+            // remove user from pond members
+            await updateDoc(pondDocRef, {
+                members: arrayRemove(user.uid)
             })
 
-            // Appends user to another pond for Selected
+            //find another pond to join
             const otherPondQuery = query(
                 collection(db, 'ponds'),
                 where('members', 'array-contains', user.uid)
             )
             const otherPondSnapshot = await getDocs(otherPondQuery)
 
-            let reassigned = false
-            for (const docSnap of otherPondSnapshot.docs) {
-                const otherPond = docSnap.data()
-                if (!otherPond.selected.includes(user.uid)) {
-                    await updateDoc(docSnap.ref, {
-                        selected: arrayUnion(user.uid)
-                    })
-                    setPondName(otherPond.name)
-                    reassigned = true
-                    break
-                }
-            }
+            if (!otherPondSnapshot.empty) {
+                const nextPondDoc = otherPondSnapshot.docs[0]
+                const nextPondId = nextPondDoc.id
+                const nextPondName = nextPondDoc.data().name || 'Unnamed Pond'
 
+                //updates user's currentPondId
+                await updateDoc(userDocRef, { currentPondId: nextPondId })
+                setPondName(nextPondName)
+            }
+            else {
+                //no other pond -> set currentPondId as ''
+                await updateDoc(userDocRef, {currentPondId: ''})
+                    setPondName('')
+            }
+            
             onLeft()
+            onClose()
         } catch (error) {
             console.error('Error leaving pond', error)
             Alert.alert('Error', 'Failed to leave pond.')
@@ -129,7 +138,38 @@ const LeavePond = ({
         if(!cachedPondRef.current) return
 
         try {
+            const auth = getAuth()
+            const user = auth.currentUser
+
+            if(!user)return
+
+            const userDocRef = doc(db, 'users', user.uid)
+
+            //delete pond
             await deleteDoc(cachedPondRef.current)
+
+            //find another pond to join
+            const otherPondQuery = query(
+                collection(db, 'ponds'),
+                where('members', 'array-contains', user.uid)
+            )
+            const otherPondSnapshot = await getDocs(otherPondQuery)
+
+            if (!otherPondSnapshot.empty) {
+                const nextPondDoc = otherPondSnapshot.docs[0]
+                const nextPondId = nextPondDoc.id
+                const nextPondName = nextPondDoc.data().name || 'Unnamed Pond'
+
+                //updates user's currentPondId
+                await updateDoc(userDocRef, { currentPondId: nextPondId })
+                setPondName(nextPondName)
+            }
+            else {
+                //no other pond -> set currentPondId as ''
+                await updateDoc(userDocRef, {currentPondId: ''})
+                    setPondName('')
+            }
+
             cachedPondRef.current=null
             setShowDeleteWarning(false)
             onLeft()

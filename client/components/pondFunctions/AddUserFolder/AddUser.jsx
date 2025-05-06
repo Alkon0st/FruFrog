@@ -3,7 +3,7 @@ import {Alert, Modal, Text, View, TouchableOpacity, Image } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 // SafeAreaView & associated are modules that automatically applies padding for views that are not covered
 import { getAuth } from 'firebase/auth';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase/firebase';
 
 
@@ -63,13 +63,18 @@ const AddUser = ( {pondName} ) => {
     if (!user) return;
 
     try {
-      const q = query(collection(db, 'ponds'), where('selected', 'array-contains', user.uid))
-      const querySnapshot = await getDocs(q)
-      const selectedPond = querySnapshot.docs[0]
-      if (selectedPond) {
-        setPondId(selectedPond.id)
+      const userDocRef = doc(db, 'users', user.uid)
+      const userDoc = await getDoc(userDocRef)
+      const currentPondId = userDoc.data().currentPondId
 
-        const joinCodeData = selectedPond.data().join_code
+      if(!currentPondId) return
+
+      const pondRef = doc(db, 'ponds', currentPondId)
+      const pondSnap = await getDoc(pondRef)
+
+      if (pondSnap.exists()) {
+        setPondId(currentPondId)
+        const joinCodeData = pondSnap.data().join_code
         const now = Date.now()
 
         // checks if join_code exists and is still valid

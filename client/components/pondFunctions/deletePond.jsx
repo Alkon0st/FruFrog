@@ -2,7 +2,7 @@ import { View, Text, Modal, TouchableOpacity, StyleSheet, Alert } from 'react-na
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
-import { collection, query, where, getDocs, deleteDoc, updateDoc, arrayUnion} from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, updateDoc, doc, getDoc, } from 'firebase/firestore';
 
 const DeletePond = ({ 
     visible,
@@ -18,60 +18,66 @@ const DeletePond = ({
             if (!user) {return}
 
             try {
-                const q = query(
-                    collection(db, 'ponds'),
-                    where('selected', 'array-contains', user.uid)
-                )
-                const querySnapshot = await getDocs(q)
+                //get the user's selected pond id
+                const userDocRef = doc(db, 'users', user.uid)
+                const userDoc = await getDoc(userDocRef)
 
-                if (querySnapshot.empty) {
-                    Alert.alert('Error', 'No selected pond found.')
-                    return;
-                }
-
-                const pondDoc = querySnapshot.docs[0]
-                const pondData = pondDoc.data()
-
-                // safety measure just in case they bypass the admin
-                if (pondData.owner !== user.uid) {
-                    Alert.alert('Error', 'Only the pond owner can delete it.')
+                if(!userDoc.exists()) {
+                    console.error('User document not found')
                     return
                 }
 
-                // deletes current pond
-                await deleteDoc(pondDoc.ref)
+                const currentPondId = userDoc.data().currentPondId
 
-                // finds another pond that user is a member
+                if (!currentPondId) {
+                    console.error('No current pond selected')
+                    return
+                }
+
+                //get current pond's document
+                const pondDocRef = doc(db, 'ponds', currentPondId)
+                const pondDoc = await getDoc(pondDocRef)
+
+                if (!pondDoc.exists()){
+                    console.error('Pond document not found')
+                    return
+                }
+
+                const pondData = pondDoc.data()
+
+                //only owner can delete just in case bypass admin
+                if (pondData.owner !== user.uid) {
+                    console.error('Only pond owner can delete pond.')
+                    return
+                }
+
+                //deletes pond
+                await deleteDoc(pondDocRef)
+
+                //find another pond for user to select
                 const otherPondQuery = query(
                     collection(db, 'ponds'),
                     where('members', 'array-contains', user.uid)
                 )
                 const otherPondSnapshot = await getDocs(otherPondQuery)
 
-                let reassigned = false
-                for (const docSnap of otherPondSnapshot.docs) {
-                    const otherPond = docSnap.data()
+                if(!otherPondSnapshot.empty) {
+                    const nextPondDoc = otherPondSnapshot.docs[0]
+                    const nextPondId = nextPondDoc.id
+                    const nextPondName = nextPondDoc.data().name || 'Unnamed Pond'
 
-                    //skip pond that was just deleted
-                    if (docSnap.id === pondDoc.id) continue;
+                    //updates user's currentPondId
+                    await updateDoc(userDocRef, {currentPondId: nextPondId})
+                    setPondName(nextPondName)
 
-                    //add user to selected
-                    if (!otherPond.selected.includes(user.uid)) {
-                        await updateDoc(docSnap.ref,{
-                            selected: arrayUnion(user.uid)
-                        })
-                    }
+                    console.log('Pond deleted successfully & user reassigned.')
+                } 
+                else {
+                    //no other pond found
+                    await updateDoc(userDocRef, {currentPondId: ''})
+                    setPondName('')
+                    console.log('Pond deleted successfully but no other ponds found..')
 
-                    reassigned = true;
-
-                    setPondName(otherPond.name) //sets current pond name to reassigned
-                    break; // only reassigns to first match
-                }
-
-                if (!reassigned) {
-                    Alert.alert('Notice', 'Pond deleted, but no other pond found to reassign')
-                } else {
-                    Alert.alert('Success', 'Pond deleted and user reassigned')
                 }
                 
                 onClose()

@@ -41,9 +41,10 @@ const SettingsPage = ({
         if (visible) {
             fetchPondInfo();
         }
-    }, [visible]);
+    }, [visible, triggerUpdate]);
     
     const fetchPondInfo = async () => {
+        console.log('Fetch pond is running...')
         const auth = getAuth()
         const user = auth.currentUser
 
@@ -85,6 +86,7 @@ const SettingsPage = ({
             setOwnerId(pondData.owner)
 
             if (pondData.owner === user.uid) {
+                if (!isAdmin) console.log("User is now the pond owner, setting admin mode.")
                 setIsAdmin(true)
             }
             else {
@@ -97,7 +99,10 @@ const SettingsPage = ({
 
     useEffect(() => {
         const fetchOwnerName = async () => {
-            if (!ownerId) return;
+            if (!ownerId) {
+                console.warn('No ownerId available');
+                return;
+            }
 
             try {
                 const q = query(
@@ -110,7 +115,7 @@ const SettingsPage = ({
                     const userData = querySnapshot.docs[0].data()
                     setOwnerName(userData.username)
                 } else {
-                    console.warn('Owner user document not found')
+                    console.warn('Owner user document not found in fetchOwnerName')
                     setOwnerName('Unnamed User')
                 }
             } catch (error) {
@@ -259,8 +264,9 @@ const SettingsPage = ({
                         visible={isLeaveVisible}
                         onClose={() => setIsLeaveVisible(false)}
                         setPondName={setPondName}
-                        onLeft={() => {
+                        onLeft={async () => {
                             setIsLeaveVisible(false)
+                            await fetchPondInfo()
                             onClose() //closes settings page
                         }}
                     />
