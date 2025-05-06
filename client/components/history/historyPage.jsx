@@ -9,15 +9,16 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { collection, query, where, getDocs, collectionGroup} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { getAuth } from "firebase/auth";
+import Bill from "../billSplit/bill";
 
 function HistoryData() {
     const [userBills, setUserBills] = useState([]);
-    const [expenseData, setExpenseData] = useState([]);
+    //const [expenseData, setExpenseData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const [editingId, setEditingId] = useState(null);
-    const [editAmount, setEditAmount] = useState("");
+    //const [editingId, setEditingId] = useState(null);
+    //const [editAmount, setEditAmount] = useState("");
     const navigation = useNavigation();
 
     useEffect(() => {
