@@ -76,7 +76,7 @@ const BillSplitPage = () => {
           {/* Bill List */}
           <View style={styles.billList}>
             {bills.length > 0 ? (
-              bills.map((bill, index) => <Bill key={index} {...bill} />)
+              bills.map((bill, index) => <Bill key={bill.id} {...bill} id={bill.id} pondId={currentPondId} />)
             ) : (
               <Text>No bills yet</Text>
             )}

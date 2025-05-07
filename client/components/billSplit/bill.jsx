@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from "./bill.style";
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
+import { getAuth } from 'firebase/auth';
 
 const profileImages = {
   1: require('../profile/img/1.png'),
@@ -23,30 +24,49 @@ const profileImages = {
   16: require('../profile/img/16.png'),
 };
 
-const Bill = ({ title, date, paid, total, split }) => {
+const Bill = ({ title, date, paid, total, split, paidBy = [], id, pondId }) => {
   const [profileMap, setProfileMap] = useState({});
+  const [hasPaid, setHasPaid] = useState(false);
+  const user = getAuth().currentUser;
 
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
         const snapshot = await getDocs(collection(db, 'profiles'));
         const map = {};
-
+  
         snapshot.forEach(doc => {
           const { members, profile_id } = doc.data();
           members.forEach(uid => {
             map[uid] = profile_id;
           });
         });
-
+  
         setProfileMap(map);
       } catch (error) {
         console.error("Error loading profile data:", error);
       }
     };
-
+  
     fetchProfiles();
-  }, []);
+  
+    if (user && paidBy.includes(user.uid)) {
+      setHasPaid(true);
+    }
+  }, [paidBy]);
+
+  const markAsPaid = async () => {
+    if (!user || hasPaid) return;
+  
+    try {
+      await updateDoc(doc(db, `ponds/${pondId}/bills`, id), {
+        paidBy: arrayUnion(user.uid),
+      });
+      setHasPaid(true);
+    } catch (error) {
+      console.error("Error updating paidBy:", error);
+    }
+  };
 
   const renderMembers = () => {
     if (split && split.length > 0) {
@@ -80,8 +100,18 @@ const Bill = ({ title, date, paid, total, split }) => {
       <View style={styles.billPaidSection}>
         <Text style={styles.billPaid}>${paid}</Text>
         <Text style={styles.billPercent}>
-          {Math.round((parseFloat(paid) / parseFloat(total)) * 100)}% Paid
+          {split && split.length > 0
+            ? Math.round((paidBy.length / split.length) * 100)
+            : 0
+          }% Paid
         </Text>
+        {!hasPaid ? (
+          <TouchableOpacity onPress={markAsPaid} style={{ marginTop: 5 }}>
+            <Text style={{ color: '#4f723a' }}>✅ Mark as Paid</Text>
+          </TouchableOpacity>
+        ) : (
+          <Text style={{ color: 'green', marginTop: 5 }}>✔ You marked as paid</Text>
+        )}
       </View>
 
       <View style={{
