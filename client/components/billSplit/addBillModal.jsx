@@ -44,10 +44,6 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
   };
 
   const handleEvenSplit = async () => {
-    const amount = parseFloat(billAmount) || 0;
-    const members = membersList.length || 1;
-    const splitAmount = amount / members;
-    const percentPaid = amount / amount;
     if (!billTitle.trim()) {
       alert('Please enter a title.');
       return;
@@ -56,38 +52,53 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
       alert('Please enter a valid total amount.');
       return;
     }
-
-    const bill = {
-      title: billTitle,
-      date: billDate,
-      category,
-      amount,
-      members,
-      split,
-      paid: splitAmount.toFixed(2),
-      percentPaid: percentPaid.toFixed(2),
-      total: amount.toFixed(2),
-      createdAt: new Date(),
-    };
-
+  
+    const amount = parseFloat(billAmount) || 0;
+  
     try {
       const user = getAuth().currentUser;
       if (!user) return;
       const pond = await getSelectedPond(user.uid);
       if (!pond) return;
-
+  
+      const members = pond.members || [];
+      const percent = 100 / members.length;
+  
+      const split = members.map(uid => ({
+        uid,
+        percent: parseFloat(percent.toFixed(2)),
+      }));
+  
+      const userSplit = split.find(m => m.uid === user.uid);
+      const paidAmount = (amount * (userSplit.percent / 100));
+      const percentPaid = userSplit.percent / 100;
+  
+      const bill = {
+        title: billTitle,
+        date: billDate,
+        category,
+        amount,
+        total: amount.toFixed(2),
+        createdAt: new Date(),
+        members: members.length,
+        split,
+        paid: paidAmount.toFixed(2),
+        percentPaid: percentPaid.toFixed(2),
+      };
+  
       await addDoc(collection(db, `ponds/${pond.id}/bills`), bill);
       onSubmit && onSubmit(bill);
       resetFields();
       onClose();
     } catch (error) {
-      console.error('Error adding bill:', error);
+      console.error('Error adding even split bill:', error);
       alert('Failed to add bill.');
     }
   };
 
   const handleCustomSplit = async () => {
-    const totalPercent = customSplit.reduce((sum, m) => sum + m.percent, 0);
+    const split = customSplit;
+    const totalPercent = split.reduce((sum, m) => sum + m.percent, 0);
     if (!billTitle.trim()) {
       alert('Please enter a title.');
       return;
@@ -123,7 +134,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
         category,
         amount,
         members,
-        customSplit,
+        split,
         paid: paidAmount.toFixed(2),
         percentPaid: percentPaid.toFixed(2),
         total: amount.toFixed(2),

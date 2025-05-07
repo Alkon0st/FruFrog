@@ -15,22 +15,22 @@ const BillSplitPage = () => {
     const [bills, setBills] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
   
-    useEffect(() => {
-      const fetchBills = async () => {
-        try {
-          const user = getAuth().currentUser;
-          if (!user) return;
-          const pond = await getSelectedPond(user.uid);
-          if (!pond) return;
-          const q = query(collection(db, `ponds/${pond.id}/bills`), orderBy('createdAt', 'desc'));
-          const snapshot = await getDocs(q)
-          const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-          setBills(billsData)
-        } catch (err) {
-          console.error('Failed to fetch bills:', err)
-        }
+    const fetchBills = async () => {
+      try {
+        const user = getAuth().currentUser;
+        if (!user) return;
+        const pond = await getSelectedPond(user.uid);
+        if (!pond) return;
+        const q = query(collection(db, `ponds/${pond.id}/bills`), orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(q)
+        const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        setBills(billsData)
+      } catch (err) {
+        console.error('Failed to fetch bills:', err)
       }
-    
+    }
+
+    useEffect(() => {
       fetchBills()
     }, []);
 

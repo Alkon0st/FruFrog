@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { getAuth } from "firebase/auth";
-import { collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase"; // Make sure the path matches yours
 import PondThumbnail from "./img/pondThumbnail";
 
@@ -64,21 +64,30 @@ const PondDisplay = ({
     const handleSelectPond = async (selectedPond) => {
         const auth = getAuth();
         const user = auth.currentUser;
-    
+      
         if (!user) return;
-    
+      
         try {
-            // Update the user's currentPondId in their user document
-            const userRef = doc(db, "users", user.uid);
-            await updateDoc(userRef, {
-                currentPondId: selectedPond.id,
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+      
+          if (!userSnap.exists()) {
+            // Create the user doc if it doesn't exist
+            await setDoc(userRef, {
+              currentPondId: selectedPond.id,
             });
-    
-            setCurrentPond(selectedPond.id);
-            setPondName(selectedPond.name);
-    
+          } else {
+            // Update the pond
+            await updateDoc(userRef, {
+              currentPondId: selectedPond.id,
+            });
+          }
+      
+          setCurrentPond(selectedPond.id);
+          setPondName(selectedPond.name);
+          console.log("Selected Pond:", selectedPond.name);
         } catch (error) {
-            console.error('Error setting current pond on user document:', error);
+          console.error("Error setting current pond on user document:", error);
         }
     };
 
