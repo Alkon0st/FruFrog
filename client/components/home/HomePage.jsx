@@ -305,7 +305,8 @@ const styles = StyleSheet.create({
         paddingBottom: 2,
     },
     leftoverAmountContainer:{
-        border:"1px solid #3F5830",
+        borderWidth: 1,
+        borderColor: '#3F5830',
         borderRadius: 10,
         padding: 2,
     },

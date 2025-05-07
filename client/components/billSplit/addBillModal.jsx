@@ -37,6 +37,7 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
   const [profileMap, setProfileMap] = useState({});
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [nameMap, setNameMap] = useState({});
 
   useEffect(() => {
     if (visible) {
@@ -71,6 +72,14 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
           });
         });
         setProfileMap(map);
+
+        const userDocs = await getDocs(collection(db, 'users'));
+        const names = {};
+        userDocs.forEach(doc => {
+          const data = doc.data();
+          names[doc.id] = data.username || 'Unnamed';
+        });
+        setNameMap(names);
       
         // 🔽 fetch categories
         const categoriesSnapshot = await getDocs(collection(db, `ponds/${pondId}/budgetCategories`));
@@ -242,38 +251,43 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
                 const imgSrc = profileImages[profileId] || profileImages[1];
                 const isSelected = selectedMembers.includes(uid);
 
+                const handleToggleMember = () => {
+                  setSelectedMembers(prev => {
+                    const updated = isSelected
+                      ? prev.filter(id => id !== uid)
+                      : [...prev, uid];
+
+                    const newCustomSplit = updated.map(id => {
+                      const existing = customSplit.find(m => m.uid === id);
+                      return existing || { uid: id, percent: 0 };
+                    });
+
+                    setCustomSplit(newCustomSplit);
+                    return updated;
+                  });
+                };
+
                 return (
                   <TouchableOpacity
                     key={uid}
-                    onPress={() => {
-                      setSelectedMembers(prev => {
-                        const isSelected = prev.includes(uid);
-                        let updated = [];
-                    
-                        if (isSelected) {
-                          updated = prev.filter(id => id !== uid);
-                        } else {
-                          updated = [...prev, uid];
-                        }
-                    
-                        // Sync customSplit with selected members
-                        const newCustomSplit = updated.map(id => {
-                          const existing = customSplit.find(m => m.uid === id);
-                          return existing || { uid: id, percent: 0 };
-                        });
-                    
-                        setCustomSplit(newCustomSplit);
-                        return updated;
-                      });
-                    }}
+                    onPress={handleToggleMember}
                     style={{
                       margin: 4,
-                      borderRadius: 24,
-                      borderWidth: 2,
-                      borderColor: isSelected ? '#4f723a' : 'transparent',
+                      alignItems: 'center',
                     }}
                   >
-                    <Image source={imgSrc} style={{ width: 48, height: 48, borderRadius: 24 }} />
+                    <View
+                      style={{
+                        borderRadius: 24,
+                        borderWidth: 2,
+                        borderColor: isSelected ? '#4f723a' : 'transparent',
+                      }}
+                    >
+                      <Image source={imgSrc} style={{ width: 48, height: 48, borderRadius: 24 }} />
+                    </View>
+                    <Text style={{ fontSize: 10, color: '#22470C', marginTop: 2 }}>
+                      {nameMap[uid] || 'Unnamed'}
+                    </Text>
                   </TouchableOpacity>
                 );
               })}
@@ -291,7 +305,7 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
 
             {splitMode === 'custom' && customSplit.map((m, i) => (
               <View key={m.uid} style={{ marginBottom: 10 }}>
-                <Text>{m.uid}</Text>
+                <Text>{nameMap[m.uid] || m.uid}</Text>
                 <Slider
                   minimumValue={0}
                   maximumValue={100}
