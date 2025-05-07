@@ -81,22 +81,23 @@ function HomePage() {
       }, []);
       
     
-    const getColorForCategory = (index) => {
+      const getColorForCategory = (category) => {
         const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
-        return colors[index % colors.length];
-    };
+        const index = Object.keys(budgetCategories).indexOf(category) % colors.length;
+        return colors[index];
+      };
+      
     
     const getCategoryTotalsForPie = (categories) => {
-        return Object.entries(categories).map(([category, subcategories], index) => {
-            const total = subcategories.reduce((sum, sub) => sum + sub.amount, 0);
-            return {
-                name: category,
-                total,
-                color: getColorForCategory(index),
-                legendFontSize: 0,
-            };
-        });
-    };
+    return Object.entries(categories).map(([category, subcategories]) => {
+        const total = subcategories.reduce((sum, sub) => sum + sub.amount, 0);
+        return {
+            name: category,
+            total,
+            color: getColorForCategory(category), // FIXED
+        };
+    });
+};
     const totalSpent = Object.values(budgetCategories).reduce((sum, category) => {
         return sum + category.reduce((subSum, sub) => subSum + sub.amount, 0);
     }, 0);
@@ -105,52 +106,71 @@ function HomePage() {
 
     return (
         <SafeAreaProvider>
-        <SafeAreaView>
-        <LinearGradient colors = {['#F1FEFE', '#B2F0EF']}>
-            <ScrollView>
-                <View style={styles.viewStyle}>
-                <HeaderNav />
-                <View style={styles.page}>
-                    <Text style={styles.headingStyle}>Hello, {username}!</Text>
+        <SafeAreaView style={{flex: 1}}>
+        <LinearGradient colors = {['#F1FEFE', '#B2F0EF']} style={{ flex: 1 }}>
+            <ScrollView style={styles.viewStyle}>
+                <HeaderNav />     
+                <Text style={styles.greeting}>Hello, {username}!</Text>
                 <View style={styles.budgetContainer}> 
                     <View>
-                    <Text style ={styles.headingStyle}>Budget Overview</Text>
+                    <Text style ={styles.budgetOverview}>Budget Overview</Text>
                     <View>
-                        
-                        <View>
-                            <Text style ={styles.textStyle}>Planned Expenses</Text>
-                            <Text style ={styles.textStyle}>${totalSpent.toFixed(2)}</Text>
-                            <View>
-                                <Text style ={styles.textStyle}>${leftoverAmount.toFixed(2)} Left to budget</Text>
+                        <View style={{display: 'flex', flexDirection: 'row'}}>
+                            <View style={styles.budgetOverviewContainer}>
+                                <View>
+                                    <Text style={styles.plannedExpenses}>Planned Expenses</Text>
+                                </View>
+                                <Text style={styles.plannedExpensesText}>${totalSpent.toFixed(2)}</Text>
+                                <View style={styles.leftoverAmountContainer}>  
+                                    <Text style={styles.leftoverAmount}>${leftoverAmount.toFixed(2)} Left to budget</Text>
+                                </View>
                             </View>
+                            {Object.keys(budgetCategories).length > 0 && (
+                            <PieChart
+                                data={getCategoryTotalsForPie(budgetCategories)}
+                                width={Dimensions.get('window').width - 30}
+                                height={175}
+                                accessor="total"
+                                backgroundColor="transparent"
+                                paddingLeft="15"
+                                absolute
+                                chartConfig={{
+                                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                }}
+                                hasLegend={false}
+                                />
+                            )}
                         </View>
-                        
+                        <View style={{ paddingHorizontal: 16, marginTop: 20 }}>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                            {Object.entries(budgetCategories).map(([category, subcategories]) => {
+                            const total = subcategories.reduce((sum, sub) => sum + sub.amount, 0);
+                            const color = getColorForCategory(category);
+                            return (
+                                <View
+                                key={category}
+                                style={{
+                                    backgroundColor: color,
+                                    borderRadius: 12,
+                                    padding: 30,
+                                    marginRight: 12,
+                                    width: 120,
+                                    justifyContent: 'flex-start',
+                                    alignItems: 'center',
+                                    shadowColor: '#000',
+                                    shadowOpacity: 0.1,
+                                    shadowRadius: 4,
+                                    elevation: 3
+                                }}
+                                >
+                                <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#ffff' }}>{category}</Text>
+                                <Text style={{ fontSize: 15, color: '#ffff' }}>${total}</Text>
+                                </View>
+                            );
+                            })}
+                        </ScrollView>
                         </View>
                     </View>
-                    
-                        <View>
-                        <Text style ={styles.textStyle}>PieChart</Text>
-                        {Object.keys(budgetCategories).length > 0 && (
-                        <PieChart
-                            data={getCategoryTotalsForPie(budgetCategories)}
-                            width={Dimensions.get('window').width - 20}
-                            height={220}
-                            accessor="total"
-                            backgroundColor="transparent"
-                            paddingLeft="15"
-                            absolute
-                            chartConfig={{
-                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            }}
-                            />
-                        )}
-                    </View>
-                    </View>
-                    
-                
-                    
-                    <View>
-                        <Text style ={styles.textStyle}>Category Cards</Text>
                     </View>
                 </View>
 
@@ -160,7 +180,7 @@ function HomePage() {
                     <Bill key={index} {...bill} />
                     ))}
                 </View>
-            </View>
+            
                 
             </ScrollView>
 
@@ -176,10 +196,7 @@ const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     viewStyle: {
-        display: 'flex',
-        justifyContent: 'start',
-        alignItems: 'center',
-        flex: 1,
+        display: 'flex'
     },
     textStyle: {
         fontSize: 20,
@@ -194,31 +211,65 @@ const styles = StyleSheet.create({
     },
     page: {  
         flex: 1,
-        justifyContent:'flex-end',
-        backgroundColor: 'white',
+        justifyContent:'flex-start',
     },
     billList: {
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
     },
+    greeting: {
+        fontSize: 30,
+        color: '#22470C',
+        fontWeight: 'bold',
+        marginTop: 20,
+        paddingLeft: 20,
+    },
     budgetContainer:{
+        flexDirection: 'column',
         backgroundColor: '#E0FDD9',
         borderRadius: 10,
         margin: 10,
         padding: 10,
         marginTop: 1,
         border:"1px solid #3F5830",
-
     },
-    budgetOverview: {
-        backgroundColor: '#EAFFCB',
-        borderRadius: 10,
-        margin: 10,
+    budgetOverview:{
+        fontSize: 30,
+        color: '#22470C',
+    },
+    budgetOverviewContainer:{
+        flexDirection: 'column',
+        color: '#22470C',
+        alignContent: 'flex-start',
+        justifyContent: 'flex-start',
         padding: 10,
-        marginTop: 1,
-        border:"1px solid #85BB65",
     },
+    plannedExpenses:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#22470C',
+    },
+    budgetOverviewText:{
+        fontSize: 20,
+        color: '#22470C',
+    },
+    plannedExpensesText:{
+        fontSize: 30,
+        color: '#22470C',
+        paddingBottom: 2,
+    },
+    leftoverAmountContainer:{
+        border:"1px solid #3F5830",
+        borderRadius: 10,
+        padding: 5,
+    },
+
+    leftoverAmount:{
+        fontSize: 15,
+        color: '#22470C',
+    },
+
 });
 
 export default HomePage
