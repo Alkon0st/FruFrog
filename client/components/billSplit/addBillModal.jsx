@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Modal, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, Modal, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
 import { db } from '../../firebase/firebase';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getSelectedPond } from './getSelectedPond';
+
+const profileImages = {
+  1: require('../profile/img/1.png'),
+  2: require('../profile/img/2.png'),
+  3: require('../profile/img/3.png'),
+  4: require('../profile/img/4.png'),
+  5: require('../profile/img/5.png'),
+  6: require('../profile/img/6.png'),
+  7: require('../profile/img/7.png'),
+  8: require('../profile/img/8.png'),
+  9: require('../profile/img/9.png'),
+  10: require('../profile/img/10.png'),
+  11: require('../profile/img/11.png'),
+  12: require('../profile/img/12.png'),
+  13: require('../profile/img/13.png'),
+  14: require('../profile/img/14.png'),
+  15: require('../profile/img/15.png'),
+  16: require('../profile/img/16.png'),
+};
 
 const AddBillModal = ({ visible, onSubmit, onClose }) => {
   const [billDate, setBillDate] = useState('');
@@ -15,6 +34,8 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
   const [splitMode, setSplitMode] = useState('even');
   const [membersList, setMembersList] = useState([]);
   const [customSplit, setCustomSplit] = useState([]);
+  const [profileMap, setProfileMap] = useState({});
+  const [selectedMembers, setSelectedMembers] = useState([]);
 
   useEffect(() => {
     if (visible) {
@@ -32,6 +53,16 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
         if (!pond) return;
         setMembersList(pond.members);
         setCustomSplit(pond.members.map(uid => ({ uid, percent: 0 })));
+        const snapshot = await getDocs(collection(db, 'profiles'));
+        const map = {};
+        snapshot.forEach(doc => {
+          const { members, profile_id } = doc.data();
+          members.forEach(uid => {
+            map[uid] = profile_id;
+          });
+        });
+        setProfileMap(map);
+        setSelectedMembers(pond.members);
       })();
     }
   }, [visible]);
@@ -61,7 +92,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
       const pond = await getSelectedPond(user.uid);
       if (!pond) return;
   
-      const members = pond.members || [];
+      const members = selectedMembers || [];
       const percent = 100 / members.length;
   
       const split = members.map(uid => ({
@@ -113,7 +144,7 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     }
   
     const amount = parseFloat(billAmount) || 0;
-    const members = membersList.length || 1;
+    const members = selectedMembers || [];
   
     try {
       const user = getAuth().currentUser;
@@ -183,8 +214,47 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
               onChangeText={setBillTitle}
             />
 
-            <View style={styles.membersSection}>
-              <Text>{membersList.join(' ') || 'Members'}</Text>
+            <View style={[styles.membersSection, { flexDirection: 'row', flexWrap: 'wrap', padding: 5 }]}>
+              {membersList.map(uid => {
+                const profileId = profileMap[uid];
+                const imgSrc = profileImages[profileId] || profileImages[1];
+                const isSelected = selectedMembers.includes(uid);
+
+                return (
+                  <TouchableOpacity
+                    key={uid}
+                    onPress={() => {
+                      setSelectedMembers(prev => {
+                        const isSelected = prev.includes(uid);
+                        let updated = [];
+                    
+                        if (isSelected) {
+                          updated = prev.filter(id => id !== uid);
+                        } else {
+                          updated = [...prev, uid];
+                        }
+                    
+                        // Sync customSplit with selected members
+                        const newCustomSplit = updated.map(id => {
+                          const existing = customSplit.find(m => m.uid === id);
+                          return existing || { uid: id, percent: 0 };
+                        });
+                    
+                        setCustomSplit(newCustomSplit);
+                        return updated;
+                      });
+                    }}
+                    style={{
+                      margin: 4,
+                      borderRadius: 24,
+                      borderWidth: 2,
+                      borderColor: isSelected ? '#4f723a' : 'transparent',
+                    }}
+                  >
+                    <Image source={imgSrc} style={{ width: 48, height: 48, borderRadius: 24 }} />
+                  </TouchableOpacity>
+                );
+              })}
             </View>
 
             <View style={{ flexDirection: 'row' }}>
@@ -246,6 +316,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4f723a',
     borderRadius: 10,
     flexDirection: 'row',
+    width: "90%",
   },
   inputContainer: {
     backgroundColor: 'white',

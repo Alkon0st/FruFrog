@@ -5,25 +5,24 @@ const styles = StyleSheet.create({
     gradient: {
         flex: 1,
     },
-    page: {
-    },
-    pageContainer: {
-        marginTop: 10,
-        justifyContent: "center",
-        alignItems: "center",
-    },
     billHeader: {
-        width: "50%",
-        // paddingHorizontal: "10%",
-        flexDirection: "row",
-        justifyContent: "right",
-        alignItems: "right",
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 20,
+        marginTop: 20,
     },
     billHeaderTitle: {
         fontSize: 30,
-        color: "black",
+        color: '#22470C',
+        fontWeight: 'bold',
+    },
+    billList: {
+        width: '100%',
+        paddingHorizontal: '10%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 20,
     },
     addButton: {
         width: "100%",
@@ -32,19 +31,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 15,
-   },
+    },
     addButtonText: {
       color: "#3f5830",
       fontSize: 15,
     },
     addButtonSubtext: {
-      color: "ababab",
-    },
-    billList: {
-        width: "100%",
-        paddingHorizontal: "10%",
-        justifyContent: "center",
-        alignItems: "center",
+        textAlign: 'center',
+        color: '#555',
     },
 });
 

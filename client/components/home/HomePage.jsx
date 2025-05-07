@@ -255,9 +255,11 @@ const styles = StyleSheet.create({
         justifyContent:'flex-start',
     },
     billList: {
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
+        width: '100%',
+        paddingHorizontal: '10%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 20,
     },
     greeting: {
         fontSize: 30,
