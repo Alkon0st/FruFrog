@@ -48,7 +48,7 @@ function HistoryData() {
     return (
         <ScrollView style={{padding:20}}>
             {/* History List */}
-            <Text style={{fontSize: 24, marginBottom: 10}}>Bill History</Text>
+            <Text style={{fontSize: 24, marginBottom: 10}}>My Bill History</Text>
             {userBills.length > 0 ? (
                 userBills.map(bill=> (
                     <Bill key={bill.id} {...bill} />
