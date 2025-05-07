@@ -28,8 +28,8 @@ function HistoryData() {
                     ...doc.data()
                 }));
                 const userRelatedBills = allBills.filter(bill => {
-                    const inCustom = bill.customSplit?.some(m => m.uid === user.uid);
-                    const inEven = bill.customSplit?.includes(user.uid);
+                    const inCustom = bill.split?.some(m => m.uid === user.uid);
+                    const inEven = bill.split?.some(m => m.uid === user.uid);
                     return inCustom || inEven;
                 });
                 setUserBills(userRelatedBills);
@@ -41,11 +41,8 @@ function HistoryData() {
         fetchExpenseData();
     }, []);
 
-
-
-    
-
     return (
+
         <ScrollView style={{padding:20}}>
             {/* History List */}
             <Text style={{fontSize: 24, marginBottom: 10}}>My Bill History</Text>
