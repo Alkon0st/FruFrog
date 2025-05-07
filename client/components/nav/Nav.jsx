@@ -31,6 +31,9 @@ export default function Nav() {
                     justifyContent: 'space-evenly',
                     alignItems: 'center',
                     flexDirection: 'row',
+                    backgroundColor: '#3A8F8380',
+                    borderTopWidth: 2,
+                    borderTopColor: '#000000',
                 }}}>
             <TabNav.Screen name='Home' component={HomePage} options={{
                 tabBarIcon: ({focused}) => (
