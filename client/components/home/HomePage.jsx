@@ -104,21 +104,23 @@ function HomePage() {
     
 
     useEffect(() => {
-        const fetchUsername = async () => {
-          try {
-            const user = getAuth().currentUser;
-            if (!user) {console.warn("No user signed in.");
-              return;
-            }
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-              const userData = userSnap.data();
-              setUsername(userData.username || "User");
-            } else {console.warn("User document does not exist.")}
-          } catch (err) {console.error("Error fetching user:", err)}
-        };
-        fetchUsername();
+        const user = getAuth().currentUser;
+        if (!user) return;
+      
+        let unsubscribe = () => {};
+      
+        (async () => {
+          const pond = await getSelectedPond(user.uid);
+          if (!pond) return;
+      
+          const q = query(collection(db, `ponds/${pond.id}/bills`), orderBy('createdAt', 'desc'));
+          unsubscribe = onSnapshot(q, (snapshot) => {
+            const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setBills(billsData);
+          });
+        })();
+      
+        return () => unsubscribe();
       }, []);
       
     
