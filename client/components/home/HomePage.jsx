@@ -39,28 +39,69 @@ function HomePage() {
 
 
     useEffect(() => {
-        const user= getAuth().currentUser;
+        const user = getAuth().currentUser;
         if (!user) return;
-        const userDocRef = doc(db, 'users', user.uid);
-        const unsubscribeUser = onSnapshot(userDocRef, (userSnapshot) =>  {
-            const userData = userSnapshot.data();
-            const currentPondId = userData?.currentPondId;
-            if (!currentPondId) return;
-            if (userData?.income?.amount && typeof userData.income.amount === 'number') {
-                setIncomeAmount(userData.income.amount);
-            }
-            const categoriesRef = collection(db, "ponds", currentPondId, "budgetCategories");
-            const unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
-                const data = {};
-                snapshot.forEach(doc => {
-                    data[doc.id] = doc.data().items;
+    
+        let unsubscribeUsers = []; // store individual user snapshot unsubscribers
+        let unsubscribeCategories = () => {}; // default cleanup
+    
+        const setupIncomeAndCategories = async () => {
+            try {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userSnap = await getDoc(userDocRef);
+                const userData = userSnap.data();
+                const currentPondId = userData?.currentPondId;
+                if (!currentPondId) return;
+                const pondRef = doc(db, "ponds", currentPondId);
+                const pondSnap = await getDoc(pondRef);
+                if (!pondSnap.exists()) return;
+                const pondData = pondSnap.data();
+                const uniqueUserUids = Array.from(new Set([
+                    pondData.owner,
+                    ...(pondData.members || [])
+                ]));
+    
+                unsubscribeUsers = uniqueUserUids.map(uid => {
+                    const uRef = doc(db, "users", uid);
+                    return onSnapshot(uRef, (userSnap) => {
+                        if (!userSnap.exists()) return;
+    
+                        const updatedUsers = {};
+                        unsubscribeUsers.forEach((_, i) => {
+                            const userData = userSnap.data();
+                            updatedUsers[uid] = userData?.income?.amount || 0;
+                        });
+                        Promise.all(
+                            uniqueUserUids.map(id => getDoc(doc(db, "users", id)))
+                        ).then(docs => {
+                            const totalIncome = docs.reduce((sum, d) => {
+                                const data = d.data();
+                                return sum + (data?.income?.amount || 0);
+                            }, 0);
+                            setIncomeAmount(totalIncome);
+                        });
+                    });
                 });
-                setBudgetCategories(data);
-            });
-            return () => unsubscribeCategories(); 
-        });
-        return () => unsubscribeUser();
+                const categoriesRef = collection(db, "ponds", currentPondId, "budgetCategories");
+                unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
+                    const data = {};
+                    snapshot.forEach(doc => {
+                        data[doc.id] = doc.data().items;
+                    });
+                    setBudgetCategories(data);
+                });
+            } catch (err) {
+                console.error("Error setting up income and categories:", err);
+            }
+        };
+    
+        setupIncomeAndCategories();
+        return () => {
+            unsubscribeUsers.forEach(unsub => unsub && unsub());
+            unsubscribeCategories();
+        };
     }, []);
+    
 
     useEffect(() => {
         const fetchUsername = async () => {
@@ -94,7 +135,7 @@ function HomePage() {
         return {
             name: category,
             total,
-            color: getColorForCategory(category), // FIXED
+            color: getColorForCategory(category), 
         };
     });
 };
@@ -262,12 +303,13 @@ const styles = StyleSheet.create({
     leftoverAmountContainer:{
         border:"1px solid #3F5830",
         borderRadius: 10,
-        padding: 5,
+        padding: 2,
     },
 
     leftoverAmount:{
         fontSize: 15,
         color: '#22470C',
+        
     },
 
 });

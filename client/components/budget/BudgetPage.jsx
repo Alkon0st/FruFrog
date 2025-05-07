@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Modal } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { collection, query, where, onSnapshot, getDoc, doc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, getDoc, doc, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebase/firebase';
 import styles from "./budgetPage.style";
@@ -17,6 +17,7 @@ import EditSubcategoryModal from './modals/editSubcategoryModal';
 import HeaderNav from '../nav/HeaderNav';
 import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import ProfilePicture from '../profile/img/profilePicture';
 
 
 const BudgetPage = () => {
@@ -33,6 +34,8 @@ const BudgetPage = () => {
     
     //income detail
     const [incomeAmount, setIncomeAmount] = useState(0);
+    const [incomeModalVisible, setIncomeModalVisible] = useState(false);
+    const [pondUsers, setPondUsers] = useState([]);
 
     // Category/Subcategory details
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -69,6 +72,28 @@ const BudgetPage = () => {
     };
     
     const screenWidth = Dimensions.get('window').width;
+    const getMembersWithDetails = async (uids) => {
+        const profilesSnapshot = await getDocs(collection(db, 'profiles'));
+        const usersQuery = query(collection(db, 'users'), where('user_uid', 'in', uids));
+        const usersSnap = await getDocs(usersQuery);
+    
+        return uids.map(uid => {
+            const userDoc = usersSnap.docs.find(doc => doc.data().user_uid === uid);
+            const userData = userDoc?.data() || {};
+            const profileDoc = profilesSnapshot.docs.find(doc => {
+                const profileData = doc.data();
+                return profileData.members?.includes(uid);
+            });
+    
+            return {
+                uid,
+                username: userData.username || "Unknown",
+                income: userData.income?.amount || 0,
+                profileId: profileDoc?.data()?.profile_id || null,
+            };
+        });
+    };
+    
     
 
     useEffect(() => {
@@ -77,8 +102,7 @@ const BudgetPage = () => {
     
         const userDocRef = doc(db, "users", user.uid);
     
-        // Listen to the user's document for changes (e.g., currentPondId updates)
-        const unsubscribeUser = onSnapshot(userDocRef, (userSnapshot) => {
+        const unsubscribeUser = onSnapshot(userDocRef, async (userSnapshot) => {
             const userData = userSnapshot.data();
             const currentPondId = userData?.currentPondId;
     
@@ -90,19 +114,21 @@ const BudgetPage = () => {
             }
     
             setPondId(currentPondId);
+    
+            const pondRef = doc(db, "ponds", currentPondId);
+            const pondSnap = await getDoc(pondRef);
+            const pondData = pondSnap.data();
+    
+           
+            const uniqueUserUids = Array.from(new Set([pondData.owner, ...(pondData.members || [])]));
 
-            //income amount
-            if (userData?.income?.amount && typeof userData.income.amount === 'number') {
-                setIncomeAmount(userData.income.amount);
-            } else {
-                console.warn("Income amount missing or invalid:", userData.income);
-                setIncomeAmount(0);
-            }
+            const detailedUsers = await getMembersWithDetails(uniqueUserUids);
+            setPondUsers(detailedUsers);
     
-            // Reference the selected pond's budgetCategories
+            const totalIncome = detailedUsers.reduce((sum, u) => sum + u.income, 0);
+            setIncomeAmount(totalIncome);
+    
             const categoriesRef = collection(db, "ponds", currentPondId, "budgetCategories");
-    
-            // Set up a real-time listener for categories
             const unsubscribeCategories = onSnapshot(categoriesRef, (snapshot) => {
                 const data = {};
                 snapshot.forEach(doc => {
@@ -110,13 +136,17 @@ const BudgetPage = () => {
                 });
                 setBudgetCategories(data);
             });
+            
     
-            // Clean up the categories listener when pond changes
             return () => unsubscribeCategories();
         });
     
         return () => unsubscribeUser();
     }, []);
+    
+    
+    
+    
 
     const renderCategory = (category) => (
         <View key={category}>
@@ -185,32 +215,35 @@ const BudgetPage = () => {
             <LinearGradient colors={['#F1FEFE', '#B2F0EF']} style={styles.page}>
                 <ScrollView>
                     <HeaderNav />
-                    <View style={styles.spendingContainer}>
-                        <Text style={styles.h2}>Spending Power</Text>
-                        <View style={styles.progressBarContainer}>
-                        <LinearGradient
-                                colors={['#00BFFF', '#1E90FF']}
-                                style={{
-                                    height: 20,
-                                    width: '100%',
-                                    borderRadius: 10,
-                                    overflow: 'hidden',
-                                    marginVertical: 10,
-                                }}
-                            >
-                                <View
+                    <TouchableOpacity onPress={() => setIncomeModalVisible(true)}>
+                        <View style={styles.spendingContainer}>
+                            <Text style={styles.h2}>Spending Power</Text>
+                            <View style={styles.progressBarContainer}>
+                                <LinearGradient
+                                    colors={['#00BFFF', '#1E90FF']}
                                     style={{
-                                        height: '100%',
-                                        width: `${Math.min(progress * 100, 100)}%`,
-                                        backgroundColor: '#FF6347', // color of the bar
+                                        height: 20,
+                                        width: '100%',
+                                        borderRadius: 10,
+                                        overflow: 'hidden',
+                                        marginVertical: 10,
                                     }}
-                                />
-                            </LinearGradient>
-                            <Text style={styles.h3}>
-                                ${totalAmount} / ${incomeAmount} 
-                            </Text>
+                                >
+                                    <View
+                                        style={{
+                                            height: '100%',
+                                            width: `${Math.min(progress * 100, 100)}%`,
+                                            backgroundColor: '#FF6347',
+                                        }}
+                                    />
+                                </LinearGradient>
+                                <Text style={styles.h3}>
+                                    ${totalAmount} / ${incomeAmount}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
+
 
                     <View style={styles.graphContainer}>
                         <Text style={styles.h2}>Chart</Text>
@@ -289,6 +322,49 @@ const BudgetPage = () => {
                     setForm({ ...form, updatedName: '', updatedAmount: '' });
                 }}
             />
+            <Modal
+                visible={incomeModalVisible}
+                transparent={true}
+                animationType="slide"
+            >
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                }}>
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#fff',
+                        borderRadius: 10,
+                        padding: 20,
+                        maxHeight: '80%',
+                    }}>
+                        <TouchableOpacity
+                            style={{alignSelf: 'flex-end', padding: 10}}
+                            onPress={() => setIncomeModalVisible(false)}
+                        >
+                            <Text style={{ color: 'red' }}>X</Text>
+                        </TouchableOpacity>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10, paddingLeft: 110 }}>Contributors</Text>
+                        <ScrollView>
+                            {pondUsers.map(({ uid, username, profileId, income }, index) => (
+                                <View key={`${uid}-${index}`} style={{ flex: 1, flexDirection: 'row', alignContent: 'center'}}>
+                                    <ProfilePicture selection={profileId}/>
+                                    <View style={{ flex: 1, flexDirection: 'row',justifyContent: 'space-between'}}>
+                                        <Text style={{ paddingLeft: 5, fontSize:20 }}>{username}</Text>
+                                        <Text style={{ paddingLeft: 5, fontSize:20  }}> ${income}</Text>
+                                    </View>
+                                    
+                                </View>
+                            ))}
+
+                            
+                        </ScrollView>
+                        
+                    </View>
+                </View>
+            </Modal>
+
         </SafeAreaView>
     );
 };
