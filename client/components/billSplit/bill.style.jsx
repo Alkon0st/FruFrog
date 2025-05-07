@@ -38,10 +38,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#767676',
     },
-    billCategory: {
-        fontSize: 12,
-        color: '#767676',
-    },
     billPaid: {
         fontSize: 20,
         color: '#22470c',
