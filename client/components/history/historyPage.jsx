@@ -1,11 +1,15 @@
-import { Text } from "react-native";
+import { Text, ScrollView, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
 import {getDocs, collectionGroup} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { getAuth } from "firebase/auth";
 import Bill from "../billSplit/bill";
+
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import HeaderNav from "../nav/HeaderNav";
+
 
 function HistoryData() {
     const [userBills, setUserBills] = useState([]);
@@ -43,7 +47,11 @@ function HistoryData() {
 
     return (
 
-        <ScrollView style={{padding:20}}>
+        <SafeAreaProvider>
+        <SafeAreaView style={{flex: 1}}>
+        <LinearGradient colors = {['#F1FEFE', '#B2F0EF']} style={{ flex: 1 }}>
+        <ScrollView style={{display: 'flex'}}>
+            <HeaderNav /> 
             {/* History List */}
             <Text style={{fontSize: 24, marginBottom: 10}}>My Bill History</Text>
             {userBills.length > 0 ? (
@@ -54,6 +62,9 @@ function HistoryData() {
                 <Text>No bills found</Text>
             )}
         </ScrollView>
+        </LinearGradient>
+        </SafeAreaView>
+        </SafeAreaProvider>
     );
 };
 export default HistoryData;
