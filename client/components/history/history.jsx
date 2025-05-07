@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './historyPage.style';
+import HeaderNav from '../nav/HeaderNav';
 import { useNavigation } from '@react-navigation/native';
 
-const History = ({ data }) => {
+function History() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [editingId, setEditingId] = useState(null);
