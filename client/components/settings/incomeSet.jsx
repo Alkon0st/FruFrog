@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Picker} from 'react-native';
 import { db } from '../../firebase/firebase';
 import { getAuth } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const IncomeForm = ({
   visible, 
@@ -12,8 +12,14 @@ const IncomeForm = ({
     amount: 0,
     currency: 'USD',
     frequency: 'monthly',
-    lastUpdated: 'Not set'
+    lastUpdated: 'Not set',
   });
+  const [prevIncomeData, setPrevIncomeData] = useState({
+    amount: 0,
+    currency: 'USD',
+    frequency: 'monthly',
+    lastUpdated: 'Not set',
+  })
 
   const currencySymbols = {
     USD: '$',
@@ -29,8 +35,16 @@ const IncomeForm = ({
     const user = auth.currentUser;
   
     try {
+      //adds the current date to the incomeData for submission
+      const updatedIncome = {
+        ...incomeData,
+        lastUpdated: new Date().toLocaleDateString(),
+      }
+
       const userRef = doc(db, 'users', user.uid);
-      await setDoc(userRef, { income: incomeData }, { merge: true });
+      await setDoc(userRef, { income: updatedIncome }, { merge: true });
+
+      setPrevIncomeData(updatedIncome)
   
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
@@ -38,6 +52,40 @@ const IncomeForm = ({
       console.error("Error updating income:", error);
     }
   };
+
+  useEffect(() => {
+    if (!visible) return
+
+    //reset content of form
+    setIncomeData({
+      amount: 0,
+      currency: 'USD',
+      frequency: 'monthly',
+      lastUpdated: 'Not set',
+    })
+
+    const fetchIncomeData = async () => {
+      const auth = getAuth()
+      const user = auth.currentUser
+      if(!user) return
+
+      try {
+        const userRef = doc(db, 'users', user.uid)
+        const userSnap = await getDoc(userRef)
+
+        if (userSnap.exists()) {
+          const userData = userSnap.data()
+          if (userData.income) {
+            setPrevIncomeData(userData.income)
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching income data:', error)
+      }
+    }
+    
+    fetchIncomeData()
+  }, [visible])
 
   
   if (!visible) return null;
@@ -111,20 +159,20 @@ const IncomeForm = ({
             <View style={styles.incomeItem}>
               <Text style={styles.incomeLabel}>Amount:</Text>
               <Text style={styles.incomeValue}>
-                {currencySymbols[incomeData.currency]}{incomeData.amount.toFixed(2)}
+                {currencySymbols[incomeData.currency]}{prevIncomeData.amount.toFixed(2)}
               </Text>
             </View>
             <View style={styles.incomeItem}>
               <Text style={styles.incomeLabel}>Currency:</Text>
-              <Text style={styles.incomeValue}>{incomeData.currency}</Text>
+              <Text style={styles.incomeValue}>{prevIncomeData.currency}</Text>
             </View>
             <View style={styles.incomeItem}>
               <Text style={styles.incomeLabel}>Frequency:</Text>
-              <Text style={styles.incomeValue}>{incomeData.frequency}</Text>
+              <Text style={styles.incomeValue}>{prevIncomeData.frequency}</Text>
             </View>
             <View style={styles.incomeItem}>
               <Text style={styles.incomeLabel}>Last Updated:</Text>
-              <Text style={styles.incomeValue}>{incomeData.lastUpdated}</Text>
+              <Text style={styles.incomeValue}>{prevIncomeData.lastUpdated}</Text>
             </View>
           </View>
           
