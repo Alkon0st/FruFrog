@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 // Bill Styles
 const styles = StyleSheet.create({
     billContainer: {
-        width: "45%",
+        width: "100%",
         backgroundColor: "white",
         padding: 10,
         marginTop: 15,

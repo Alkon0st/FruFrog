@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
     },
     pageContainer: {
         marginTop: 10,
-        marginHorizontal: 100,
         justifyContent: "center",
         alignItems: "center",
     },
     billHeader: {
         width: "50%",
+        // paddingHorizontal: "10%",
         flexDirection: "row",
         justifyContent: "right",
         alignItems: "right",
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     },
     billList: {
         width: "100%",
+        paddingHorizontal: "10%",
         justifyContent: "center",
         alignItems: "center",
     },
