@@ -24,7 +24,7 @@ const profileImages = {
   16: require('../profile/img/16.png'),
 };
 
-const Bill = ({ title, date, paid, total, split, paidBy = [], id, pondId, category }) => {
+const Bill = ({ title, date, paid, total, split, paidBy = [], id, pondId }) => {
   const [profileMap, setProfileMap] = useState({});
   const [hasPaid, setHasPaid] = useState(false);
   const user = getAuth().currentUser;
@@ -97,7 +97,6 @@ const Bill = ({ title, date, paid, total, split, paidBy = [], id, pondId, catego
       <View style={styles.billTitleSection}>
         <Text style={styles.billTitle}>{title}</Text>
         <Text style={styles.billDate}>{date}</Text>
-        <Text style={styles.billCategory}>{category}</Text>
       </View>
 
       <View style={styles.billPaidSection}>

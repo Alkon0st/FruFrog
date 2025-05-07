@@ -28,7 +28,6 @@ const profileImages = {
 
 const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
   const [billDate, setBillDate] = useState('');
-  const [category, setCategory] = useState('');
   const [billTitle, setBillTitle] = useState('');
   const [billAmount, setBillAmount] = useState('');
   const [splitMode, setSplitMode] = useState('even');
@@ -36,7 +35,6 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
   const [customSplit, setCustomSplit] = useState([]);
   const [profileMap, setProfileMap] = useState({});
   const [selectedMembers, setSelectedMembers] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [nameMap, setNameMap] = useState({});
 
   useEffect(() => {
@@ -80,14 +78,6 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
           names[doc.id] = data.username || 'Unnamed';
         });
         setNameMap(names);
-      
-        // 🔽 fetch categories
-        const categoriesSnapshot = await getDocs(collection(db, `ponds/${pondId}/budgetCategories`));
-        const categoryList = categoriesSnapshot.docs.map(doc => doc.id);
-        setCategories(categoryList);
-        if (categoryList.length > 0) {
-          setCategory(categoryList[0]);
-        }
       })();
     }
   }, [visible]);
@@ -133,7 +123,6 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
       const bill = {
         title: billTitle,
         date: billDate,
-        category,
         amount,
         total: amount.toFixed(2),
         createdAt: new Date(),
@@ -193,7 +182,6 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
       const bill = {
         title: billTitle,
         date: billDate,
-        category,
         amount,
         members,
         split: customSplit,
@@ -224,18 +212,6 @@ const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                 <Text style={{ color: 'black' }}>✖</Text>
               </TouchableOpacity>
-            </View>
-
-            <View style={styles.categorySection}>
-            <Picker selectedValue={category} onValueChange={(itemValue) => setCategory(itemValue)}>
-              {categories.length > 0 ? (
-                categories.map((cat, index) => (
-                  <Picker.Item key={index} label={cat} value={cat} />
-                ))
-              ) : (
-                <Picker.Item label="No categories" value="" />
-              )}
-            </Picker>
             </View>
 
             <TextInput
@@ -360,10 +336,6 @@ const styles = StyleSheet.create({
     padding: 10,
     position: 'relative',
     minWidth: 300,
-  },
-  categorySection: {
-    alignItems: 'left',
-    marginBottom: 10,
   },
   dateSection: {
     flexDirection: 'row',
