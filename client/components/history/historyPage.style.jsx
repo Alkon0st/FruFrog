@@ -24,12 +24,11 @@ const styles = StyleSheet.create({
     marginLeft: 75,
   },
   searchContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
   },
-  searchBar: {
+  searchInput: {
     flex: 1,
     height: 40,
     borderColor: '#D9D9D9',
@@ -112,8 +111,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
   },
   filterText: {
-    color: '#333',
-    fontSize: 12,
+    color: '#008000',
+    fontSize: 16,
+  },
+  filterInput: {
+    height: 40,
+    borderColor: '#D9D9D9',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    marginLeft: 10,
+    backgroundColor: '#F5F5F5',
+  },
+  chevron: {
+    fontSize: 20,
+    color: '#008000',
+    marginLeft: 10,
   },
   filterTextActive: {
     color: '#fff',

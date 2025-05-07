@@ -1,10 +1,11 @@
-import { Text, ScrollView, } from "react-native";
+import { Text, TextInput, ScrollView, View, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {getDocs, collectionGroup} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { getAuth } from "firebase/auth";
 import Bill from "../billSplit/bill";
+import styles from "./historyPage.style";``
 
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -13,7 +14,10 @@ import HeaderNav from "../nav/HeaderNav";
 
 function HistoryData() {
     const [userBills, setUserBills] = useState([]);
-    //const [expenseData, setExpenseData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [category, setSelectedCategory] = useState([]);
+    const [expenseData, setExpenseData] = useState([]);
+    const [visible, setVisible] = useState({});
     //const [editingId, setEditingId] = useState(null);
     //const [editAmount, setEditAmount] = useState("");
     const navigation = useNavigation();
@@ -45,13 +49,43 @@ function HistoryData() {
         fetchExpenseData();
     }, []);
 
+    const categories = ['All', ...new Set(expenseData.map(item => item.category))];
+    const filteredData = expenseData.filter(item => {
+        const matchesSearch =
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.category.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = category === 'All' || item.category === category;
+        return matchesSearch && matchesCategory;
+    });
+
     return (
 
         <SafeAreaProvider>
         <SafeAreaView style={{flex: 1}}>
         <LinearGradient colors = {['#F1FEFE', '#B2F0EF']} style={{ flex: 1 }}>
         <ScrollView style={{display: 'flex'}}>
-            <HeaderNav /> 
+            <HeaderNav />
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Search..."
+                    placeholderTextColor="#888"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
+                <View key={category}>
+                    <Text style={styles.chevron}>
+                        {visible[category] ? '▼' : '⯈'}
+                    </Text>
+                    <TextInput
+                        style={styles.filterInput}
+                        placeholder="Categories"
+                        placeholderTextColor="#85BB65"
+                        value={category}
+                        onChangeText={setSelectedCategory}
+                    />
+                </View>
+            </View>
             {/* History List */}
             <Text style={{fontSize: 24, marginBottom: 10}}>My Bill History</Text>
             {userBills.length > 0 ? (
