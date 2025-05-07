@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from 'firebase/auth';
-import { collection, getDocs, query, orderBy, doc, onSnapshot  } from 'firebase/firestore';
+import { collection, query, orderBy, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
-import { getSelectedPond } from './getSelectedPond';
 
 import HeaderNav from '../nav/HeaderNav';
 import Bill from './bill';
@@ -16,44 +15,41 @@ const BillSplitPage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPondId, setCurrentPondId] = useState(null);
 
-  const fetchBills = async () => {
-    try {
-      const user = getAuth().currentUser;
-      if (!user) return;
-      const pond = await getSelectedPond(user.uid);
-      if (!pond) return;
-
-      setCurrentPondId(pond.id);
-
-      const q = query(collection(db, `ponds/${pond.id}/bills`), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
-      const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setBills(billsData);
-    } catch (err) {
-      console.error('Failed to fetch bills:', err);
-    }
-  };
-
   useEffect(() => {
     const user = getAuth().currentUser;
     if (!user) return;
-  
-    const unsub = onSnapshot(doc(db, "users", user.uid), async (docSnap) => {
+
+    const unsub = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
       if (!docSnap.exists()) return;
       const data = docSnap.data();
       const newPondId = data.currentPondId;
-  
+
       if (newPondId && newPondId !== currentPondId) {
-        await fetchBills();
+        setCurrentPondId(newPondId);
       }
     });
-  
+
+    return () => unsub();
+  }, []); // Only runs once on mount
+
+  useEffect(() => {
+    if (!currentPondId) return;
+
+    const q = query(
+      collection(db, `ponds/${currentPondId}/bills`),
+      orderBy('createdAt', 'desc')
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const billsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setBills(billsData);
+    });
+
     return () => unsub();
   }, [currentPondId]);
 
-  const addBill = async () => {
-    await fetchBills();
-    setModalVisible(false);
+  const addBill = () => {
+    setModalVisible(false); // Live listener handles the rest
   };
 
   return (
@@ -76,13 +72,20 @@ const BillSplitPage = () => {
           {/* Bill List */}
           <View style={styles.billList}>
             {bills.length > 0 ? (
-              bills.map((bill, index) => <Bill key={bill.id} {...bill} id={bill.id} pondId={currentPondId} />)
+              bills.map((bill) => (
+                <Bill key={bill.id} {...bill} id={bill.id} pondId={currentPondId} />
+              ))
             ) : (
               <Text>No bills yet</Text>
             )}
           </View>
 
-          <AddBillModal visible={modalVisible} onSubmit={addBill} onClose={() => setModalVisible(false)} />
+          <AddBillModal
+            visible={modalVisible}
+            onSubmit={addBill}
+            onClose={() => setModalVisible(false)}
+            pondId={currentPondId}
+          />
         </ScrollView>
       </LinearGradient>
     </SafeAreaView>

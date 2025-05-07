@@ -26,7 +26,7 @@ const profileImages = {
   16: require('../profile/img/16.png'),
 };
 
-const AddBillModal = ({ visible, onSubmit, onClose }) => {
+const AddBillModal = ({ visible, onSubmit, onClose, pondId }) => {
   const [billDate, setBillDate] = useState('');
   const [category, setCategory] = useState('Rent');
   const [billTitle, setBillTitle] = useState('');
@@ -48,11 +48,19 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
 
       (async () => {
         const user = getAuth().currentUser;
-        if (!user) return;
-        const pond = await getSelectedPond(user.uid);
+        if (!user || !pondId) return;
+      
+        const pondSnap = await getDocs(collection(db, 'ponds'));
+        const pond = pondSnap.docs.find(doc => doc.id === pondId);
         if (!pond) return;
-        setMembersList(pond.members);
-        setCustomSplit(pond.members.map(uid => ({ uid, percent: 0 })));
+      
+        const pondData = pond.data();
+        const members = pondData.members || [];
+      
+        setMembersList(members);
+        setCustomSplit(members.map(uid => ({ uid, percent: 0 })));
+        setSelectedMembers(members);
+      
         const snapshot = await getDocs(collection(db, 'profiles'));
         const map = {};
         snapshot.forEach(doc => {
@@ -62,7 +70,6 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
           });
         });
         setProfileMap(map);
-        setSelectedMembers(pond.members);
       })();
     }
   }, [visible]);
@@ -89,8 +96,10 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     try {
       const user = getAuth().currentUser;
       if (!user) return;
-      const pond = await getSelectedPond(user.uid);
-      if (!pond) return;
+      if (!pondId) {
+        alert("No pond selected.");
+        return;
+      }
   
       const members = selectedMembers || [];
       const percent = 100 / members.length;
@@ -117,7 +126,8 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
         percentPaid: percentPaid.toFixed(2),
       };
   
-      await addDoc(collection(db, `ponds/${pond.id}/bills`), bill);
+      await addDoc(collection(db, `ponds/${pondId}/bills`), bill);
+  
       onSubmit && onSubmit(bill);
       resetFields();
       onClose();
@@ -128,8 +138,8 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
   };
 
   const handleCustomSplit = async () => {
-    const split = customSplit;
-    const totalPercent = split.reduce((sum, m) => sum + m.percent, 0);
+    const totalPercent = customSplit.reduce((sum, m) => sum + m.percent, 0);
+  
     if (!billTitle.trim()) {
       alert('Please enter a title.');
       return;
@@ -149,6 +159,10 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
     try {
       const user = getAuth().currentUser;
       if (!user) return;
+      if (!pondId) {
+        alert("No pond selected.");
+        return;
+      }
   
       const userSplit = customSplit.find(m => m.uid === user.uid);
       if (!userSplit) {
@@ -165,17 +179,15 @@ const AddBillModal = ({ visible, onSubmit, onClose }) => {
         category,
         amount,
         members,
-        split,
+        split: customSplit,
         paid: paidAmount.toFixed(2),
         percentPaid: percentPaid.toFixed(2),
         total: amount.toFixed(2),
         createdAt: new Date(),
       };
   
-      const pond = await getSelectedPond(user.uid);
-      if (!pond) return;
+      await addDoc(collection(db, `ponds/${pondId}/bills`), bill);
   
-      await addDoc(collection(db, `ponds/${pond.id}/bills`), bill);
       onSubmit && onSubmit(bill);
       resetFields();
       onClose();

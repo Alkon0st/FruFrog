@@ -70,23 +70,25 @@ const Bill = ({ title, date, paid, total, split, paidBy = [], id, pondId }) => {
 
   const renderMembers = () => {
     if (split && split.length > 0) {
-      return split.map(member => {
-        const profileId = profileMap[member.uid];
-        const imageSource = profileImages[profileId] || profileImages[1];
-
-        return (
-          <View key={member.uid} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2 }}>
-            <Image
-              source={imageSource}
-              style={{ width: 24, height: 24, marginRight: 8, borderRadius: 12 }}
-              resizeMode="contain"
-            />
-            <Text style={styles.billMembers}>{member.percent}%</Text>
-          </View>
-        );
-      });
+      return (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          {split.map(member => {
+            const profileId = profileMap[member.uid];
+            const imageSource = profileImages[profileId] || profileImages[1];
+  
+            return (
+              <Image
+                key={member.uid}
+                source={imageSource}
+                style={{ width: 32, height: 32, borderRadius: 16 }}
+                resizeMode="contain"
+              />
+            );
+          })}
+        </View>
+      );
     }
-
+  
     return <Text style={styles.billMembers}>No members listed</Text>;
   };
 
@@ -98,7 +100,7 @@ const Bill = ({ title, date, paid, total, split, paidBy = [], id, pondId }) => {
       </View>
 
       <View style={styles.billPaidSection}>
-        <Text style={styles.billPaid}>${paid}</Text>
+        <Text style={styles.billPaid}>You Owe: ${paid}</Text>
         <Text style={styles.billPercent}>
           {split && split.length > 0
             ? Math.round((paidBy.length / split.length) * 100)
@@ -110,7 +112,7 @@ const Bill = ({ title, date, paid, total, split, paidBy = [], id, pondId }) => {
             <Text style={{ color: '#4f723a' }}>✅ Mark as Paid</Text>
           </TouchableOpacity>
         ) : (
-          <Text style={{ color: 'green', marginTop: 5 }}>✔ You marked as paid</Text>
+          <Text style={{ color: 'green', marginTop: 5 }}>✔ Paid</Text>
         )}
       </View>
 
