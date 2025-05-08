@@ -101,6 +101,25 @@ function HomePage() {
             unsubscribeCategories();
         };
     }, []);
+    useEffect(() => {
+        const user = getAuth().currentUser;
+        if (!user) return;
+    
+        const fetchUsername = async () => {
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    setUsername(userData.username || user.displayName || "User");
+                }
+            } catch (err) {
+                console.error("Failed to fetch username:", err);
+            }
+        };
+    
+        fetchUsername();
+    }, []);
+    
     
 
     useEffect(() => {
@@ -153,7 +172,7 @@ function HomePage() {
         <LinearGradient colors = {['#F1FEFE', '#B2F0EF']} style={{ flex: 1 }}>
             <ScrollView style={styles.viewStyle}>
                 <HeaderNav />     
-                <Text style={styles.greeting}>Hello, {username}!</Text>
+                <Text style={styles.greeting}>Hello, {username || 'there'}!</Text>
                 <View style={styles.budgetContainer}> 
                     <View>
                     <Text style ={styles.budgetOverview}>Budget Overview</Text>
