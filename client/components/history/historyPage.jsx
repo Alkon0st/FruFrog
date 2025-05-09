@@ -79,7 +79,7 @@ function HistoryData() {
     };
 
     const saveEdits = async (billId, pondId) => {
-        const user = useAuth().currentUser;
+        const user = getAuth().currentUser;
         if (!user) return;
 
         try {
