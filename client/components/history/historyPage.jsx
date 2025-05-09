@@ -119,6 +119,7 @@ function HistoryData() {
             <View style={styles.headBanner}>
                 <TouchableOpacity onPress={() => setFilterVisible(!filterVisible)}>
                     <Text style={styles.chevron}>▼</Text>
+                    <Text style={styles.filterText}>Amount</Text>
                 </TouchableOpacity>
                 <Text style={styles.headBannerTitle}>My Bill History</Text>
             </View>

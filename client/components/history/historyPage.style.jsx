@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   },
   headBannerTitle: {
     fontSize: 24,
+    right: 20,
     color: '#000',
     fontWeight: 'bold',
     flex: 1,
@@ -57,6 +58,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#008000',
     marginLeft: 10,
+  },
+  filterText: {
+    fontSize: 12,
+    color: '#22470C',
+    fontWeight: 'light',
+    textDecorationLine: 'underline',
   },
   pickerDropdown: {
     marginHorizontal: 20,
@@ -150,14 +157,15 @@ const styles = StyleSheet.create({
   },
   addEventButtonText: {
     color: '#FFF',
-    fontSize: 28,
-    fontWeight: 'normal',
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   addEventButtonSubtext: {
     position: 'absolute',
     bottom: 60,
     color: '#85BB65',
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: 'bold',
   },
 });
