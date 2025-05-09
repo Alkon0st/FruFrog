@@ -1,7 +1,7 @@
 import { Text, TextInput, ScrollView, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { getDocs, collectionGroup, doc, updateDoc } from "firebase/firestore";
+import { getDocs, collectionGroup, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { getAuth } from "firebase/auth";
 import Bill from "../billSplit/bill";
@@ -15,35 +15,34 @@ function HistoryData() {
     const [userBills, setUserBills] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [amountFilter, setAmountFilter] = useState('All');
-    const [expenseData, setExpenseData] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [editAmountOwe, setEditAmountOwe] = useState("");
     const [editAmountTotal, setEditAmountTotal] = useState("");
     const [editTitle, setEditTitle] = useState("");
     const navigation = useNavigation();
 
-    useEffect(() => {
-        const fetchExpenseData = async () => {
-            try {
-                const user = getAuth().currentUser;
-                if (!user) return;
-                
-                const billsRef = await getDocs(collectionGroup(db, "bills"));
-                const allBills = billsRef.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                const userRelatedBills = allBills.filter(bill => {
-                    const inCustom = bill.split?.some(m => m.uid === user.uid);
-                    const inEven = bill.split?.some(m => m.uid === user.uid);
-                    return inCustom || inEven;
-                });
-                setUserBills(userRelatedBills);
-            } catch (error) {
-                console.error("Error fetching merged data:", error);
-            }
-        };
+    const fetchExpenseData = async () => {
+        try {
+            const user = getAuth().currentUser;
+            if (!user) return;
+            
+            const billsRef = await getDocs(collectionGroup(db, "bills"));
+            const allBills = billsRef.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            const userRelatedBills = allBills.filter(bill => {
+                const inCustom = bill.split?.some(m => m.uid === user.uid);
+                const inEven = bill.split?.some(m => m.uid === user.uid);
+                return inCustom || inEven;
+            });
+            setUserBills(userRelatedBills);
+        } catch (error) {
+            console.error("Error fetching merged data:", error);
+        }
+    };
 
+    useEffect(() => {
         fetchExpenseData();
     }, []);
 
@@ -131,75 +130,34 @@ function HistoryData() {
                 <View key={date} style={styles.subBanner}>
                     <Text style={styles.dateText}>{date}</Text>
                     {filteredData.filter(item => item.date === date).map(bill => (
-                        <View key={bill.id} style={styles.expenseRow}>
-                            {editingId === bill.id ? (
-                                <>
-                                    <TextInput
-                                        style={styles.editTitle}
-                                        value={editTitle || bill.title}
-                                        onChangeText={setEditTitle}
-                                    />
-                                    <Text>You Owe: $</Text>
-                                    <TextInput
-                                        style={styles.editAmount}
-                                        value={editAmountOwe || bill.paid.toString()}
-                                        onChangeText={setEditAmountOwe}
-                                        keyboardType="numeric"
-                                    />
-                                    <Text>Total: $</Text>
-                                    <TextInput
-                                        style={styles.editAmount}
-                                        value={editAmountTotal || bill.total.toString()}
-                                        onChangeText={setEditAmountTotal}
-                                        keyboardType="numeric"
-                                    />
-                                    <TouchableOpacity
-                                        style={styles.buttonText}
-                                        onPress={() => saveEdits(bill.id, bill.pondId)}
-                                    >
-                                        <Text style={styles.buttonTextStyle}>Save</Text>
-                                    </TouchableOpacity>
-                                </>
-                            ) : (
-                                <>
-                                    <Text style={styles.nameText}>{bill.title}</Text>
-                                    <Text style={styles.amountText}>You Owe: ${bill.paid}</Text>
-                                    <Text style={styles.amountText}>Total: ${bill.total}</Text>
-                                    <TouchableOpacity
-                                        style={styles.buttonText}
-                                        onPress={() => navigation.navigate('Bill Split')}
-                                    >
-                                        <Text style={styles.buttonTextStyle}>View Bill</Text>
-                                    </TouchableOpacity>
-                                </>
-                            )}
-                            <TouchableOpacity
-                                style={styles.editButton}
-                                onPress={() => {
-                                    if (editingId === bill.id) {
-                                        setEditingId(null);
-                                        setEditAmountOwe("");
-                                        setEditAmountTotal("");
-                                        setEditTitle("");
-                                    } else {
-                                        setEditingId(bill.id);
-                                        setEditTitle(bill.title);
-                                        setEditAmountOwe(bill.paid.toString());
-                                        setEditAmountTotal(bill.total.toString());
-                                    }
-                                }}
-                            >
-                                <Text style={styles.editButtonText}>Edit</Text>
-                            </TouchableOpacity>
-                            {!bill.paidBy?.includes(getAuth().currentUser.uid) && (
-                                <TouchableOpacity
-                                    style={styles.buttonText}
-                                    onPress={() => markAsPaid(bill.id, bill.pondId)}
-                                >
-                                    <Text style={styles.buttonTextStyle}>Mark as Paid</Text>
-                                </TouchableOpacity>
-                            )}
-                        </View>
+                        <Bill
+                            key={bill.id}
+                            title={editingId === bill.id ? (editTitle || bill.title) : bill.title}
+                            date={bill.date}
+                            paid={editingId === bill.id ? (editAmountOwe || bill.paid) : bill.paid}
+                            total={editingId === bill.id ? (editAmountTotal || bill.total) : bill.total}
+                            split={bill.split}
+                            paidBy={bill.paidBy || []}
+                            id={bill.id}
+                            pondId={bill.pondId}
+                            isEditing={editingId === bill.id}
+                            onEdit={() => {
+                                if (editingId === bill.id) {
+                                    setEditingId(null);
+                                    setEditAmountOwe("");
+                                    setEditAmountTotal("");
+                                    setEditTitle("");
+                                } else {
+                                    setEditingId(bill.id);
+                                    setEditTitle(bill.title);
+                                    setEditAmountOwe(bill.paid.toString());
+                                    setEditAmountTotal(bill.total.toString());
+                                }
+                            }}
+                            onSave={() => saveEdits(bill.id, bill.pondId)}
+                            onMarkAsPaid={() => markAsPaid(bill.id, bill.pondId)}
+                            navigation={navigation}
+                        />
                     ))}
                 </View>
             ))}
