@@ -1,4 +1,5 @@
-import { Text, TextInput, ScrollView, View, TouchableOpacity } from "react-native";
+// START OF REVISED historyPage.jsx
+import { Text, TextInput, ScrollView, View, TouchableOpacity, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { getDocs, collectionGroup, doc, updateDoc, arrayUnion } from "firebase/firestore";
@@ -15,17 +16,19 @@ function HistoryData() {
     const [userBills, setUserBills] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [amountFilter, setAmountFilter] = useState('All');
+    const [filterVisible, setFilterVisible] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [editAmountOwe, setEditAmountOwe] = useState("");
     const [editAmountTotal, setEditAmountTotal] = useState("");
     const [editTitle, setEditTitle] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation();
 
     const fetchExpenseData = async () => {
         try {
             const user = getAuth().currentUser;
             if (!user) return;
-            
+
             const billsRef = await getDocs(collectionGroup(db, "bills"));
             const allBills = billsRef.docs.map(doc => ({
                 id: doc.id,
@@ -33,8 +36,7 @@ function HistoryData() {
             }));
             const userRelatedBills = allBills.filter(bill => {
                 const inCustom = bill.split?.some(m => m.uid === user.uid);
-                const inEven = bill.split?.some(m => m.uid === user.uid);
-                return inCustom || inEven;
+                return inCustom;
             });
             setUserBills(userRelatedBills);
         } catch (error) {
@@ -47,7 +49,7 @@ function HistoryData() {
     }, []);
 
     const filteredData = userBills.filter(item => {
-        const matchesSearch = 
+        const matchesSearch =
             item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             item.category?.toLowerCase().includes(searchQuery.toLowerCase());
         const amount = parseFloat(item.paid) || 0;
@@ -70,7 +72,7 @@ function HistoryData() {
             await updateDoc(doc(db, `ponds/${pondId}/bills`, billId), {
                 paidBy: arrayUnion(user.uid),
             });
-            setUserBills(prevBills => prevBills.filter(bill => bill.id !== billId));
+            fetchExpenseData();
         } catch (error) {
             console.error("Error marking as paid:", error);
         }
@@ -91,13 +93,11 @@ function HistoryData() {
             setEditAmountOwe("");
             setEditAmountTotal("");
             setEditTitle("");
-            fetchExpenseData(); // Refresh data
+            fetchExpenseData();
         } catch (error) {
             console.error("Error saving edits:", error);
         }
     };
-
-    const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <SafeAreaProvider>
@@ -105,6 +105,7 @@ function HistoryData() {
         <LinearGradient colors={['#F1FEFE', '#B2F0EF']} style={{ flex: 1 }}>
         <ScrollView style={{display: 'flex'}}>
             <HeaderNav />
+
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
@@ -114,54 +115,79 @@ function HistoryData() {
                     onChangeText={setSearchQuery}
                 />
             </View>
+
             <View style={styles.headBanner}>
-                <TouchableOpacity onPress={() => {
-                    setAmountFilter(prev => {
-                        const options = ['All', '$0-99', '$100-499', '$500-749', '$750-999', '>$1000'];
-                        const currentIndex = options.indexOf(prev);
-                        return options[(currentIndex + 1) % options.length];
-                    });
-                }}>
+                <TouchableOpacity onPress={() => setFilterVisible(!filterVisible)}>
                     <Text style={styles.chevron}>▼</Text>
                 </TouchableOpacity>
                 <Text style={styles.headBannerTitle}>My Bill History</Text>
             </View>
+            {filterVisible && (
+                <View style={{ paddingHorizontal: 20 }}>
+                    {["All", "$0-99", "$100-499", "$500-749", "$750-999", ">$1000"].map((range) => (
+                        <TouchableOpacity key={range} onPress={() => {
+                            setAmountFilter(range);
+                            setFilterVisible(false);
+                        }}>
+                            <Text>{range}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            )}
+
             {dates.map(date => (
-                <View key={date} style={styles.subBanner}>
-                    <Text style={styles.dateText}>{date}</Text>
+                <View key={date}>
+                    <View style={styles.subBanner}>
+                        <Text style={styles.dateText}>{date}</Text>
+                        <TouchableOpacity
+                            style={styles.buttonText}
+                            onPress={() => navigation.navigate('Bill Split')}
+                        >
+                            <Text style={styles.buttonTextStyle}>View Bill</Text>
+                        </TouchableOpacity>
+                    </View>
+
                     {filteredData.filter(item => item.date === date).map(bill => (
-                        <Bill
-                            key={bill.id}
-                            title={editingId === bill.id ? (editTitle || bill.title) : bill.title}
-                            date={bill.date}
-                            paid={editingId === bill.id ? (editAmountOwe || bill.paid) : bill.paid}
-                            total={editingId === bill.id ? (editAmountTotal || bill.total) : bill.total}
-                            split={bill.split}
-                            paidBy={bill.paidBy || []}
-                            id={bill.id}
-                            pondId={bill.pondId}
-                            isEditing={editingId === bill.id}
-                            onEdit={() => {
-                                if (editingId === bill.id) {
-                                    setEditingId(null);
-                                    setEditAmountOwe("");
-                                    setEditAmountTotal("");
-                                    setEditTitle("");
-                                } else {
-                                    setEditingId(bill.id);
-                                    setEditTitle(bill.title);
-                                    setEditAmountOwe(bill.paid.toString());
-                                    setEditAmountTotal(bill.total.toString());
-                                }
-                            }}
-                            onSave={() => saveEdits(bill.id, bill.pondId)}
-                            onMarkAsPaid={() => markAsPaid(bill.id, bill.pondId)}
-                            navigation={navigation}
-                        />
+                        <View key={bill.id}>
+                            <TouchableOpacity
+                                style={styles.editButton}
+                                onPress={() => {
+                                    if (editingId === bill.id) {
+                                        setEditingId(null);
+                                        setEditAmountOwe("");
+                                        setEditAmountTotal("");
+                                        setEditTitle("");
+                                    } else {
+                                        setEditingId(bill.id);
+                                        setEditTitle(bill.title);
+                                        setEditAmountOwe(bill.paid.toString());
+                                        setEditAmountTotal(bill.total.toString());
+                                    }
+                                }}
+                            >
+                                <Text style={styles.editButtonText}>Edit</Text>
+                            </TouchableOpacity>
+
+                            <Bill
+                                title={editingId === bill.id ? (editTitle || bill.title) : bill.title}
+                                date={bill.date}
+                                paid={editingId === bill.id ? (editAmountOwe || bill.paid) : bill.paid}
+                                total={editingId === bill.id ? (editAmountTotal || bill.total) : bill.total}
+                                split={bill.split}
+                                paidBy={bill.paidBy || []}
+                                id={bill.id}
+                                pondId={bill.pondId}
+                                isEditing={editingId === bill.id}
+                                onSave={() => saveEdits(bill.id, bill.pondId)}
+                                onMarkAsPaid={() => markAsPaid(bill.id, bill.pondId)}
+                                navigation={navigation}
+                            />
+                        </View>
                     ))}
                 </View>
             ))}
         </ScrollView>
+
         <TouchableOpacity
             style={styles.addEventButton}
             onPress={() => setModalVisible(true)}
@@ -169,6 +195,7 @@ function HistoryData() {
             <Text style={styles.addEventButtonText}>+</Text>
         </TouchableOpacity>
         <Text style={styles.addEventButtonSubtext}>Add Event</Text>
+
         <AddEventModal
             visible={modalVisible}
             onClose={() => setModalVisible(false)}
@@ -179,5 +206,6 @@ function HistoryData() {
         </SafeAreaView>
         </SafeAreaProvider>
     );
-};
+}
+
 export default HistoryData;
