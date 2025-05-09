@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     color: '#22470C',
     fontWeight: 'light',
     textDecorationLine: 'underline',
+    right: 2,
   },
   pickerDropdown: {
     marginHorizontal: 20,
@@ -88,7 +89,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#B2E196',
     paddingVertical: 5,
     paddingHorizontal: 10,
-    marginTop: 10,
   },
   dateText: {
     fontSize: 16,
@@ -120,6 +120,33 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: 'lightgrey',
     marginBottom: 5,
+  },
+  amountContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  saveButton: {
+    backgroundColor: '#85BB65',
+    borderColor: '#008000',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  markAsPaidButton: {
+    backgroundColor: '#85BB65',
+    borderColor: '#008000',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  markAsPaidButton: {
+    backgroundColor: '#85BB65',
+    borderColor: '#008000',
   },
   editAmount: {
     borderBottomWidth: 1,

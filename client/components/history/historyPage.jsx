@@ -169,20 +169,57 @@ function HistoryData() {
                                 <Text style={styles.editButtonText}>Edit</Text>
                             </TouchableOpacity>
 
-                            <Bill
-                                title={editingId === bill.id ? (editTitle || bill.title) : bill.title}
-                                date={bill.date}
-                                paid={editingId === bill.id ? (editAmountOwe || bill.paid) : bill.paid}
-                                total={editingId === bill.id ? (editAmountTotal || bill.total) : bill.total}
-                                split={bill.split}
-                                paidBy={bill.paidBy || []}
-                                id={bill.id}
-                                pondId={bill.pondId}
-                                isEditing={editingId === bill.id}
-                                onSave={() => saveEdits(bill.id, bill.pondId)}
-                                onMarkAsPaid={() => markAsPaid(bill.id, bill.pondId)}
-                                navigation={navigation}
-                            />
+                            {editingId === bill.id ? (
+                                <View style={styles.expenseRow}>
+                                    <TextInput
+                                        style={styles.editTitle}
+                                        value={editTitle}
+                                        onChangeText={setEditTitle}
+                                    />
+                                    <View style={styles.amountContainer}>
+                                        <Text style={styles.amountText}>You Owe: $</Text>
+                                        <TextInput
+                                            style={styles.editAmount}
+                                            value={editAmountOwe}
+                                            onChangeText={setEditAmountOwe}
+                                            keyboardType="numeric"
+                                        />
+                                    </View>
+                                    <View style={styles.amountContainer}>
+                                        <Text style={styles.amountText}>Total: $</Text>
+                                        <TextInput
+                                            style={styles.editAmount}
+                                            value={editAmountTotal}
+                                            onChangeText={setEditAmountTotal}
+                                            keyboardType="numeric"
+                                        />
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.saveButton}
+                                        onPress={() => saveEdits(bill.id, bill.pondId)}
+                                    >
+                                        <Text style={styles.editButtonText}>Save</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.markAsPaidButton}
+                                        onPress={() => markAsPaid(bill.id, bill.pondId)}
+                                    >
+                                        <Text style={styles.markAsPaidText}>Mark as Paid</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ) : (
+                                <Bill
+                                    title={bill.title}
+                                    date={bill.date}
+                                    paid={bill.paid}
+                                    total={bill.total}
+                                    split={bill.split}
+                                    paidBy={bill.paidBy || []}
+                                    id={bill.id}
+                                    pondId={bill.pondId}
+                                    navigation={navigation}
+                                />
+                            )}
                         </View>
                     ))}
                 </View>
@@ -194,8 +231,7 @@ function HistoryData() {
             onPress={() => setModalVisible(true)}
         >
             <Text style={styles.addEventButtonText}>+</Text>
-        
-        <Text style={styles.addEventButtonSubtext}>Add Event</Text>
+            <Text style={styles.addEventButtonSubtext}>Add Event</Text>
         </TouchableOpacity>
         
         <AddEventModal
