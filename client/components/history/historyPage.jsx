@@ -142,7 +142,7 @@ function HistoryData() {
                         <Text style={styles.dateText}>{date}</Text>
                         <TouchableOpacity
                             style={styles.buttonText}
-                            onPress={() => navigation.navigate('Bill Split')}
+                            onPress={() => navigation.navigate('BillSplit')}
                         >
                             <Text style={styles.buttonTextStyle}>View Bill</Text>
                         </TouchableOpacity>

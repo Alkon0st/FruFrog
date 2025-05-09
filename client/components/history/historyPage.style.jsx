@@ -10,10 +10,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   buttonTextStyle: {
-    color: '#808080',
-    fontSize: 8,
-    fontWeight: 'light',
+    color: '#000',
+    fontSize: 10,
+    fontWeight: 'normal',
     textDecorationLine: 'underline',
+    right: 10,
   },
   textStyle: {
     fontSize: 32,
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   },
   addEventButtonSubtext: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 59,
     color: '#85BB65',
     fontSize: 12,
     fontWeight: 'bold',
