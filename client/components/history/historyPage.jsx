@@ -1,4 +1,4 @@
-import { Text, TextInput, ScrollView, View, TouchableOpacity, Modal } from "react-native";
+import { Text, TextInput, ScrollView, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { getDocs, collectionGroup, doc, updateDoc, arrayUnion } from "firebase/firestore";
@@ -71,14 +71,15 @@ function HistoryData() {
             await updateDoc(doc(db, `ponds/${pondId}/bills`, billId), {
                 paidBy: arrayUnion(user.uid),
             });
-            fetchExpenseData();
+            // Immediately remove the bill from the state for the animation effect
+            setUserBills(prevBills => prevBills.filter(bill => bill.id !== billId));
         } catch (error) {
             console.error("Error marking as paid:", error);
         }
     };
 
     const saveEdits = async (billId, pondId) => {
-        const user = getAuth().currentUser;
+        const user = useAuth().currentUser;
         if (!user) return;
 
         try {
@@ -102,7 +103,7 @@ function HistoryData() {
         <SafeAreaProvider>
         <SafeAreaView style={{flex: 1}}>
         <LinearGradient colors={['#F1FEFE', '#B2F0EF']} style={{ flex: 1 }}>
-        <ScrollView style={{display: 'flex'}}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
             <HeaderNav />
 
             <View style={styles.searchContainer}>
@@ -122,13 +123,13 @@ function HistoryData() {
                 <Text style={styles.headBannerTitle}>My Bill History</Text>
             </View>
             {filterVisible && (
-                <View style={{ paddingHorizontal: 20 }}>
+                <View style={styles.filterDropdown}>
                     {["All", "$0-99", "$100-499", "$500-749", "$750-999", ">$1000"].map((range) => (
                         <TouchableOpacity key={range} onPress={() => {
                             setAmountFilter(range);
                             setFilterVisible(false);
                         }}>
-                            <Text>{range}</Text>
+                            <Text style={styles.filterText}>{range}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -192,9 +193,10 @@ function HistoryData() {
             onPress={() => setModalVisible(true)}
         >
             <Text style={styles.addEventButtonText}>+</Text>
-        </TouchableOpacity>
+        
         <Text style={styles.addEventButtonSubtext}>Add Event</Text>
-
+        </TouchableOpacity>
+        
         <AddEventModal
             visible={modalVisible}
             onClose={() => setModalVisible(false)}

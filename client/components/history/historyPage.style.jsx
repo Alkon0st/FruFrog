@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
   },
   editButton: {
     backgroundColor: '#85BB65',
+    borderColor: '#008000',
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -136,9 +137,10 @@ const styles = StyleSheet.create({
   },
   addEventButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 100,
     right: 20,
     backgroundColor: '#85BB65',
+    borderColor: '#008000',
     width: 60,
     height: 60,
     borderRadius: 30,
@@ -148,15 +150,15 @@ const styles = StyleSheet.create({
   },
   addEventButtonText: {
     color: '#FFF',
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontWeight: 'normal',
   },
   addEventButtonSubtext: {
     position: 'absolute',
-    bottom: 10,
-    right: 20,
+    bottom: 60,
     color: '#85BB65',
-    fontSize: 12,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
