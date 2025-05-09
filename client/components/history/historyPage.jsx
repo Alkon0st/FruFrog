@@ -1,4 +1,3 @@
-// START OF REVISED historyPage.jsx
 import { Text, TextInput, ScrollView, View, TouchableOpacity, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
