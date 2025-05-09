@@ -231,7 +231,7 @@ function HistoryData() {
             onPress={() => setModalVisible(true)}
         >
             <Text style={styles.addEventButtonText}>+</Text>
-            <Text style={styles.addEventButtonSubtext}>Add Event</Text>
+            <Text style={styles.addEventButtonSubtext}>New Event</Text>
         </TouchableOpacity>
         
         <AddEventModal

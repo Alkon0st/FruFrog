@@ -193,8 +193,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 59,
     color: '#85BB65',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
