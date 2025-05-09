@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  // could use select container for history page as resource
   LinearGradient: {
     flex: 1,
   },
@@ -12,7 +11,7 @@ const styles = StyleSheet.create({
   },
   buttonTextStyle: {
     color: '#808080',
-    fontSize: 10,
+    fontSize: 8,
     fontWeight: 'light',
     textDecorationLine: 'underline',
   },
@@ -39,32 +38,36 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#F5F5F5',
   },
-  formContainer: {
-    backgroundColor: '#85BB65',
+  headBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EFFFD9',
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginBottom: 10,
-    alighSelf: 'center',
+    paddingHorizontal: 15,
+    justifyContent: 'space-between',
   },
-  title: {
-    fontSize: 20,
+  headBannerTitle: {
+    fontSize: 24,
+    color: '#000',
     fontWeight: 'bold',
-    color: 'white',
-    alignSelf: 'center',
-  },
-  flatList: {
     flex: 1,
-    paddingHorizontal: 20,
+    textAlign: 'center',
   },
-  itemContainer: {
-    backgroundColor: '#85BB65',
-    marginBottom: 20,
+  chevron: {
+    fontSize: 20,
+    color: '#008000',
+    marginLeft: 10,
+  },
+  subBanner: {
+    backgroundColor: '#B2E196',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginTop: 10,
   },
   dateText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 5,
+    color: '#22470C',
   },
   expenseRow: {
     flexDirection: 'row',
@@ -72,67 +75,70 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8F5E9',
     padding: 10,
     borderRadius: 5,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  expenseDetails: {
-    flex: 1,
-  },
-  categoryText: {
-    fontSize: 14,
-    color: '#666',
+    marginTop: 5,
   },
   nameText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
+    flex: 1,
   },
   amountText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
+    marginLeft: 10,
   },
-
-  filterContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginLeft: 25,
-  },
-  filterButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 15,
-    backgroundColor: '#85BB65',
-    marginRight: 5,
+  editTitle: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: 'lightgrey',
     marginBottom: 5,
   },
-  filterButtonActive: {
-    backgroundColor: '#4CAF50',
+  editAmount: {
+    borderBottomWidth: 1,
+    borderColor: 'lightgrey',
+    marginBottom: 5,
+    width: 60,
   },
-  filterText: {
-    color: '#008000',
-    fontSize: 16,
+  editButton: {
+    backgroundColor: '#85BB65',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
   },
-  filterInput: {
-    height: 40,
-    borderColor: '#D9D9D9',
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    marginLeft: 10,
-    backgroundColor: '#F5F5F5',
-  },
-  chevron: {
-    fontSize: 20,
-    color: '#008000',
-    marginLeft: 10,
-  },
-  filterTextActive: {
-    color: '#fff',
+  editButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
   buttonText: {
-    position: 'center',
+    marginLeft: 10,
+  },
+  addEventButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#85BB65',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  addEventButtonText: {
+    color: '#FFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  addEventButtonSubtext: {
+    position: 'absolute',
+    bottom: 10,
+    right: 20,
+    color: '#85BB65',
+    fontSize: 12,
   },
 });
 
