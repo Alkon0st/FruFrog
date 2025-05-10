@@ -10,6 +10,7 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import HeaderNav from "../nav/HeaderNav";
 import AddEventModal from "./addEventModal";
+import { parse } from "@babel/core";
 
 function HistoryData() {
     const [userBills, setUserBills] = useState([]);
@@ -71,7 +72,6 @@ function HistoryData() {
             await updateDoc(doc(db, `ponds/${pondId}/bills`, billId), {
                 paidBy: arrayUnion(user.uid),
             });
-            // Immediately remove the bill from the state for the animation effect
             setUserBills(prevBills => prevBills.filter(bill => bill.id !== billId));
         } catch (error) {
             console.error("Error marking as paid:", error);
@@ -84,19 +84,46 @@ function HistoryData() {
 
         try {
             const billRef = doc(db, `ponds/${pondId}/bills`, billId);
-            await updateDoc(billRef, {
-                title: editTitle || userBills.find(b => b.id === billId).title,
-                paid: editAmountOwe || userBills.find(b => b.id === billId).paid,
-                total: editAmountTotal || userBills.find(b => b.id === billId).total,
-            });
+            const currentBill = userBills.find(b => b.id === billId);
+            if (!currentBill) {
+                console.error("Current bill not found for ID:", billId);
+                return;
+            }
+
+            const updatedTitle = editTitle || currentBill.title;
+            const newPaid = editAmountOwe ? parseFloat(editAmountOwe) : parseFloat(currentBill.paid);
+            const newTotal = editAmountTotal ? parseFloat(editAmountTotal) : parseFloat(currentBill.total);
+
+            if (isNaN(newPaid) || isNaN(newTotal)) {
+                console.error("Invalid number for paid or total:", { newPaid, newTotal });
+                return;
+            }
+
+            const updatedData = {
+                title: updatedTitle,
+                paid: newPaid,
+                total: newTotal,
+            };
+
+            // Only update split if it exists and matches the expected structure
+            if (currentBill.split && Array.isArray(currentBill.split)) {
+                updatedData.split = currentBill.split.map(m => 
+                    m.uid === user.uid ? { ...m, percent: 100 } : m
+                );
+            }
+
+            console.log("Updating document with:", updatedData); // Debug log
+            await updateDoc(billRef, updatedData);
             setEditingId(null);
             setEditAmountOwe("");
             setEditAmountTotal("");
             setEditTitle("");
-            fetchExpenseData();
+            await fetchExpenseData();
+            console.log("Document updated successfully");
         } catch (error) {
             console.error("Error saving edits:", error);
         }
+        
     };
 
     return (
