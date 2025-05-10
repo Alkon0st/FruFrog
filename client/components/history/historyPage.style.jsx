@@ -80,6 +80,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  filterDropdown: {
+    backgroundColor: '#E1FAD7',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
   pickerOption: {
     fontSize: 16,
     paddingVertical: 6,
