@@ -1,23 +1,20 @@
-# FruFrog
+# FruFrog - Collaborative Budgeting Made Simple
 
-server: Express.js, Firestone
+## What is FruFrog?
+  FruFrog is a mobile budgeting app designed to help individuals and groups manage finances together. Whether you're planning a shared
+household budget, splitting costs with friends, or tracking your own expenses, FruFrog makes it easy to stay on top of you money
 
-client: React Native 
+## Built With:
+- React Native
+- Express.js
+- Firebase Firestone
+- Firebase OAuth
 
-database: Firestore Database
-
-please check on the package-lock.json file for all the dependencies
-
-Steps to Run:
-
-Go to the client folder
-```cd client```
-
-Install any packages used.
-```npm install``` 
-
-Run the app
-```npm run start```
+## Key Features:
+- Create and manage personal or group budgets
+- Invite friends or family to collaborate on shaared financial plans
+- Categorize expenses and track real-time updates
+- Cloud-based storage and syncing with Firestone
 
 *Owned by PondPatrol*
 
